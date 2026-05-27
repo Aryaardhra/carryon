@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Oxygen:wght@300;400;700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+
+
+body{
+   font-family: "Oxygen" !important;
+  background-color: #f6f3f3;
+}
+.font-lora{
+  font-family: "Lora", serif !important;
+}
+.font-inter{
+  font-family: "Inter", sans-serif !important;
+}
+.font-playfair{
+  font-family: "Playfair", serif !important;
+}
+.font-oxygen{
+   font-family: "Oxygen" !important;
+}
+.title {
+  font-family: 'Playfair Display', serif;
+  
+}
+
+.heading {
+  font-family: 'Playfair', sans-serif !important;
+}
+
+.paragraph {
+  font-family: 'Oxygen', sans-serif !important;
+  color: #6B7280;
+}
+.banner{
+   position: relative;
+}
+
+
+ .marquee-inner {
+          animation: marqueeScroll linear infinite;
+        }
+
+        @keyframes marqueeScroll {
+          0% {
+            transform: translateX(0%);
+          }
+
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        @theme{
+  --color-primary : #3A0D08;
+  --color-secondary :#38082b;
+  --color-menu : #33313b;
+  --color-text : #321B1B;
+  --color-subtexts : #483440;
+  --color-subtext : "linear-gradient(180deg, #4E0682 0%, #11011C 100%)" !important;
+  --text-light: #64748b;
+  --text-subTitle : oklab(#35092ce6 80%, transparent) !important
+ /* --color-subTitle :oklab(#35092ce6 80%, transparent) !important*/
+}
