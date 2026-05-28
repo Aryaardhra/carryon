@@ -12,6 +12,7 @@ import left_arrow from "../icons/left_arrow.svg";
 import right_arrow from "../icons/right_arrow.svg";
 import trunk from "../icons/trunk.svg";
 import rating from "../icons/rating.svg";
+import add_icon from "../icons/add_icon.svg";
 import duffle_bag from "../images/duffle_bag.png";
 import hand_bag from "../images/hand_bag.png";
 import hobo_bag from "../images/hobo_bag.png";
@@ -34,6 +35,7 @@ import trolley1 from "../images/trolley1.jpg";
 import shoulder_bag1 from "../images/shoulder_bag1.jpg";
 import c_img from "../images/c_img.png";
 import c_img2 from "../images/c_img2.png";
+import upload_area from "../images/upload_area.png";
 import v_bag from "../images/v_bag.mp4";
 import bg_login from "../icons/bg_login.mp4";
 
@@ -52,6 +54,7 @@ left_arrow,
 right_arrow,
 trunk,
 rating,
+add_icon,
 sling_bag,
 duffle_bag1,
 hand_bag1,
@@ -66,7 +69,8 @@ trolley1,
 c_img,
 c_img2,
 v_bag,
-bg_login
+bg_login,
+upload_area
 }
 
 export const categories = [
@@ -552,4 +556,64 @@ export const demoblogs = [
   
    "details" : "Borem ipsum dolor sit amet, consectetur adipiscing elit."
 }
-]
+];
+
+export const dummyAddress = [
+  {
+    _id: "67b5b9e54ea97f71bbc196a0",
+    userId: "67b5880e4d09769c5ca61644",
+    firstName: "User",
+    lastName: "Carry",
+    email: "byteqzone@gmail.com",
+    street: "Street 123",
+    city: "Main City",
+    state: "New State",
+    zipcode: 123456,
+    country: "IN",
+    phone: "1234567890",
+  },
+];
+
+export const dummyOrders = [
+  {
+    _id: "67e2589a8f87e63366786400",
+    userId: "67b5880e4d09769c5ca61644",
+    items: [
+      {
+        product: dummyProducts[3],
+        quantity: 2,
+        _id: "67e2589a8f87e63366786401",
+      },
+    ],
+    amount: 89,
+    address: dummyAddress[0],
+    status: "Order Placed",
+    paymentType: "Online",
+    isPaid: true,
+    createdAt: "2026-05-25T07:17:46.018Z",
+    updatedAt: "2026-05-25T07:18:13.103Z",
+  },
+  {
+    _id: "67e258798f87e633667863f2",
+    userId: "67b5880e4d09769c5ca61644",
+    items: [
+      {
+        product: dummyProducts[0],
+        quantity: 1,
+        _id: "67e258798f87e633667863f3",
+      },
+      {
+        product: dummyProducts[1],
+        quantity: 1,
+        _id: "67e258798f87e633667863f4",
+      },
+    ],
+    amount: 43,
+    address: dummyAddress[0],
+    status: "Order Placed",
+    paymentType: "COD",
+    isPaid: false,
+    createdAt: "2026-05-25T07:17:13.068Z",
+    updatedAt: "2026-05-25T07:17:13.068Z",
+  },
+];
