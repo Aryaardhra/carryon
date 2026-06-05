@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-//import {products} from "../data/assets";
 import Title from './Title';
-
-import { dummyProducts } from '../assets/data/assets';
 import { ProductCard } from './ProductCard';
+import { useProductContext } from '../context/ProductContext';
 
 const RelatedProduct = () => {
 
+  const {products} = useProductContext();
   const initialCount = 4;
   const [showExtra, setShowExtra] = useState(false); // toggle for extra 4
 
@@ -15,8 +14,8 @@ const RelatedProduct = () => {
   };*/
 
   const visibleProducts = showExtra
-    ? dummyProducts.slice(0, initialCount + 4) // show 0-7 (8 total)
-    : dummyProducts.slice(0, initialCount);   // show 0-3 (4 only)
+    ? products.slice(0, initialCount + 4) // show 0-7 (8 total)
+    : products.slice(0, initialCount);   // show 0-3 (4 only)
 
   return (
     <>

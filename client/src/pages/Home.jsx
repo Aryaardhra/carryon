@@ -16,9 +16,6 @@ import OurBlog from '../components/OurBlog';
 const Home = () => {
 
    const { setShowNavbar } = useOutletContext();
-  /*   const handleBooking = () => {
-    alert("Booking initiated!");
-  };*/
 
   return (
     <>

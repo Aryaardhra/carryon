@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-//import {products} from "../data/assets";
 import { dummyProducts } from "../assets/data/assets";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/data/assets";
 import CartDrawer from "../components/CartDrawer";
-
 import RelatedProduct from "../components/RelatedProduct";
 import ReviewSection from "../components/ReviewSection";
 import ProductAccordion from "../components/ProductAccordion";
+import { useProductContext } from "../context/ProductContext";
 
 const ProductDetails = () => {
+  const { products } = useProductContext();
   const { productId } = useParams();
   const navigate = useNavigate();
-  console.log(productId);
-  const product = dummyProducts.find((item) => item._id === productId);
-  console.log("product:", product);
+  const product = products.find((item) => item._id === productId);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
 
@@ -29,7 +27,7 @@ const ProductDetails = () => {
   // related products
   useEffect(() => {
     if (product) {
-      const filtered = dummyProducts.filter(
+      const filtered = products.filter(
         (item) =>
           item.category === product.category && item._id !== product._id,
       );
@@ -51,7 +49,7 @@ const ProductDetails = () => {
     <>
       <div className="mt-12 max-w-7xl mx-auto px-6">
         {/* Breadcrumb */}
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-500 text-sm mb-6 pt-10">
           <Link to="/">Home</Link> /<Link to="/products"> Products</Link> /
           <span className="text-black"> {product.name}</span>
         </p>

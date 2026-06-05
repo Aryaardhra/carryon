@@ -11,11 +11,14 @@ import AddProduct from "../admin/pages/AddProduct";
 import ProductList from "../admin/pages/ProductList";
 import Orders from "../admin/pages/Orders";
 import AdminRoute from "./AdminRoute";
+import { AuthContextProvider } from "../context/AuthContext";
+import { ProductContextProvider } from "../context/ProductContext";
+import { CartContextProvider } from "../context/CartContext";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: < App/>,
     children: [
       { path: "/", element: <Home /> },
       { path: "/collection", element: <Collection /> },

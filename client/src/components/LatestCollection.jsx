@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Title from "./Title";
 import { ProductCard } from "./ProductCard";
-import { dummyProducts } from "../assets/data/assets";
+import { useProductContext } from "../context/ProductContext";
+
 const LatestCollection = () => {
-  //console.log(dummyProducts)
-  //const products = dummyProducts;
+  
+  const {products} = useProductContext();
   const [stopScroll, setStopScroll] = useState(false);
-  const [latestSeller, setLatestSeller] = useState(dummyProducts);
+  const [latestSeller, setLatestSeller] = useState(products);
 
   const latestProducts = () => {
     const latestProduct = latestSeller.filter((item) => item.latestSeller);
