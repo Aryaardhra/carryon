@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export function ProductCard({ products }) {
-  console.log("products", products);
+ 
   return (
     <>
-      {products?.map((product) => (
+      {products.map((product) => (
         <Link to={(`/products/${product._id}`)}  
         key={product._id}  
         onClick={() => window.scrollTo(0, 0)}>

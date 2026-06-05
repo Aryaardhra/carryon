@@ -4,8 +4,9 @@ import Title from "./Title";
 import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
+  
   const navigate = useNavigate();
-  // const dummyCategory = categories;
+  
   return (
     <>
       <div className="mt-16">

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/data/assets";
 import BackgroundVideo from "../BackgroundVideo";
+import { useAuthContext } from "../../context/AuthContext";
 
 const AdminLogin = () => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  
+  const { isAdmin } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();

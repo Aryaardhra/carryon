@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { dummyProducts } from "../assets/data/assets";
 import { ProductCard } from "./ProductCard";
 import Title from "./Title";
+import { useProductContext } from "../context/ProductContext";
 
 const BestSeller = () => {
-  const [bestSeller, setBestSeller] = useState(dummyProducts);
+  const { products } = useProductContext();
+
+  const [bestSeller, setBestSeller] = useState(products);
   const [stopScroll, setStopScroll] = useState(false);
 
   const bestProducts = () => {

@@ -2,10 +2,11 @@ import { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { motion, AnimatePresence } from "motion/react";
 import { itemVariants } from "./Variants";
+import { useProductContext } from "../context/ProductContext";
 
 const filterSections = [
   {
-    title: "Category",
+    title: "category",
     options: [
       "Tote Bags",
       "Crossbody",
@@ -16,7 +17,7 @@ const filterSections = [
     ],
   },
   {
-    title: "Color",
+    title: "color",
     options: [
       "Black",
       "Brown",
@@ -29,30 +30,26 @@ const filterSections = [
     ],
   },
   {
-    title: "Price",
-    options: [
-      "Under $50",
-      "$50 - $100",
-      "$100 - $200",
-      "$200 - $500",
-      "Over $500",
-    ],
+    title: "price",
+    options: ["Below ₹500", "₹500-₹2500", "₹2500-₹4500", "Above ₹4500"],
   },
   {
-    title: "Material",
+    title: "material",
     options: ["Leather", "Vegan Leather", "Canvas", "Suede", "Nylon"],
   },
   {
-    title: "Size",
-    options: ["Small", "Medium", "Large", "Extra Large"],
+    title: "sizes",
+    options: ["XS", "S", "M", "L", "XL"],
   },
 ];
 
 export function FilterSidebar({ filters, onFilterChange }) {
+  const { clearFilters } = useProductContext();
+
   const [openSections, setOpenSections] = useState([
-    "Category",
-    "Color",
-    "Price",
+    "category",
+    "color",
+    "price",
   ]);
 
   const toggleSection = (title) => {
@@ -134,8 +131,11 @@ export function FilterSidebar({ filters, onFilterChange }) {
             variants={itemVariants}
             className="mt-10 flex items-center gap-6 justify-center"
           >
-            <button className="rounded-md border border-secondary px-12 py-3 text-sm font-medium text-secondary transition hover:bg-secondary/15">
-              VIEW
+            <button
+              onClick={clearFilters}
+              className="rounded-md border border-secondary px-12 py-3 text-sm font-medium text-secondary transition hover:bg-secondary/15"
+            >
+              Clear All Filter
             </button>
           </motion.div>
         </div>
