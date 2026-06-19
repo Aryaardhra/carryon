@@ -4,13 +4,12 @@ import { ProductCard } from "./ProductCard";
 import { useProductContext } from "../context/ProductContext";
 
 const LatestCollection = () => {
-  
-  const {products} = useProductContext();
+  const { products } = useProductContext();
   const [stopScroll, setStopScroll] = useState(false);
-  const [latestSeller, setLatestSeller] = useState(products);
+  const [latestSeller, setLatestSeller] = useState([]);
 
   const latestProducts = () => {
-    const latestProduct = latestSeller.filter((item) => item.latestSeller);
+    const latestProduct = products.filter((item) => item.latestSeller);
     setLatestSeller(latestProduct);
   };
 
@@ -42,17 +41,19 @@ const LatestCollection = () => {
               animationDuration: latestSeller.length * 2500 + "ms",
             }}
           >
-            <ProductCard products={latestSeller} />
+            {latestSeller.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+
             <div
-              className=" flex justify-center
-    group relative shrink-0
-    h-[240px] w-[260px]
-    max-w-sm overflow-hidden rounded-3xl
-    shadow-2xl transition-all duration-500 ease-in-out
-    hover:-translate-y-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent
-  "
+              className="flex justify-center
+              group relative shrink-0
+              h-[240px] w-[260px]
+              max-w-sm overflow-hidden rounded-3xl
+              shadow-2xl transition-all duration-500 ease-in-out
+              hover:-translate-y-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent"
             >
-              <h4 className=" flex mt-20 text-2xl font-medium">shop now</h4>
+              <h4 className="flex mt-20 text-2xl font-medium">Shop Now</h4>
             </div>
           </div>
         </div>

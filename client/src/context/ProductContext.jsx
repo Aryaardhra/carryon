@@ -5,6 +5,7 @@ export const ProductContext = createContext();
 
 export const ProductContextProvider = ({ children }) => {
   const [products] = useState(dummyProducts);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
   const [filters, setFilters] = useState({
     category: [],
@@ -24,6 +25,16 @@ export const ProductContextProvider = ({ children }) => {
 
   const handleFilters = () => {
     let tempProducts = [...products];
+
+    // Search Filter
+    if (searchQuery.length > 0) {
+      tempProducts = tempProducts.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.material.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
 
     // Category
     if (filters.category.length > 0) {
@@ -54,10 +65,12 @@ export const ProductContextProvider = ({ children }) => {
     }
 
     const isPriceInSelectedRange = (price) => {
+      const numericPrice = Number(price);
+
       return filters.price.some((selectedRange) => {
         const range = priceRange.find((item) => item.label === selectedRange);
 
-        return range && price >= range.min && price <= range.max;
+        return range && numericPrice >= range.min && numericPrice <= range.max;
       });
     };
 
@@ -97,10 +110,10 @@ export const ProductContextProvider = ({ children }) => {
 
   useEffect(() => {
     handleFilters();
-  }, [filters, products]);
+  }, [filters, products, searchQuery]);
 
   const clearFilters = () => {
-    setFilteredProducts({
+    setFilters({
       category: [],
       color: [],
       sizes: [],
@@ -139,6 +152,8 @@ export const ProductContextProvider = ({ children }) => {
     handleFilterChange,
     handleSortChange,
     clearFilters,
+    searchQuery,
+    setSearchQuery,
   };
 
   return (

@@ -36,6 +36,8 @@ import shoulder_bag1 from "../images/shoulder_bag1.jpg";
 import c_img from "../images/c_img.png";
 import c_img2 from "../images/c_img2.png";
 import upload_area from "../images/upload_area.png";
+import profile_img from "../images/profile_img.jpg";
+import hand_bag3 from "../images/hand_bag3.jpg";
 import v_bag from "../images/v_bag.mp4";
 import bg_login from "../icons/bg_login.mp4";
 
@@ -70,7 +72,9 @@ c_img,
 c_img2,
 v_bag,
 bg_login,
-upload_area
+upload_area,
+profile_img,
+hand_bag3
 }
 
 export const categories = [
@@ -96,7 +100,7 @@ export const categories = [
   },
   {
     text: "Laptop Bags",
-    path: "lapto_bags",
+    path: "laptop_bags",
     image: laptop_bag,
   },
   {
@@ -121,7 +125,7 @@ export const dummyProducts = [
   {
     _id: "bgid1",
     name: "Hobo Bags",
-    category: "Hobo Bags",
+    category: "hobo_bags",
     image: [hobo_bag1],
     about: [
       "Versatile Design",
@@ -161,7 +165,7 @@ export const dummyProducts = [
   {
     _id: "bgid2",
     name: "Travel Bags",
-    category: "Travel Bags",
+    category: "travel_bags",
     image: [travel_bag1],
     about: [
       "Versatile Design",
@@ -201,7 +205,7 @@ export const dummyProducts = [
   {
     _id: "bgid3",
     name: "Duffle Bags",
-    category: "Duffle Bags",
+    category: "duffle_bags",
     image: [duffle_bag1],
     about: [
       "Versatile Design",
@@ -240,7 +244,7 @@ export const dummyProducts = [
   {
     _id: "bgid4",
     name: "Hand Bags",
-    category: "Hand Bags",
+    category: "hand_bags",
     image: [hand_bag1],
     about: [
       "Versatile Design",
@@ -279,7 +283,7 @@ export const dummyProducts = [
     {
     _id: "bgid5",
     name: "Laptop Bags",
-    category: "Laptop Bags",
+    category: "laptop_bags",
     image: [laptop_bag1],
     about: [
       "Versatile Design",
@@ -318,7 +322,7 @@ export const dummyProducts = [
     {
     _id: "bgid6",
     name: "School Bags",
-    category: "School Bags",
+    category: "school_bags",
     image: [school_bag1],
     about: [
       "Versatile Design",
@@ -357,7 +361,7 @@ export const dummyProducts = [
     {
     _id: "bgid7",
     name: "Sling Bags",
-    category: "Sling Bags",
+    category: "sling_bags",
     image: [sling_bag1],
     about: [
       "Versatile Design",
@@ -396,7 +400,7 @@ export const dummyProducts = [
     {
     _id: "bgid8",
     name: "Tote Bags",
-    category: "Tote Bags",
+    category: "tote_bags",
     image: [tote_bag1],
     about: [
       "Versatile Design",
@@ -435,7 +439,7 @@ export const dummyProducts = [
     {
     _id: "bgid9",
     name: "Trolley Bags",
-    category: "Trolley Bags",
+    category: "trolley_bags",
     image: [trolley1],
     about: [
       "Versatile Design",
@@ -474,7 +478,7 @@ export const dummyProducts = [
     {
     _id: "bgid10",
     name: "Shoulder Bags",
-    category: "Shoulder Bags",
+    category: "shoulder_bags",
     image: [hand_bag1],
     about: [
       "Versatile Design",
@@ -493,6 +497,45 @@ export const dummyProducts = [
      occasion : ["school", "travel", "casual"],
      rating : "4",
      sizes : ["M"],
+     feature : ["Water Resistivity"],
+     manufacturer: "Axyz.Pvt.Ltd",
+     color:["Black", "gray", "dark green"],
+      outer_material: "Faux Leather",
+      Lining: "Polyester",
+      no_of_Pockets : 1,
+      no_of_compartments : 1,
+      dimensions : "LxWxH - 8.6x2.5x6.1 inches",
+      item_weight : "450g",
+      stock : "true",
+      country_of_origin : "China",
+      bestSeller : true,
+      latestSeller : false,
+    createdAt: "2026-05-25T07:17:46.018Z",
+    updatedAt: "2026-05-25T07:18:13.103Z",
+    inStock: true,
+  },
+  {
+    _id: "bgid11",
+    name: "Hand Bags",
+    category: "hand_bags",
+    image: [hand_bag3],
+    about: [
+      "Versatile Design",
+      "Spacious Interior",
+      "Fashionable Accessory",
+      "Organised Storage",
+    ],
+    description : "Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño.",
+     price : "900",
+     offerPrice : "850",
+     offer:"true",
+     offerValue:"30%",
+     item_model_number : "21023KN02",
+     material :"Leather",
+     suitable_for : ["women", "men", "unisex"],
+     occasion : ["shoulder", "travel", "backpack", "casual"],
+     rating : "4",
+     sizes : ["S", "M", "L"],
      feature : ["Water Resistivity"],
      manufacturer: "Axyz.Pvt.Ltd",
      color:["Black", "gray", "dark green"],

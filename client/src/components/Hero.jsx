@@ -70,11 +70,11 @@ export default function Hero({ setShowNavbar }) {
               }}
               className="absolute inset-0 flex flex-col items-center justify-center text-center"
             >
-              <h1 className="font-serif text-5xl md:text-7xl tracking-[0.35em] text-white">
+              <h1 className="font-serif text-5xl md:text-7xl tracking-[0.35em] text-[#220328]">
                 CARRYON
               </h1>
 
-              <p className="mt-5 text-sm md:text-lg tracking-[0.5em] text-white/80">
+              <p className="mt-5 text-sm md:text-lg tracking-[0.5em] text-[#220328]/80">
                 LUXURY REDEFINED
               </p>
             </motion.div>

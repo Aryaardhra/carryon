@@ -5,8 +5,16 @@ import searchIcon from "../assets/search_icon.svg";
 import cartIcon from "../assets/cart_icon.svg";
 import menuDots from "../assets/menu_dots.svg";
 import closeIcon from "../assets/close_icon.svg";
+import { useCartContext } from "../context/CartContext";
+import CartDrawer from "./CartDrawer";
+import { useAuthContext } from "../context/AuthContext";
+import { assets } from "../assets/data/assets";
+import { useProductContext } from "../context/ProductContext";
 
 const Navbar = ({ visible = false }) => {
+  const { user, setUser } = useAuthContext();
+  const { searchQuery, setSearchQuery } = useProductContext();
+  const { getCartCount, setIsCartOpen, isCartOpen } = useCartContext();
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Collection", path: "/collection" },
@@ -19,22 +27,35 @@ const Navbar = ({ visible = false }) => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      navigate("/collection");
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     if (location.pathname !== "/") {
       setIsScrolled(true);
       return;
-    } else {
-      setIsScrolled(false);
     }
-    setIsScrolled((prev) => (location.pathname !== "/" ? true : prev));
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
+
+  const logout = async () => {
+    setUser(null);
+    navigate("/");
+  };
 
   return (
     <>
@@ -51,24 +72,23 @@ const Navbar = ({ visible = false }) => {
           <img
             src={logo}
             alt=""
-            className="h-8 
-                "
+            className="h-8"
           />
         </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-4 lg:gap-8 pl-6 ml-6">
           {navLinks.map((link, i) => (
-            <a
-              key={i}
-              href={link.path}
+            <Link
+              key={link.path}
+              to={link.path}
               className={`group flex flex-col gap-0.5 text-[18px] font-semibold ${isScrolled ? "text-secondary/95" : "text-menu"} hover:text-primary`}
             >
               {link.name}
               <div
                 className={`${isScrolled ? "bg-primary/90" : "bg-primary"} h-0.5 w-0 group-hover:w-full transition-all duration-300`}
               />
-            </a>
+            </Link>
           ))}
           {/* <button className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
                         New Launch
@@ -80,16 +100,62 @@ const Navbar = ({ visible = false }) => {
           <img
             src={searchIcon}
             alt="search"
-            className=" h-6 transition-all duration-500 pr-4"
+            onClick={() => setShowSearch(!showSearch)}
+            className="h-6 cursor-pointer"
           />
-          <img
-            src={cartIcon}
-            alt="cart"
-            className=" h-6 transition-all duration-500"
-          />
-          <button className="border border-secondary text-secondary px-8 py-2.5 rounded-full ml-4 transition-all duration-500 hover:bg-secondary/15 ">
-            Login
-          </button>
+
+          {showSearch && (
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border px-4 py-2 rounded-full"
+            />
+          )}
+          <div
+            onClick={() => setIsCartOpen(true)}
+            className="relative cursor-pointer"
+          >
+            <img
+              src={cartIcon}
+              alt="cart"
+              className=" h-6 transition-all duration-500"
+            />
+            <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
+              {getCartCount()}
+            </button>
+          </div>
+          {!user ? (
+            <button
+              onClick={() => navigate("/login")}
+              className="border border-secondary text-secondary px-8 py-2.5 rounded-full ml-4 transition-all duration-500 hover:bg-secondary/15 "
+            >
+              Login
+            </button>
+          ) : (
+            <div className="relative group">
+              <img
+                src={assets.profile_img}
+                alt="profile_icon"
+                className="w-8 h-8 rounded-full object-cover ml-2 cursor-pointer"
+              />
+              <ul className="hidden group-hover:block absolute top-10 right-0 bg-white shadow border border-gray-200 py-2 w-32 rounded-md text-sm z-40">
+                <li
+                  onClick={() => navigate("/my-orders")}
+                  className="p-1 5 pl-3 hover:bg-primary/10 cursor-pointer"
+                >
+                  My Orders
+                </li>
+                <li
+                  onClick={logout}
+                  className="py-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -114,18 +180,37 @@ const Navbar = ({ visible = false }) => {
           </button>
 
           {navLinks.map((link, i) => (
-            <a key={i} href={link.path} onClick={() => setIsMenuOpen(false)}>
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsMenuOpen(false)}
+            >
               {link.name}
-            </a>
+            </Link>
           ))}
-
+          {user && (
+            <Link to="/my-orders" onClick={() => setIsMenuOpen(false)}>
+              My Orders
+            </Link>
+          )}
           {/* <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
                         New Launch
                     </button>*/}
-
-          <button className="bg-[#130944] text-white px-8 py-2.5 rounded-full transition-all duration-500">
-            Login
-          </button>
+          {!user ? (
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-[#130944] text-white px-8 py-2.5 rounded-full transition-all duration-500"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={logout}
+              className="cursor-pointer px-6 py-2 mt-2 bg-[#130944] hover:bg-secondary transition text-white rounded-full text-sm"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </nav>
     </>

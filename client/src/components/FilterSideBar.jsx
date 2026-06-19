@@ -1,33 +1,18 @@
 import { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, color } from "motion/react";
 import { itemVariants } from "./Variants";
 import { useProductContext } from "../context/ProductContext";
+import { categories } from "../assets/data/assets";
 
 const filterSections = [
   {
     title: "category",
-    options: [
-      "Tote Bags",
-      "Crossbody",
-      "Shoulder Bags",
-      "Clutches",
-      "Satchels",
-      "Hobo Bags",
-    ],
+    options: categories.map((item) => item.path),
   },
   {
     title: "color",
-    options: [
-      "Black",
-      "Brown",
-      "Beige",
-      "White",
-      "Navy",
-      "Red",
-      "Pink",
-      "Gold",
-    ],
+    options: ["Black", "Grey", "Blue", "red", "green"],
   },
   {
     title: "price",
@@ -114,9 +99,8 @@ export function FilterSidebar({ filters, onFilterChange }) {
                               }
                               className="rounded border-gray-300 text-black focus:ring-black w-4 h-4 cursor-pointer"
                             />
-
                             <span className="text-sm group-hover:text-gray-600">
-                              {option}
+                              {option.replaceAll("_", " ")}
                             </span>
                           </label>
                         ))}
