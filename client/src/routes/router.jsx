@@ -14,6 +14,7 @@ import AdminRoute from "./AdminRoute";
 import { AuthContextProvider } from "../context/AuthContext";
 import { ProductContextProvider } from "../context/ProductContext";
 import { CartContextProvider } from "../context/CartContext";
+import ProductCategory from "../pages/ProductCategory";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/collection", element: <Collection /> },
-      { path: "/products/:productId", element: <ProductDetails /> },
+      { path: "/category/:category", element: <ProductCategory /> },
+      { path: "/product/:productId", element: <ProductDetails /> },
       { path: "/blog", element: <Blog /> },
       { path: "/contact", element: <Contact /> },
       { path: "*", element: "NotFound" },

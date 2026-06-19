@@ -4,20 +4,17 @@ import Title from "./Title";
 import { useProductContext } from "../context/ProductContext";
 
 const BestSeller = () => {
+  
   const { products } = useProductContext();
-
-  const [bestSeller, setBestSeller] = useState(products);
+  const [bestSeller, setBestSeller] = useState([]);
   const [stopScroll, setStopScroll] = useState(false);
 
-  const bestProducts = () => {
-    const bestProduct = bestSeller.filter((item) => item.bestSeller);
-    setBestSeller(bestSeller);
-  };
-
   useEffect(() => {
-    bestProducts();
-  }, []);
-
+    setBestSeller(
+      products.filter((item) => item.bestSeller)
+    );
+  }, [products]);
+  
   return (
     <>
       <div>
@@ -41,14 +38,17 @@ const BestSeller = () => {
               animationDuration: bestSeller.length * 2500 + "ms",
             }}
           >
-            <ProductCard products={bestSeller} />
+            {bestSeller.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+
             <div
               className="flex justify-center
-                         group relative shrink-0
-                         h-[240px] w-[260px]
-                         max-w-sm overflow-hidden rounded-3xl
-                         shadow-2xl transition-all duration-500 ease-in-out
-                         hover:-translate-y-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent"
+             group relative shrink-0
+             h-[240px] w-[260px]
+             max-w-sm overflow-hidden rounded-3xl
+             shadow-2xl transition-all duration-500 ease-in-out
+             hover:-translate-y-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent"
             >
               <h4 className=" flex mt-20 text-2xl font-medium">shop now</h4>
             </div>

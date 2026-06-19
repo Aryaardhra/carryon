@@ -2,27 +2,29 @@ import React, { useEffect, useState } from "react";
 import { dummyProducts } from "../assets/data/assets";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/data/assets";
-import CartDrawer from "../components/CartDrawer";
 import RelatedProduct from "../components/RelatedProduct";
 import ReviewSection from "../components/ReviewSection";
 import ProductAccordion from "../components/ProductAccordion";
 import { useProductContext } from "../context/ProductContext";
+import { useCartContext } from "../context/CartContext";
 
 const ProductDetails = () => {
   const { products } = useProductContext();
+  const {
+    cartItems,
+    setCartItems,
+    addToCart,
+    removeFromCart,
+    isCartOpen,
+    setIsCartOpen,
+  } = useCartContext();
   const { productId } = useParams();
   const navigate = useNavigate();
   const product = products.find((item) => item._id === productId);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
-
-  const [cartItems, setCartItems] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
-  const addToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
-    setIsCartOpen(true);
-  };
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
 
   // related products
   useEffect(() => {
@@ -40,6 +42,13 @@ const ProductDetails = () => {
   useEffect(() => {
     if (product?.image?.length) {
       setThumbnail(product.image[0]);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedSize(product.sizes?.[0] || "");
+      setSelectedColor(product.color?.[0] || "");
     }
   }, [product]);
 
@@ -88,15 +97,23 @@ const ProductDetails = () => {
             {/* BUTTONS BELOW IMAGE */}
             <div className="flex gap-4">
               <button
-                onClick={() => addToCart(product)}
-                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded"
+                onClick={() => {
+                  addToCart(product._id, selectedSize, selectedColor);
+
+                  setIsCartOpen(true);
+                }}
+                className="flex-1 py-3 bg-gray-300 hover:bg-gray-400 rounded"
               >
                 Add to Cart
               </button>
 
               <button
-                onClick={() => navigate("/cart")}
-                className="flex-1 py-3 bg-black text-white hover:bg-gray-800 rounded"
+                onClick={() => {
+                  addToCart(product._id, selectedSize, selectedColor);
+
+                  setIsCartOpen(true);
+                }}
+                className="flex-1 py-3 bg-secondary text-white hover:bg-primary rounded"
               >
                 Buy Now
               </button>
@@ -130,6 +147,43 @@ const ProductDetails = () => {
               </span>
             </div>
 
+            <div className="mt-6">
+              <h3 className="font-medium mb-2">Select Size</h3>
+
+              <div className="flex gap-3">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 border rounded ${
+                      selectedSize === size ? "bg-secondary text-white" : ""
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="font-medium mb-2">Select Color</h3>
+
+              <div className="flex flex-wrap gap-2">
+                {product.color.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`px-4 py-2 border rounded ${
+                      selectedColor === color
+                        ? "bg-secondary text-white"
+                        : "bg-white"
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
             <ProductAccordion product={product} />
           </div>
         </div>
@@ -137,19 +191,13 @@ const ProductDetails = () => {
         {/* RELATED PRODUCTS */}
 
         <div className="mt-24">
-          <RelatedProduct />
+          <RelatedProduct products={relatedProducts} />
         </div>
       </div>
 
       <div>
         <ReviewSection />
       </div>
-
-      <CartDrawer
-        isOpen={isCartOpen}
-        setIsOpen={setIsCartOpen}
-        cartItems={cartItems}
-      />
     </>
   );
 };

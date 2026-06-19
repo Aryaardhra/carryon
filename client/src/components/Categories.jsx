@@ -4,9 +4,8 @@ import Title from "./Title";
 import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
-  
   const navigate = useNavigate();
-  
+
   return (
     <>
       <div className="mt-16">
@@ -17,7 +16,7 @@ const Categories = () => {
               key={index}
               className="group cursor-pointer py-5 px-2 gap-2 rounded-lg flex flex-col justify-center items-center"
               onClick={() => {
-                navigate(`/products/${category.path.toLowerCase()}`);
+                navigate(`/category/${category.path.toLowerCase()}`);
                 scrollTo(0, 0);
               }}
             >
