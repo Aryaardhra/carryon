@@ -9,6 +9,7 @@ const adminMiddleware = (req, res, next) => {
             message : "Admin only!"
         })
     }
+    next();
 }
 
 export default adminMiddleware;
