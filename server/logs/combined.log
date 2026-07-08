@@ -289,3 +289,14 @@
 {"app":"carry_on-server","level":"info","message":"Media deleted successfully from cloud storage: carryon/uzke9fjzpbwzzovba09v","timestamp":"2026-07-07 16:15:07"}
 {"app":"carry_on-server","level":"info","message":"Media deleted successfully from cloud storage: carryon/whnyj8dhnf3edqexyt2l","timestamp":"2026-07-07 16:15:07"}
 {"app":"carry_on-server","level":"info","message":"Media deleted successfully from cloud storage: carryon/wwrjvoifxibrkhwvig0v","timestamp":"2026-07-07 16:15:07"}
+{"app":"carry_on-server","level":"info","message":"Login successful: byteqzone@gmail.com","timestamp":"2026-07-08 13:14:03"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-08 13:14:27"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Backpack to cart.","timestamp":"2026-07-08 13:15:06"}
+{"app":"carry_on-server","level":"warn","message":"Cart item id is required.","timestamp":"2026-07-08 13:17:00"}
+{"app":"carry_on-server","level":"error","message":"Error: Cart item id is required.\n    at updateCartQuantity (file:///D:/M_E_R_N/carry_on/server/controllers/cartController.js:156:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-07-08 13:17:00"}
+{"app":"carry_on-server","level":"info","message":"Updated cart quantity for BAG002BLKM","timestamp":"2026-07-08 13:22:33"}
+{"app":"carry_on-server","level":"info","message":"Updated cart quantity for BAG002BLKM","timestamp":"2026-07-08 13:22:43"}
+{"app":"carry_on-server","level":"info","message":"Cart item removed : 6a4e00021bb674ce45cb02a8","timestamp":"2026-07-08 13:24:25"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Backpack to cart.","timestamp":"2026-07-08 13:24:54"}
+{"app":"carry_on-server","level":"info","message":"Cart cleared for user 6a3fa7c4b3a9d45122236a65","timestamp":"2026-07-08 13:26:21"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Backpack to cart.","timestamp":"2026-07-08 13:26:44"}
