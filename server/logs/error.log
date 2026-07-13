@@ -484,3 +484,15 @@
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 14:28:33"}
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 14:46:40"}
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 15:01:50"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 16:21:28"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 16:37:29"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 16:52:39"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:25:28"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:43:08"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:45:22"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:45:44"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:50:18"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 17:50:54"}
+{"app":"carry_on-server","level":"error","message":"MulterError: File too large\n    at abortWithCode (D:\\M_E_R_N\\carry_on\\server\\node_modules\\multer\\lib\\make-middleware.js:107:22)\n    at FileStream.<anonymous> (D:\\M_E_R_N\\carry_on\\server\\node_modules\\multer\\lib\\make-middleware.js:221:11)\n    at FileStream.emit (node:events:518:28)\n    at SBMH.ssCb [as _cb] (D:\\M_E_R_N\\carry_on\\server\\node_modules\\busboy\\lib\\types\\multipart.js:479:32)\n    at feed (D:\\M_E_R_N\\carry_on\\server\\node_modules\\streamsearch\\lib\\sbmh.js:248:10)\n    at SBMH.push (D:\\M_E_R_N\\carry_on\\server\\node_modules\\streamsearch\\lib\\sbmh.js:104:16)\n    at Multipart._write (D:\\M_E_R_N\\carry_on\\server\\node_modules\\busboy\\lib\\types\\multipart.js:567:19)\n    at writeOrBuffer (node:internal/streams/writable:572:12)\n    at _write (node:internal/streams/writable:501:10)\n    at Writable.write (node:internal/streams/writable:510:10)","timestamp":"2026-07-13 18:05:49"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 18:37:25"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 18:38:08"}

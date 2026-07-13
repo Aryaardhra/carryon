@@ -20,6 +20,7 @@ import AdminLogin from "../components/admin/AdminLogin";
 import VerifyEmail from "../pages/VerifyEmail";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+import Profile from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -32,13 +33,15 @@ const router = createBrowserRouter([
       { path: "product/:productId", element: <ProductDetails /> },
       { path: "blog", element: <Blog /> },
       { path: "contact", element: <Contact /> },
+      
       {
         element: <ProtectedRoute />,
         children: [
-          { path: "profile", element: "Profile" },
+          
           { path: "cart", element: "Cart" },
           { path: "checkout", element: "checkout" },
           { path: "my-orders", element: "orders" },
+          { path: "my-profile", element: <Profile /> },
           { path: "wishlist", element: "wishlist" },
         ],
       },

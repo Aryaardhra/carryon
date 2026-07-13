@@ -70,6 +70,12 @@ export const AuthContextProvider = ({ children }) => {
   }
 };
 
+const refreshProfile = async () => {
+    const { data } = await getProfile();
+    setUser(data.user);
+    return data.user;
+};
+
   useEffect(() => {
     registerLogoutHandler(logout);
     loadUser();
@@ -86,6 +92,7 @@ export const AuthContextProvider = ({ children }) => {
         register,
         logout,
         loadUser,
+        refreshProfile
       }}
     >
       {children}
