@@ -10,9 +10,10 @@ import CartDrawer from "./CartDrawer";
 import { useAuthContext } from "../context/AuthContext";
 import { assets } from "../assets/data/assets";
 import { useProductContext } from "../context/ProductContext";
+import { triggerLogout } from "../services/authServices.";
 
 const Navbar = ({ visible = false }) => {
-  const { user, setUser, logout } = useAuthContext();
+  const { user } = useAuthContext();
   const { searchQuery, setSearchQuery } = useProductContext();
   const { getCartCount, setIsCartOpen, isCartOpen } = useCartContext();
   const navLinks = [
@@ -52,8 +53,8 @@ const Navbar = ({ visible = false }) => {
     };
   }, [location.pathname]);
 
-  const logoutHandler = async () => {
-    await logout
+  const logoutHandler = () => {
+    triggerLogout();
     navigate("/");
   };
 
@@ -132,26 +133,53 @@ const Navbar = ({ visible = false }) => {
           ) : (
             <div className="relative group">
               <img
-                src={assets.profile_img}
-                alt="profile_icon"
+                src={user?.avatar?.url || assets.profile_img}
+                alt={user?.name || "Profile"}
                 className="w-8 h-8 rounded-full object-cover ml-2 cursor-pointer"
               />
-              <ul className="hidden group-hover:block absolute top-10 right-0 bg-white shadow border border-gray-200 py-2 w-32 rounded-md text-sm z-40">
+
+              <ul className="hidden group-hover:block absolute top-11 right-0 bg-white shadow-lg border border-gray-200 py-2 w-52 rounded-lg text-sm z-40 overflow-hidden">
+                <li className="px-4 py-3 border-b border-gray-100">
+                  <p className="font-semibold text-gray-800 truncate">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user?.email}
+                  </p>
+                </li>
+
+                {user?.role === "admin" && (
+                  <li
+                    onClick={() => navigate("/admin")}
+                    className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
+                  >
+                    Dashboard
+                  </li>
+                )}
                 <li
                   onClick={() => navigate("/my-orders")}
-                  className="p-1 5 pl-3 hover:bg-primary/10 cursor-pointer"
+                  className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
                 >
                   My Orders
                 </li>
+
+                <li
+                  onClick={() => navigate("/wishlist")}
+                  className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
+                >
+                  Wishlist
+                </li>
+
                 <li
                   onClick={() => navigate("/my-profile")}
-                  className="p-1 5 pl-3 hover:bg-primary/10 cursor-pointer"
+                  className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
                 >
                   My Profile
                 </li>
+
                 <li
                   onClick={logoutHandler}
-                  className="py-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
+                  className="px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer"
                 >
                   Logout
                 </li>
@@ -191,13 +219,37 @@ const Navbar = ({ visible = false }) => {
             </Link>
           ))}
           {user && (
-            <ul>
+            <ul className="flex flex-col items-center gap-4">
+              <li className="text-center mb-2">
+                {/* <img
+        src={user?.avatar?.url || assets.profile_img}
+        alt={user?.name}
+        className="w-16 h-16 rounded-full object-cover mx-auto"
+      />*/}
+                <p className="mt-2 font-semibold">{user?.name}</p>
+                {/*<p className="text-xs text-gray-500">{user?.email}</p>*/}
+              </li>
+
+              {user?.role === "admin" && (
+                <li>
+                  <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link to="/my-orders" onClick={() => setIsMenuOpen(false)}>
                   My Orders
                 </Link>
               </li>
-              <li className="mt-4">
+
+              <li>
+                <Link to="/wishlist" onClick={() => setIsMenuOpen(false)}>
+                  Wishlist
+                </Link>
+              </li>
+
+              <li>
                 <Link to="/my-profile" onClick={() => setIsMenuOpen(false)}>
                   My Profile
                 </Link>

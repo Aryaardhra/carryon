@@ -9,6 +9,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import SwitchLink from "../components/form/SwitchLink";
 import Button from "../components/form/Button";
 import InputField from "../components/form/InputField";
+import PasswordField from "../components/form/PasswordField";
 
 const ResetPassword = () => {
 
@@ -49,7 +50,7 @@ const ResetPassword = () => {
         subtitle="Enter your new password below."
       >
         <form onSubmit={submitHandler} className="flex flex-col gap-4">
-          <InputField
+          <PasswordField
             label="New Password"
             type="password"
             value={password}
@@ -57,7 +58,7 @@ const ResetPassword = () => {
             placeholder="Enter new password"
           />
 
-          <InputField
+          <PasswordField
             label="Confirm Password"
             type="password"
             value={confirmPassword}

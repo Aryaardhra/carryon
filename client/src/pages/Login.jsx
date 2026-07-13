@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import AuthLayout from "../layouts/AuthLayout";
 import InputField from "../components/form/InputField";
 import Button from "../components/form/Button";
+import PasswordField from "../components/form/PasswordField";
 
 const Login = () => {
 
@@ -74,7 +75,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
           />
-          <InputField
+          <PasswordField
             type="password"
             label="Password"
             value={password}
