@@ -825,3 +825,4 @@
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 15:01:50"}
 {"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-13 15:01:52"}
 {"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 15:01:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 15:13:04"}
