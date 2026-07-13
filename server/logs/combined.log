@@ -918,3 +918,13 @@
 {"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-07-13 18:38:08"}
 {"app":"carry_on-server","level":"info","message":"Password reset successful : byteqzone@gmail.com","timestamp":"2026-07-13 18:38:37"}
 {"app":"carry_on-server","level":"info","message":"Login successful: byteqzone@gmail.com","timestamp":"2026-07-13 18:38:52"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 21:11:57"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:11:57"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:11:57"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:25:16"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:25:17"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-13 21:39:04"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:39:05"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:39:05"}
+{"app":"carry_on-server","level":"info","message":"Logout successful: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:39:14"}
+{"app":"carry_on-server","level":"info","message":"Login successful: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:40:33"}
