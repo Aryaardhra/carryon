@@ -30,12 +30,11 @@ export const validateResetPassword = (data) => {
       .max(30)
       .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/)
       .required(),
-    confirmPassword: Joi.string()
-      .min(8)
-      .max(30)
-      .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/)
-      .required(),
-  });
+    confirmPassword: Joi.any()
+      .valid(Joi.ref("password"))
+      .required()
+      .messages({"any.only": "Passwords do not match."})
+  })
   return schema.validate(data);
 };
 

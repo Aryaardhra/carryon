@@ -1,14 +1,96 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { loginUser, registerUser, logoutUser, getCurrentUser } from "../api/authApi";
+import toast from "react-hot-toast";
+import { registerLogoutHandler } from "../services/authServices.";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const value = { isAdmin, setIsAdmin, user, setUser };
+   // Load Current User
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const loadUser = async () => {
+    try {
+
+      const { data } = await getCurrentUser();
+      setUser(data.user);
+      setIsAuthenticated(true);
+      setIsAdmin(data.user.role === "admin");
+      
+    } catch {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+   // Login
+
+  const login = async (formData) => {
+
+    const { data } = await loginUser(formData);
+    setUser(data.user);
+    setIsAuthenticated(true);
+    setIsAdmin(data.user.role === "admin");
+    toast.success(data.message);
+    return data;
+  };
+
+  
+  //  Register
+
+
+  const register = async (formData) => {
+    const { data } = await registerUser(formData);
+    toast.success(data?.message);
+    return data;
+  };
+
+   // Logout
+
+  const logout = async (callApi = true) => {
+  try {
+    if (callApi) {
+      await logoutUser();
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setUser(null);
+    setIsAuthenticated(false);
+    setIsAdmin(false);
+  }
+};
+
+  useEffect(() => {
+    registerLogoutHandler(logout);
+    loadUser();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated,
+        isAdmin,
+        login,
+        register,
+        logout,
+        loadUser,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => {

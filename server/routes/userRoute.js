@@ -1,8 +1,8 @@
 import express from "express";
 import { changePassword, checkAuth, deleteAccountUser, forgotPassword, getAllUsers, getUserData, login, logout, refreshAccessToken, registerUser, resetPassword, updateProfile, verifyEmail } from "../controllers/userController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
 import upload from "../middlewares/multer.js";
+import authorizeRoles from "../middlewares/authorizeRoles.js";
 
 const userRouter = express.Router();
 
@@ -15,7 +15,7 @@ userRouter.post("/refresh-token", refreshAccessToken);
 userRouter.patch("/change-password", authMiddleware, changePassword);
 userRouter.get("/me", authMiddleware, getUserData);
 userRouter.get("/check-auth", authMiddleware, checkAuth);
-userRouter.get("/all-users", authMiddleware, adminMiddleware, getAllUsers);
+userRouter.get("/all-users", authMiddleware, authorizeRoles("admin"), getAllUsers);
 userRouter.put("/update-profile", authMiddleware, upload.single("avatar"), updateProfile);
 userRouter.delete("/delete-account", authMiddleware, deleteAccountUser);
 userRouter.post("/logout", authMiddleware, logout);

@@ -1,15 +1,15 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
 import upload from "../middlewares/multer.js";
 import { addCategory, deleteCategory, getCategories, getCategory, updateCategory } from "../controllers/categorycontroller.js";
+import authorizeRoles from "../middlewares/authorizeRoles.js";
 
 const categoryRouter = express.Router();
 
-categoryRouter.post("/add", authMiddleware, adminMiddleware, upload.single("image"), addCategory);
+categoryRouter.post("/add", authMiddleware, authorizeRoles("admin"), upload.single("image"), addCategory);
 categoryRouter.get("/", getCategories);
 categoryRouter.get("/:id", getCategory);
-categoryRouter.put("/:id", authMiddleware, adminMiddleware, upload.single("image"), updateCategory);
-categoryRouter.delete("/:id", authMiddleware, adminMiddleware, deleteCategory);
+categoryRouter.put("/:id", authMiddleware, authorizeRoles("admin"), upload.single("image"), updateCategory);
+categoryRouter.delete("/:id", authMiddleware, authorizeRoles("admin"), deleteCategory);
 
 export default categoryRouter;

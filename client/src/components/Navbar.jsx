@@ -12,7 +12,7 @@ import { assets } from "../assets/data/assets";
 import { useProductContext } from "../context/ProductContext";
 
 const Navbar = ({ visible = false }) => {
-  const { user, setUser } = useAuthContext();
+  const { user, setUser, logout } = useAuthContext();
   const { searchQuery, setSearchQuery } = useProductContext();
   const { getCartCount, setIsCartOpen, isCartOpen } = useCartContext();
   const navLinks = [
@@ -52,8 +52,8 @@ const Navbar = ({ visible = false }) => {
     };
   }, [location.pathname]);
 
-  const logout = async () => {
-    setUser(null);
+  const logoutHandler = async () => {
+    await logout
     navigate("/");
   };
 
@@ -69,11 +69,7 @@ const Navbar = ({ visible = false }) => {
       >
         {/* Logo */}
         <Link to="/">
-          <img
-            src={logo}
-            alt=""
-            className="h-8"
-          />
+          <img src={logo} alt="" className="h-8" />
         </Link>
 
         {/* Desktop Nav */}
@@ -148,7 +144,13 @@ const Navbar = ({ visible = false }) => {
                   My Orders
                 </li>
                 <li
-                  onClick={logout}
+                  onClick={() => navigate("/my-profile")}
+                  className="p-1 5 pl-3 hover:bg-primary/10 cursor-pointer"
+                >
+                  My Profile
+                </li>
+                <li
+                  onClick={logoutHandler}
                   className="py-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
                 >
                   Logout
@@ -189,9 +191,18 @@ const Navbar = ({ visible = false }) => {
             </Link>
           ))}
           {user && (
-            <Link to="/my-orders" onClick={() => setIsMenuOpen(false)}>
-              My Orders
-            </Link>
+            <ul>
+              <li>
+                <Link to="/my-orders" onClick={() => setIsMenuOpen(false)}>
+                  My Orders
+                </Link>
+              </li>
+              <li className="mt-4">
+                <Link to="/my-profile" onClick={() => setIsMenuOpen(false)}>
+                  My Profile
+                </Link>
+              </li>
+            </ul>
           )}
           {/* <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
                         New Launch
@@ -205,7 +216,7 @@ const Navbar = ({ visible = false }) => {
             </button>
           ) : (
             <button
-              onClick={logout}
+              onClick={logoutHandler}
               className="cursor-pointer px-6 py-2 mt-2 bg-[#130944] hover:bg-secondary transition text-white rounded-full text-sm"
             >
               Logout

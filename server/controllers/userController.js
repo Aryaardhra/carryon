@@ -114,8 +114,8 @@ export const verifyEmail = async (req, res, next) => {
     }
 
     user.isEmailVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpiry = undefined;
+    user.verificationToken = null;
+    user.verificationTokenExpiry = null;
 
     await user.save();
 
@@ -186,10 +186,12 @@ export const login = async (req, res, next) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = await generateRefreshToken(user._id);
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     };
 
     res.cookie("accessToken", accessToken, {
@@ -471,10 +473,12 @@ export const refreshAccessToken = async (req, res, next) => {
     const accessToken = generateAccessToken(user);
     const newRefreshToken = await generateRefreshToken(user._id);
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     };
 
     res.cookie("accessToken", accessToken, {
@@ -492,6 +496,13 @@ export const refreshAccessToken = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Access token refreshed successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+      },
     });
   } catch (error) {
     logger.error(`Refresh Token Error: ${error.message}`);
@@ -674,8 +685,8 @@ export const deleteAccountUser = async (req, res, next) => {
 
     //delete avatar from cloudinary
 
-    if (user.avatar?.public_id) {
-      await deleteFromCloudinary(user.avatar.public_id);
+    if (user.avatar?.publicId) {
+      await deleteFromCloudinary(user.avatar.publicId);
     }
 
     //delete refresh token from redis
@@ -691,10 +702,12 @@ export const deleteAccountUser = async (req, res, next) => {
 
     await user.deleteOne();
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     };
 
     res.clearCookie("accessToken", {
@@ -732,13 +745,13 @@ export const logout = async (req, res, next) => {
         await redis.del(`user-refresh:${userId}`);
       }
     }
+    const isProduction = process.env.NODE_ENV === "production";
 
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     };
-
     res.clearCookie("accessToken", {
       ...cookieOptions,
       maxAge: 15 * 60 * 1000,

@@ -8,9 +8,9 @@ const authMiddleware = async (req, res, next) => {
   try {
     if (!token) {
       logger.error("Invalid token ");
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: "Invalid token or not valid",
+        message: "Authentication required",
       });
     }
 
@@ -20,9 +20,9 @@ const authMiddleware = async (req, res, next) => {
 
     if (!user) {
       logger.error("User not found!");
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: "Not Authorized Login Again",
+        message: "User not found",
       });
     }
 
@@ -31,7 +31,7 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     logger.error("Error while verifying token", error);
-    res.status(401).send({ message: "Error while verifying token" });
+    res.status(401).send({ message: "Invalid or expired token" });
   }
 };
 
