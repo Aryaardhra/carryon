@@ -15,35 +15,57 @@ import { AuthContextProvider } from "../context/AuthContext";
 import { ProductContextProvider } from "../context/ProductContext";
 import { CartContextProvider } from "../context/CartContext";
 import ProductCategory from "../pages/ProductCategory";
+import ProtectedRoute from "./ProtectedRoute";
+import AdminLogin from "../components/admin/AdminLogin";
+import VerifyEmail from "../pages/VerifyEmail";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: < App/>,
+    element: <App />,
     children: [
-      { path: "/", element: <Home /> },
-      { path: "/collection", element: <Collection /> },
-      { path: "/category/:category", element: <ProductCategory /> },
-      { path: "/product/:productId", element: <ProductDetails /> },
-      { path: "/blog", element: <Blog /> },
-      { path: "/contact", element: <Contact /> },
-      { path: "*", element: "NotFound" },
+      { index: true, element: <Home /> },
+      { path: "collection", element: <Collection /> },
+      { path: "category/:category", element: <ProductCategory /> },
+      { path: "product/:productId", element: <ProductDetails /> },
+      { path: "blog", element: <Blog /> },
+      { path: "contact", element: <Contact /> },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "profile", element: "Profile" },
+          { path: "cart", element: "Cart" },
+          { path: "checkout", element: "checkout" },
+          { path: "my-orders", element: "orders" },
+          { path: "wishlist", element: "wishlist" },
+        ],
+      },
     ],
   },
+
+  { path: "/verify-email/:token", element: <VerifyEmail /> },
+  { path: "/login", element: <Login /> },
+  { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password/:token", element: <ResetPassword /> },
+  { path: "/admin/login", element: <AdminLogin /> },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "admin",
+    path: "/admin",
     element: <AdminRoute />,
     children: [
-      { index: true, element: <AddProduct /> },
-      { path: "product-list", element: <ProductList /> },
-      { path: "orders", element: <Orders /> },
+      {
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <AddProduct /> },
+          { path: "product-list", element: <ProductList /> },
+          { path: "orders", element: <Orders /> },
+        ],
+      },
     ],
   },
-  { path: "*", element: "NotFound" },
+
+  { path: "*", element: <>404 Not Found</> },
 ]);
 
 export default router;

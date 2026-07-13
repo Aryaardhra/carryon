@@ -3,25 +3,47 @@ import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/data/assets";
 import BackgroundVideo from "../BackgroundVideo";
 import { useAuthContext } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 const AdminLogin = () => {
   
-  const { isAdmin } = useAuthContext();
+  //const { isAdmin } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login, isAuthenticated, isAdmin, loading} = useAuthContext();
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setIsSeller(true);
-  };
+   useEffect(() => {
 
-  useEffect(() => {
+        if (!loading && isAuthenticated && isAdmin) {
+            navigate("/admin", {replace: true});
+          }
+        },[loading, isAuthenticated, isAdmin, navigate]);
+
+   const onSubmitHandler = async (e) => {
+
+        e.preventDefault();
+        try {
+            setSubmitting(true);
+            await login({ email, password });
+            navigate("/admin", {replace: true });
+        }
+
+        catch (error) {
+            toast.error( error?.response?.data?.message || "Login failed.");
+        }
+
+        finally {
+           setSubmitting(false);
+        }
+    };
+
+ /* useEffect(() => {
     if (isAdmin) {
       console.log(isAdmin);
       navigate("/admin");
     }
-  }, [isAdmin]);
+  }, [isAdmin]);*/
 
   return (
     !isAdmin && (
@@ -68,8 +90,10 @@ const AdminLogin = () => {
                   required
                 />
               </div>
-              <button className="bg-primary/80 hover:bg-secondary/80 transition-all text-white w-full py-2 rounded-md cursor-pointer">
-                login
+              <button 
+              disabled={submitting}
+              className="bg-primary/80 hover:bg-secondary/80 transition-all text-white w-full py-2 rounded-md cursor-pointer">
+                { submitting ? "Loggin..." : "Login" }
               </button>
             </form>
           </div>

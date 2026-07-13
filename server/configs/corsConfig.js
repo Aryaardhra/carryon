@@ -3,7 +3,7 @@ import cors from "cors";
 const corsConfig = () => {
   return cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ["http://localhost:5173"];
+      const allowedOrigins = [process.env.CLIENT_URL ||"http://localhost:5173"];
 
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
