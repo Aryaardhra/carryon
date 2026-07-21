@@ -11,6 +11,7 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+    const [submitting, setSubmitting] = useState(false);
   const { login, isAuthenticated, isAdmin, loading} = useAuthContext();
 
    useEffect(() => {

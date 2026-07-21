@@ -9,9 +9,14 @@ const AdminLayout = () => {
   const [isAdmin, setIsAdmin] = useState(true);
 
   const sidebarLinks = [
+     {
+      name: "Category List",
+      path: "/admin/category-list",
+      icon: <IoMdList className="text-gray-800" />,
+    },
     {
       name: "Add Product",
-      path: "/admin",
+      path: "/admin/add-product",
       icon: <MdLibraryAdd className="text-gray-800" />,
     },
     {

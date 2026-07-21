@@ -21,6 +21,9 @@ import VerifyEmail from "../pages/VerifyEmail";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import Profile from "../pages/Profile";
+import AddCategory from "../admin/pages/AddCategory";
+import CategoryList from "../admin/pages/CategoryList";
+import EditProduct from "../admin/pages/EditProduct";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +63,10 @@ const router = createBrowserRouter([
       {
         element: <AdminLayout />,
         children: [
-          { index: true, element: <AddProduct /> },
+          /*{ index: true, element: <AddCategory /> },*/
+          { index: true, path: "category-list", element: <CategoryList /> },
+          { path: "add-product", element: <AddProduct /> },
+          { path: "edit/:id", element: <EditProduct />},
           { path: "product-list", element: <ProductList /> },
           { path: "orders", element: <Orders /> },
         ],
