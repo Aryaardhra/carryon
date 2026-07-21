@@ -928,3 +928,9 @@
 {"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:39:05"}
 {"app":"carry_on-server","level":"info","message":"Logout successful: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:39:14"}
 {"app":"carry_on-server","level":"info","message":"Login successful: kaizerbruno2@gmail.com","timestamp":"2026-07-13 21:40:33"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-21 13:44:23"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-21 13:44:23"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-21 13:44:25"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: byteqzone@gmail.com","timestamp":"2026-07-21 13:44:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: byteqzone@gmail.com","timestamp":"2026-07-21 13:44:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-21 13:44:26"}
