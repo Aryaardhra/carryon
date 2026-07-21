@@ -3,7 +3,7 @@ import Product from "../models/productModel.js";
 import logger from "../utils/logger.js";
 
 const findUserCart = async (userId, session) => {
-  let cart = await Cart.findOne({user: userId}).session(session);
+  let cart = await Cart.findOne({ user: userId }).session(session);
 
   if (!cart) {
     const created = await Cart.create(
@@ -71,7 +71,7 @@ const findExistingCartItem = (cart, productId, sku) => {
 };
 
 export const addToCartService = async ({ userId, body, session }) => {
-  const { productId, sku, quantity = 1} = body;
+  const { productId, sku, quantity = 1 } = body;
 
   if (!productId) {
     throw new Error("Product ID is required.");
@@ -84,7 +84,7 @@ export const addToCartService = async ({ userId, body, session }) => {
   const variant = findVariant(product, sku);
   validateStock(variant, quantity);
   const cart = await findUserCart(userId, session);
-  const existingItem = findExistingCartItem( cart, productId, sku );
+  const existingItem = findExistingCartItem(cart, productId, sku);
 
   if (existingItem) {
     const newQuantity = existingItem.quantity + Number(quantity);
@@ -102,20 +102,19 @@ export const addToCartService = async ({ userId, body, session }) => {
     });
   }
 
-  await cart.save({session});
+  await cart.save({ session });
   logger.info(`Added ${product.name} to cart.`);
   return cart;
 };
 
 export const getCartService = async (userId) => {
-  const cart = await Cart.findOne({ user: userId})
-   .populate({
-      path: "items.product",
-      populate: {
-        path: "category",
-        select: "name slug",
-      },
-    });
+  const cart = await Cart.findOne({ user: userId }).populate({
+    path: "items.product",
+    populate: {
+      path: "category",
+      select: "name slug",
+    },
+  });
 
   if (!cart) {
     return {
@@ -137,7 +136,7 @@ export const getCartService = async (userId) => {
   for (const item of cart.items) {
     const product = item.product;
 
-//Product deleted
+    //Product deleted
 
     if (!product) {
       hasInvalidItems = true;
@@ -159,7 +158,7 @@ export const getCartService = async (userId) => {
       continue;
     }
 
-      // Find Variant
+    // Find Variant
 
     const variant = product.variants.find(
       (variant) => variant.sku === item.sku && variant.isActive,
@@ -175,8 +174,8 @@ export const getCartService = async (userId) => {
     const currentPrice = variant.salePrice ?? variant.price;
     const itemTotal = currentPrice * item.quantity;
 
-   // Savings
-     
+    // Savings
+
     let saving = 0;
 
     if (variant.salePrice) {
@@ -187,7 +186,7 @@ export const getCartService = async (userId) => {
     totalSavings += saving;
     totalQuantity += item.quantity;
 
-     // Frontend Response
+    // Frontend Response
 
     validItems.push({
       cartItemId: item._id,
@@ -213,8 +212,8 @@ export const getCartService = async (userId) => {
     });
   }
 
-// Remove Invalid Items
- 
+  // Remove Invalid Items
+
   if (hasInvalidItems) {
     cart.items = cart.items.filter((item) =>
       validItems.some(
@@ -225,7 +224,7 @@ export const getCartService = async (userId) => {
   }
 
   //  Response
- 
+
   return {
     items: validItems,
     totalItems: validItems.length,
@@ -253,8 +252,8 @@ export const updateCartQuantityService = async ({ userId, body, session }) => {
     throw new Error("Quantity must be at least 1.");
   }
 
- // Find Cart
-  
+  // Find Cart
+
   const cart = await Cart.findOne({
     user: userId,
   }).session(session);
@@ -271,7 +270,7 @@ export const updateCartQuantityService = async ({ userId, body, session }) => {
     throw new Error("Cart item not found.");
   }
 
-// Find Product
+  // Find Product
 
   const product = await Product.findOne({
     _id: cartItem.product,
@@ -284,7 +283,7 @@ export const updateCartQuantityService = async ({ userId, body, session }) => {
     throw new Error("Product not available.");
   }
 
-// Find Variant
+  // Find Variant
 
   const variant = product.variants.find(
     (item) => item.sku === cartItem.sku && item.isActive,
@@ -294,21 +293,21 @@ export const updateCartQuantityService = async ({ userId, body, session }) => {
     throw new Error("Variant unavailable.");
   }
 
-// Validate Stock
- 
+  // Validate Stock
+
   if (variant.stock < quantity) {
     throw new Error("Insufficient stock.");
   }
 
-   // Update Quantity
+  // Update Quantity
 
   cartItem.quantity = Number(quantity);
-  await cart.save({session});
+  await cart.save({ session });
   logger.info(`Updated cart quantity for ${variant.sku}`);
   return cart;
 };
 
-export const removeCartItemService = async ({userId, body, session}) => {
+export const removeCartItemService = async ({ userId, body, session }) => {
   const { cartItemId } = body;
 
   if (!cartItemId) {
@@ -316,15 +315,15 @@ export const removeCartItemService = async ({userId, body, session}) => {
     throw new Error("Cart item id is required.");
   }
 
-// Find Cart
+  // Find Cart
 
-  const cart = await Cart.findOne({user: userId}).session(session);
+  const cart = await Cart.findOne({ user: userId }).session(session);
 
   if (!cart) {
     throw new Error("Cart not found.");
   }
 
-    //Find Item
+  //Find Item
 
   const item = cart.items.id(cartItemId);
 
@@ -332,21 +331,21 @@ export const removeCartItemService = async ({userId, body, session}) => {
     throw new Error("Cart item not found.");
   }
 
-   // Remove Item
-  
+  // Remove Item
+
   item.deleteOne();
-  await cart.save({session});
+  await cart.save({ session });
   logger.info(`Cart item removed : ${cartItemId}`);
   return cart;
 };
-export const clearCartService = async ({userId,session}) => {
-  const cart = await Cart.findOne({user: userId}).session(session);
+export const clearCartService = async ({ userId, session }) => {
+  const cart = await Cart.findOne({ user: userId }).session(session);
 
   if (!cart) {
     throw new Error("Cart not found.");
   }
   cart.items = [];
-  await cart.save({session});
+  await cart.save({ session });
 
   logger.info(`Cart cleared for user ${userId}`);
   return cart;

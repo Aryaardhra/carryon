@@ -74,12 +74,25 @@ export const validateSalePrice = (variants) => {
   if (!variants) return true;
 
   for (const variant of variants) {
-    if (
-      variant.salePrice &&
-      Number(variant.salePrice) >= Number(variant.price)
-    ) {
-      logger.warn(`Invalid sale price for SKU ${variant.sku}`);
-      throw new Error(`Sale price must be less than price for SKU ${variant.sku}`,);
+    if (!variant.options || variant.options.length === 0) {
+      throw new Error(
+        `Variant '${variant.sku}' must contain at least one size option.`,
+      );
+    }
+
+    for (const option of variant.options) {
+      if (
+        option.salePrice &&
+        Number(option.salePrice) >= Number(option.price)
+      ) {
+        logger.warn(
+          `Invalid sale price for SKU ${variant.sku} (${option.size})`,
+        );
+
+        throw new Error(
+          `Sale price must be less than price for SKU ${variant.sku} (${option.size})`,
+        );
+      }
     }
   }
 
@@ -136,27 +149,38 @@ export const validateBasicInformation = async ({
   let slug = existingProduct.slug;
 
   if (body.name && body.name.trim() !== existingProduct.name) {
-    slug = await generateUniqueSlug(
-      body.name,
-      session,
-    );
+    slug = await generateUniqueSlug(body.name, session);
   }
 
   return slug;
 };
-export const validatePricing = ({ price, salePrice }) => {
-  if (price !== undefined && Number(price) <= 0) {
-    throw new Error("Price must be greater than zero.");
-  }
 
-  if (
-    price !== undefined && salePrice !== undefined && Number(salePrice) >= Number(price)) {
-    throw new Error("Sale price must be less than price.");
+export const validatePricing = (options) => {
+  if (!options) return true;
+
+  for (const option of options) {
+    if (Number(option.price) <= 0) {
+      throw new Error(
+        `Price must be greater than zero for size ${option.size}.`,
+      );
+    }
+
+    if (option.salePrice && Number(option.salePrice) >= Number(option.price)) {
+      throw new Error(
+        `Sale price must be less than price for size ${option.size}.`,
+      );
+    }
   }
+  return true;
 };
 
-export const validateInventory = ({ stock }) => {
-  if (stock !== undefined && Number(stock) < 0) {
-    throw new Error("Stock cannot be negative.");
+export const validateInventory = (options) => {
+  if (!options) return true;
+
+  for (const option of options) {
+    if (Number(option.stock) < 0) {
+      throw new Error(`Stock cannot be negative for size ${option.size}.`);
+    }
   }
+  return true;
 };

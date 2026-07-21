@@ -24,7 +24,7 @@ const imageSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const colorSchema = new mongoose.Schema(
@@ -43,7 +43,7 @@ const colorSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const specificationSchema = new mongoose.Schema(
@@ -62,26 +62,14 @@ const specificationSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
-
-const variantSchema = new mongoose.Schema(
+const optionSchema = new mongoose.Schema(
   {
-    sku: {
+    size: {
       type: String,
       required: true,
-      trim: true,
-      uppercase: true,
-    },
-
-    color: {
-      type: colorSchema,
-      required: true,
-    },
-
-    size: {
-    type: String,
-    enum: ["XS","S","M","L","XL","XXL"]
+      enum: ["XS", "S", "M", "L", "XL", "XXL"],
     },
 
     stock: {
@@ -102,6 +90,34 @@ const variantSchema = new mongoose.Schema(
       default: null,
       min: 0,
     },
+  },
+  { _id: false },
+);
+
+const variantSchema = new mongoose.Schema(
+  {
+    sku: {
+      type: String,
+      required: true,
+      trim: true,
+      uppercase: true,
+    },
+
+    color: {
+      type: colorSchema,
+      required: true,
+    },
+
+    options: {
+      type: [optionSchema],
+      required: true,
+      validate: {
+        validator(value) {
+          return value.length > 0;
+        },
+        message: "Each variant must contain at least one size option.",
+      },
+    },
 
     images: {
       type: [imageSchema],
@@ -114,17 +130,9 @@ const variantSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
-  }
+    _id: false,
+  },
 );
-
-variantSchema.virtual("discountPercentage").get(function () {
-  if (!this.salePrice) return 0;
-
-  return Math.round(
-    ((this.price - this.salePrice) / this.price) * 100
-  );
-});
 
 variantSchema.set("toJSON", {
   virtuals: true,
@@ -155,7 +163,7 @@ const seoSchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const productSchema = new mongoose.Schema(
@@ -226,6 +234,7 @@ const productSchema = new mongoose.Schema(
 
     variants: {
       type: [variantSchema],
+      required: true,
       validate: {
         validator(value) {
           return value.length > 0;
@@ -244,11 +253,6 @@ const productSchema = new mongoose.Schema(
     totalReviews: {
       type: Number,
       default: 0,
-    },
-
-    featured: {
-      type: Boolean,
-      default: false,
     },
 
     bestSeller: {
@@ -277,17 +281,17 @@ const productSchema = new mongoose.Schema(
       default: {},
     },
     isDeleted: {
-    type: Boolean,
-    default: false,
-},
-deletedAt: {
-    type: Date,
-    default: null,
-},
+      type: Boolean,
+      default: false,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 productSchema.index({
@@ -313,24 +317,31 @@ productSchema.index({
 });
 
 productSchema.virtual("minPrice").get(function () {
-  return Math.min(
-    ...this.variants.map((v) => v.salePrice || v.price)
+  const prices = this.variants.flatMap((variant) =>
+    variant.options.map((option) => option.salePrice ?? option.price),
   );
+
+  return prices.length ? Math.min(...prices) : 0;
 });
 
 productSchema.virtual("maxPrice").get(function () {
-  return Math.max(
-    ...this.variants.map((v) => v.salePrice || v.price)
+  const prices = this.variants.flatMap((variant) =>
+    variant.options.map((option) => option.salePrice ?? option.price),
   );
+
+  return prices.length ? Math.max(...prices) : 0;
 });
 
 productSchema.virtual("totalStock").get(function () {
-  return this.variants.reduce(
-    (acc, variant) => acc + variant.stock,
-    0
-  );
-});
+  return this.variants.reduce((variantTotal, variant) => {
+    const optionStock = variant.options.reduce(
+      (optionTotal, option) => optionTotal + option.stock,
+      0,
+    );
 
+    return variantTotal + optionStock;
+  }, 0);
+});
 productSchema.virtual("inStock").get(function () {
   return this.totalStock > 0;
 });

@@ -1,7 +1,4 @@
-import {
-  deleteFromCloudinary,
-  uploadToCloudinary,
-} from "../configs/cloudinary.js";
+import {deleteFromCloudinary,uploadToCloudinary} from "../configs/cloudinary.js";
 import logger from "./logger.js";
 
 export const uploadFeaturedImage = async (
@@ -108,15 +105,25 @@ export const uploadVariantImages = async (
 
     finalVariants.push({
       sku: variant.sku.trim().toUpperCase(),
+
       color: variant.color,
-      size: variant.size,
-      stock: Number(variant.stock),
-      price: Number(variant.price),
-      salePrice: variant.salePrice ? Number(variant.salePrice) : null,
+
+      options: variant.options.map((option) => ({
+        size: option.size,
+        stock: Number(option.stock),
+        price: Number(option.price),
+        salePrice:
+          option.salePrice === "" || option.salePrice == null
+            ? null
+            : Number(option.salePrice),
+      })),
+
       images: variantImages,
-      isActive: true,
+
+      isActive: variant.isActive ?? true,
     });
   }
+
   return finalVariants;
 };
 
@@ -208,7 +215,7 @@ export const replaceVariantImages = async (
 
   if (variant.images.length) {
     await Promise.all(
-      variant.images.map((image) => eleteFromCloudinary(image.public_id)),
+      variant.images.map((image) => deleteFromCloudinary(image.public_id)),
     );
   }
 

@@ -1,12 +1,13 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import { addToProduct, deleteProduct, getAllProducts, getProduct, getProductById, permanentlyDeleteProduct, restoreDeletedProduct, updateBasicInformation, updateFeaturedImage, updateGalleryImages, updateProductInventory, updateProductPricing, updateVariantImages } from "../controllers/productController.js";
+import { addToProduct, deleteProduct, getAdminProductList, getAllProducts, getDeletedProducts, getProduct, getProductById, permanentlyDeleteProduct, restoreDeletedProduct, toggleProductStatus, updateBasicInformation, updateFeaturedImage, updateGalleryImages, updateProductInventory, updateProductPricing, updateVariantImages } from "../controllers/productController.js";
 import authorizeRoles from "../middlewares/authorizeRoles.js";
 import upload from "../middlewares/multer.js";
 
 const productRouter = express.Router();
 
 productRouter.post("/add", authMiddleware, authorizeRoles("admin"), upload.any(), addToProduct);
+productRouter.get("/admin/all",authMiddleware, authorizeRoles("admin"), getAdminProductList );
 productRouter.get("/:slug", getProduct);
 productRouter.get("/pid/:id", getProductById);
 productRouter.get("/", getAllProducts);
@@ -19,5 +20,7 @@ productRouter.patch("/:id/gallery-images", authMiddleware, authorizeRoles("admin
 productRouter.delete("/:id", deleteProduct);
 productRouter.patch("/restore/:id", restoreDeletedProduct);
 productRouter.delete("/permanent/:id", permanentlyDeleteProduct);
+productRouter.patch("/toggle-status/:id", authMiddleware, authorizeRoles("admin"), toggleProductStatus);
+productRouter.patch("/deleted", authMiddleware, authorizeRoles("admin"), getDeletedProducts);
 
 export default productRouter;

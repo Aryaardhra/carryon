@@ -3,6 +3,7 @@ import {
   uploadToCloudinary,
 } from "../configs/cloudinary.js";
 import categoryModel from "../models/categoryModel.js";
+import productModel from "../models/productModel.js";
 import logger from "../utils/logger.js";
 import slugify from "slugify";
 
@@ -19,7 +20,11 @@ export const addCategory = async (req, res, next) => {
       });
     }
 
-    const existingCategory = await categoryModel.findOne({ name: name.trim() });
+    const existingCategory = await categoryModel.findOne({
+      name: {
+        $regex: new RegExp(`^${name.trim()}$`, "i"),
+      },
+    });
 
     if (existingCategory) {
       logger.warn(`Category already exists: ${name}`);
@@ -66,9 +71,7 @@ export const addCategory = async (req, res, next) => {
 
 export const getCategories = async (req, res, next) => {
   try {
-    const categories = await categoryModel.find({
-      isActive: true,
-    });
+    const categories = await categoryModel.find();
 
     logger.info("Fetched all categories");
 
@@ -78,6 +81,20 @@ export const getCategories = async (req, res, next) => {
     });
   } catch (error) {
     logger.error(error.message);
+    next(error);
+  }
+};
+export const getActiveCategories = async (req, res, next) => {
+  try {
+    const categories = await categoryModel.find({
+      isActive: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      categories,
+    });
+  } catch (error) {
     next(error);
   }
 };
@@ -141,7 +158,7 @@ export const updateCategory = async (req, res, next) => {
         mimeType: req.file.mimetype,
       };
     }
-
+   
     await category.save();
 
     logger.info(`Category updated: ${category.name}`);
@@ -153,6 +170,33 @@ export const updateCategory = async (req, res, next) => {
     });
   } catch (error) {
     logger.error(error.message);
+    next(error);
+  }
+};
+
+export const toggleCategoryStatus = async (req, res, next) => {
+  try {
+    const category = await categoryModel.findById(req.params.id);
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    category.isActive = !category.isActive;
+
+    await category.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Category ${
+        category.isActive ? "activated" : "deactivated"
+      } successfully`,
+      category,
+    });
+  } catch (error) {
     next(error);
   }
 };

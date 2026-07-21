@@ -16,6 +16,7 @@ import {
   commitTransaction,
   createProduct,
   endTransaction,
+  getAdminProducts,
   getAllProduct,
   getSingleProduct,
   getSingleProductById,
@@ -23,6 +24,7 @@ import {
   restoreProduct,
   softDeleteProduct,
   startTransaction,
+  toggleProductStatusService,
   updateBasicInformationService,
   updateFeaturedImageService,
   updateGalleryImagesService,
@@ -36,6 +38,7 @@ import logger from "../utils/logger.js";
 import { deleteFromCloudinary } from "../configs/cloudinary.js";
 
 export const addToProduct = async (req, res, next) => {
+ 
   const session = await startTransaction();
   const uploadedPublicIds = [];
   try {
@@ -101,25 +104,19 @@ export const addToProduct = async (req, res, next) => {
 export const getProduct = async (req, res, next) => {
   try {
     const { slug } = req.params;
-    console.log(req.params);
-    console.log(slug);
     const product = await getSingleProduct(slug);
-    console.log(product);
     return res.status(200).json({
       success: true,
       product,
     });
   } catch (error) {
     logger.error(`Get Product Error: ${error.message}`);
-
-    next(error);
   }
 };
 
 export const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
     const product = await getSingleProductById(id);
 
     return res.status(200).json({
@@ -146,9 +143,19 @@ export const getAllProducts = async (req, res, next) => {
     next(error);
   }
 };
+export const getAdminProductList = async (req, res, next) => {
+  try {
+    const result = await getAdminProducts(req.query);
 
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const updateBasicInformation = async (req, res, next) => {
-
   const session = await startTransaction();
 
   try {
@@ -178,14 +185,14 @@ export const updateBasicInformation = async (req, res, next) => {
 
 export const updateProductPricing = async (req, res, next) => {
   const session = await startTransaction();
- 
+
   try {
     const product = await updateProductPricingService({
       productId: req.params.id,
       body: req.body,
       session,
     });
-    
+
     await commitTransaction(session);
 
     await clearProductCache(product.category);
@@ -331,6 +338,32 @@ export const updateVariantImages = async (req, res, next) => {
     await Promise.allSettled(
       uploadedPublicIds.map((id) => deleteFromCloudinary(id)),
     );
+
+    next(error);
+  } finally {
+    await endTransaction(session);
+  }
+};
+
+export const toggleProductStatus = async (req, res, next) => {
+  const session = await startTransaction();
+
+  try {
+    const product = await toggleProductStatusService(req.params.id, session);
+
+    await commitTransaction(session);
+
+    await clearProductCache(product.category);
+
+    return res.status(200).json({
+      success: true,
+      message: `Product ${
+        product.isActive ? "activated" : "deactivated"
+      } successfully.`,
+      product,
+    });
+  } catch (error) {
+    await abortTransaction(session);
 
     next(error);
   } finally {

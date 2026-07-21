@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { assets, categories } from "../../assets/data/assets";
-import { getCategories } from "../../services/categoryService";
+import { useParams } from "react-router-dom";
+import useEditProduct from "../../hooks/useEditProduct";
 import AdminHeader from "./AdminHeader";
 import AdminCard from "../../components/admin/AdminCard";
 import BasicInformation from "../../components/admin/product/BasicInformation";
-import ImageUpload from "../../components/admin/ImageUpload";
-import ProductVariants from "../../components/admin/product/ProductVariants";
 import ProductImages from "../../components/admin/product/ProductImages";
-import VariantCard from "../../components/admin/product/VariantCard";
-import AdminButton from "../../components/admin/AdminButton";
+import ProductVariants from "../../components/admin/product/ProductVariants";
 import ProductSpecifications from "../../components/admin/product/ProductSpecifications";
-import DynamicList from "../../components/admin/product/DynamicList";
-import SeoSection from "../../components/admin/product/SeoSection";
-import SuitableFor from "../../components/admin/product/SuitableFor";
-import useProductForm from "../../hooks/useProductForm";
 import ProductAttributes from "../../components/admin/product/ProductAttributes";
+import SeoSection from "../../components/admin/product/SeoSection";
+import AdminButton from "../../components/admin/AdminButton";
 import ProductVisibility from "../../components/admin/product/ProductVisibility";
+import ProductAnalytics from "../../components/admin/product/ProductAnalytics";
 
-const AddProduct = () => {
+const EditProduct = () => {
+
+  const { id } = useParams();
   
-  const { product, setProduct, categories, loading, submitProduct } = useProductForm();
+  const {product, setProduct, categories, loading, submitProduct, pageLoading} = useEditProduct(id);
+  
+  if (pageLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading Product...
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
-      <AdminHeader title="Add Product" />
+      <AdminHeader title="Edit Product" />
       <form onSubmit={submitProduct}>
         <AdminCard>
           <div className="space-y-10">
@@ -35,31 +40,38 @@ const AddProduct = () => {
                 categories={categories}
               />
             </section>
+
             <section>
               <h2 className="text-lg font-semibold mb-5">Product Images</h2>
               <ProductImages product={product} setProduct={setProduct} />
             </section>
+
             <section>
               <ProductVariants product={product} setProduct={setProduct} />
             </section>
+
             <section>
               <ProductSpecifications
                 product={product}
                 setProduct={setProduct}
               />
             </section>
+
             <section>
               <h2 className="text-lg font-semibold mb-5">Product Attributes</h2>
               <ProductAttributes product={product} setProduct={setProduct} />
             </section>
+            
             <section>
               <ProductVisibility product={product} setProduct={setProduct} />
             </section>
+
             <section>
               <SeoSection product={product} setProduct={setProduct} />
             </section>
+
             <div className="flex justify-end">
-              <AdminButton loading={loading}>Add Product</AdminButton>
+              <AdminButton loading={loading}>Save Changes</AdminButton>
             </div>
           </div>
         </AdminCard>
@@ -68,4 +80,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;
