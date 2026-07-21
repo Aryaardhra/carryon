@@ -14,10 +14,15 @@ import ProductAnalytics from "../../components/admin/product/ProductAnalytics";
 
 const EditProduct = () => {
 
-  const { id } = useParams();
-  
-  const {product, setProduct, categories, loading, submitProduct, pageLoading} = useEditProduct(id);
-  
+  const {
+    product,
+    setProduct,
+    categories,
+    loading,
+    submitProduct,
+    pageLoading,
+  } = useEditProduct();
+
   if (pageLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -28,54 +33,119 @@ const EditProduct = () => {
 
   return (
     <div className="flex-1 overflow-y-auto p-8">
+
       <AdminHeader title="Edit Product" />
+
       <form onSubmit={submitProduct}>
+
         <AdminCard>
+
           <div className="space-y-10">
+
+            {/* Basic Information */}
+
             <section>
-              <h2 className="text-lg font-semibold mb-5">Basic Information</h2>
+
+              <h2 className="text-lg font-semibold mb-5">
+                Basic Information
+              </h2>
+
               <BasicInformation
                 product={product}
                 setProduct={setProduct}
                 categories={categories}
               />
+
             </section>
 
-            <section>
-              <h2 className="text-lg font-semibold mb-5">Product Images</h2>
-              <ProductImages product={product} setProduct={setProduct} />
-            </section>
+            {/* Images */}
 
             <section>
-              <ProductVariants product={product} setProduct={setProduct} />
+
+              <h2 className="text-lg font-semibold mb-5">
+                Product Images
+              </h2>
+
+              <ProductImages
+                product={product}
+                setProduct={setProduct}
+              />
+
             </section>
 
+            {/* Variants */}
+
             <section>
+
+              <ProductVariants
+                product={product}
+                setProduct={setProduct}
+              />
+
+            </section>
+
+            {/* Specifications */}
+
+            <section>
+
               <ProductSpecifications
                 product={product}
                 setProduct={setProduct}
               />
+
             </section>
 
-            <section>
-              <h2 className="text-lg font-semibold mb-5">Product Attributes</h2>
-              <ProductAttributes product={product} setProduct={setProduct} />
-            </section>
-            
-            <section>
-              <ProductVisibility product={product} setProduct={setProduct} />
-            </section>
+            {/* Attributes */}
 
             <section>
-              <SeoSection product={product} setProduct={setProduct} />
+
+              <h2 className="text-lg font-semibold mb-5">
+                Product Attributes
+              </h2>
+
+              <ProductAttributes
+                product={product}
+                setProduct={setProduct}
+              />
+
+            </section>
+
+            {/* Visibility */}
+
+            <section>
+
+              <ProductVisibility
+                product={product}
+                setProduct={setProduct}
+              />
+
+            </section>
+
+            {/* SEO */}
+
+            <section>
+
+              <SeoSection
+                product={product}
+                setProduct={setProduct}
+              />
+
             </section>
 
             <div className="flex justify-end">
-              <AdminButton loading={loading}>Save Changes</AdminButton>
+
+              <AdminButton loading={loading}>
+                Save Changes
+              </AdminButton>
+
             </div>
+
           </div>
+
         </AdminCard>
+
       </form>
+
     </div>
   );
 };

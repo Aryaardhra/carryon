@@ -29,23 +29,25 @@ export const updateBasicInformation = (id, data) => {
 };
 
 export const updateProductPricing = (id, data) => {
-  return axiosInstance.put(`/v1/product/${id}/pricing`, data);
+  return axiosInstance.patch(`/v1/product/${id}/pricing`, data);
 };
 
 export const updateProductInventory = (id, data) => {
-  return axiosInstance.put(`/v1/product/${id}/inventory`, data);
+  return axiosInstance.patch(`/v1/product/${id}/inventory`, data);
 };
 
 export const updateFeaturedImage = (id, formData) => {
-  return axiosInstance.put(`/v1/product/${id}/featured-image`, formData);
+  return axiosInstance.patch(`/v1/product/${id}/featured-image`, formData);
 };
 
 export const updateGalleryImages = (id, formData) => {
-  return axiosInstance.put(`/v1/product/${id}/gallery-images`, formData);
+  return axiosInstance.patch(`/v1/product/${id}/gallery-images`, formData);
 };
-
+export const updateVariantBasic = (id, data) =>{
+  return axiosInstance.patch(`v1/product/${id}/variant-basic`, data);
+};
 export const updateVariantImages = (id, formData) => {
-  return axiosInstance.put(`/v1/product/${id}/variant-images`, formData);
+  return axiosInstance.patch(`/v1/product/${id}/variant-images`, formData);
 };
 
 // ---------------- Status ----------------

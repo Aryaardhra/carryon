@@ -24,26 +24,27 @@ import {
   restoreProduct,
   softDeleteProduct,
   startTransaction,
-  toggleProductStatusService,
   updateBasicInformationService,
   updateFeaturedImageService,
   updateGalleryImagesService,
   updateProductInventoryService,
   updateProductPricingService,
+  updateVariantBasicService,
   updateVariantImagesService,
 } from "../services/ProductServices.js";
 import { clearProductCache } from "../redis/cache.js";
 import slugify from "slugify";
 import logger from "../utils/logger.js";
 import { deleteFromCloudinary } from "../configs/cloudinary.js";
+import generateVariantSKUs from "../utils/generateVariantSKUs.js";
 
 export const addToProduct = async (req, res, next) => {
- 
   const session = await startTransaction();
   const uploadedPublicIds = [];
   try {
     const data = parseProductRequest(req.body);
 
+    data.variants = generateVariantSKUs(data.name, data.variants);
     validateParsedProduct(data);
 
     await validateSKU(data.variants, session);
@@ -104,21 +105,10 @@ export const addToProduct = async (req, res, next) => {
 export const getProduct = async (req, res, next) => {
   try {
     const { slug } = req.params;
+    console.log(req.params);
+    console.log(slug);
     const product = await getSingleProduct(slug);
-    return res.status(200).json({
-      success: true,
-      product,
-    });
-  } catch (error) {
-    logger.error(`Get Product Error: ${error.message}`);
-  }
-};
-
-export const getProductById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const product = await getSingleProductById(id);
-
+    console.log(product);
     return res.status(200).json({
       success: true,
       product,
@@ -130,16 +120,19 @@ export const getProductById = async (req, res, next) => {
   }
 };
 
-export const getAllProducts = async (req, res, next) => {
+export const getProductById = async (req, res, next) => {
   try {
-    const result = await getAllProduct(req.query);
+    const { id } = req.params;
+    console.log(req.params);
+    const product = await getSingleProductById(id);
 
     return res.status(200).json({
       success: true,
-      ...result,
+      product,
     });
   } catch (error) {
-    logger.error(`Get Products Error: ${error.message}`);
+    logger.error(`Get Product Error: ${error.message}`);
+
     next(error);
   }
 };
@@ -155,6 +148,20 @@ export const getAdminProductList = async (req, res, next) => {
     next(error);
   }
 };
+export const getAllProducts = async (req, res, next) => {
+  try {
+    const result = await getAllProduct(req.query);
+
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  } catch (error) {
+    logger.error(`Get Products Error: ${error.message}`);
+    next(error);
+  }
+};
+
 export const updateBasicInformation = async (req, res, next) => {
   const session = await startTransaction();
 
@@ -178,6 +185,36 @@ export const updateBasicInformation = async (req, res, next) => {
     await abortTransaction(session);
 
     next(error);
+  } finally {
+    await endTransaction(session);
+  }
+};
+// update variantbasic
+
+export const updateVariantBasic = async (
+  req,
+  res,
+  next
+) => {
+  const session = await startTransaction();
+
+  try {
+    const product = await updateVariantBasicService({
+      productId: req.params.id,
+      body: req.body,
+      session,
+    });
+
+    await commitTransaction(session);
+
+    return res.status(200).json({
+      success: true,
+      message: "Variant updated successfully.",
+      product,
+    });
+  } catch (err) {
+    await abortTransaction(session);
+    next(err);
   } finally {
     await endTransaction(session);
   }
@@ -344,7 +381,6 @@ export const updateVariantImages = async (req, res, next) => {
     await endTransaction(session);
   }
 };
-
 export const toggleProductStatus = async (req, res, next) => {
   const session = await startTransaction();
 
@@ -370,6 +406,7 @@ export const toggleProductStatus = async (req, res, next) => {
     await endTransaction(session);
   }
 };
+
 
 export const deleteProduct = async (req, res, next) => {
   const session = await startTransaction();

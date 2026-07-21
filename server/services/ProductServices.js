@@ -27,6 +27,7 @@ import {
   validateSKU,
   validateUpdateProduct,
 } from "../utils/productValidator.js";
+import generateSku from "../utils/generateSku.js";
 
 export const createProduct = async (
   {
@@ -464,19 +465,15 @@ export const updateBasicInformationService = async ({ id, body, session }) => {
   return product;
 };
 
-export const updateProductPricingService = async ({
+export const updateVariantBasicService = async ({
   productId,
   body,
   session,
 }) => {
-  const { sku, size, price, salePrice } = body;
+  const { productName, variants } = body;
 
-  if (!sku) {
-    throw new Error("SKU is required.");
-  }
-
-  if (!size) {
-    throw new Error("Size is required.");
+  if (!Array.isArray(variants) || variants.length === 0) {
+    throw new Error("Variants are required.");
   }
 
   const product = await Product.findById(productId).session(session);
@@ -485,39 +482,112 @@ export const updateProductPricingService = async ({
     throw new Error("Product not found.");
   }
 
-  const variant = product.variants.find(
-    (item) => item.sku === sku.trim().toUpperCase(),
-  );
-
-  if (!variant) {
-    throw new Error("Variant not found.");
+  // Update product name
+  if (
+    productName &&
+    productName.trim() !== product.name
+  ) {
+    product.name = productName.trim();
   }
 
-  const option = variant.options.find((item) => item.size === size);
+  for (const incomingVariant of variants) {
+    if (!incomingVariant._id) {
+      throw new Error("Variant ID is required.");
+    }
 
-  if (!option) {
-    throw new Error("Size option not found.");
+    if (!incomingVariant.color?.name) {
+      throw new Error("Variant color is required.");
+    }
+
+    const existingVariant = product.variants.id(incomingVariant._id);
+
+    if (!existingVariant) {
+      throw new Error("Variant not found.");
+    }
+
+    // Update color
+    existingVariant.color = incomingVariant.color;
+
+    // Regenerate SKU using updated product name & color
+    existingVariant.sku = generateSku(
+      product.name,
+      incomingVariant.color.name,
+      existingVariant.options[0].size
+    );
   }
 
-  validatePricing([
-    {
-      ...option.toObject(),
-      price: price !== undefined ? Number(price) : option.price,
-      salePrice:
-        salePrice !== undefined
-          ? salePrice === ""
+  // Check duplicate SKUs after regeneration
+  await validateSKU(product.variants, session, product._id);
+
+  await product.save({ session });
+
+  return product;
+};
+
+export const updateProductPricingService = async ({
+  productId,
+  body,
+  session,
+}) => {
+  const { variants } = body;
+
+  if (!Array.isArray(variants) || variants.length === 0) {
+    throw new Error("Variants are required.");
+  }
+
+  const product = await Product.findById(productId).session(session);
+
+  if (!product) {
+    throw new Error("Product not found.");
+  }
+
+  for (const incomingVariant of variants) {
+    if (!incomingVariant._id) {
+      throw new Error("Variant ID is required.");
+    }
+
+    if (
+      !Array.isArray(incomingVariant.options) ||
+      incomingVariant.options.length === 0
+    ) {
+      throw new Error(
+        "Each variant must contain at least one size option."
+      );
+    }
+
+    const existingVariant = product.variants.id(incomingVariant._id);
+
+    if (!existingVariant) {
+      throw new Error("Variant not found.");
+    }
+
+    // Validate prices
+    validatePricing(incomingVariant.options);
+
+    // Update prices
+    for (const incomingOption of incomingVariant.options) {
+      const existingOption = existingVariant.options.find(
+        (option) => option.size === incomingOption.size
+      );
+
+      if (!existingOption) {
+        throw new Error(
+          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`
+        );
+      }
+
+      if (incomingOption.price !== undefined) {
+        existingOption.price = Number(incomingOption.price);
+      }
+
+      if (incomingOption.salePrice !== undefined) {
+        existingOption.salePrice =
+          incomingOption.salePrice === "" ||
+          incomingOption.salePrice === null
             ? null
-            : Number(salePrice)
-          : option.salePrice,
-    },
-  ]);
-
-  if (price !== undefined) {
-    option.price = Number(price);
-  }
-
-  if (salePrice !== undefined) {
-    option.salePrice = salePrice === "" ? null : Number(salePrice);
+            : Number(incomingOption.salePrice);
+      }
+    }
   }
 
   await product.save({ session });
@@ -530,14 +600,10 @@ export const updateProductInventoryService = async ({
   body,
   session,
 }) => {
-  const { sku, size, stock, isActive } = body;
+  const { variants } = body;
 
-  if (!sku) {
-    throw new Error("SKU is required.");
-  }
-
-  if (!size) {
-    throw new Error("Size is required.");
+  if (!Array.isArray(variants) || variants.length === 0) {
+    throw new Error("Variants are required.");
   }
 
   const product = await Product.findById(productId).session(session);
@@ -546,40 +612,56 @@ export const updateProductInventoryService = async ({
     throw new Error("Product not found.");
   }
 
-  const variant = product.variants.find(
-    (item) => item.sku === sku.trim().toUpperCase(),
-  );
+  for (const incomingVariant of variants) {
+    if (!incomingVariant._id) {
+      throw new Error("Variant ID is required.");
+    }
 
-  if (!variant) {
-    throw new Error("Variant not found.");
-  }
+    if (
+      !Array.isArray(incomingVariant.options) ||
+      incomingVariant.options.length === 0
+    ) {
+      throw new Error(
+        "Each variant must contain at least one size option."
+      );
+    }
 
-  const option = variant.options.find((item) => item.size === size);
+    const existingVariant = product.variants.id(incomingVariant._id);
 
-  if (!option) {
-    throw new Error("Size option not found.");
-  }
+    if (!existingVariant) {
+      throw new Error("Variant not found.");
+    }
 
-  validateInventory([
-    {
-      ...option.toObject(),
-      stock: stock !== undefined ? Number(stock) : option.stock,
-    },
-  ]);
+    // Validate inventory
+    validateInventory(incomingVariant.options);
 
-  if (stock !== undefined) {
-    option.stock = Number(stock);
-  }
+    // Update Variant Status
+    if (incomingVariant.isActive !== undefined) {
+      existingVariant.isActive = Boolean(incomingVariant.isActive);
+    }
 
-  if (isActive !== undefined) {
-    variant.isActive = Boolean(isActive);
+    // Update Stock
+    for (const incomingOption of incomingVariant.options) {
+      const existingOption = existingVariant.options.find(
+        (option) => option.size === incomingOption.size
+      );
+
+      if (!existingOption) {
+        throw new Error(
+          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`
+        );
+      }
+
+      if (incomingOption.stock !== undefined) {
+        existingOption.stock = Number(incomingOption.stock);
+      }
+    }
   }
 
   await product.save({ session });
 
   return product;
 };
-
 export const updateFeaturedImageService = async ({
   productId,
   files,
@@ -598,7 +680,6 @@ export const updateFeaturedImageService = async ({
 
   return product;
 };
-
 export const updateGalleryImagesService = async ({
   productId,
   files,

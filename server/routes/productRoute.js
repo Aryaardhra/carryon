@@ -1,6 +1,6 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import { addToProduct, deleteProduct, getAdminProductList, getAllProducts, getDeletedProducts, getProduct, getProductById, permanentlyDeleteProduct, restoreDeletedProduct, toggleProductStatus, updateBasicInformation, updateFeaturedImage, updateGalleryImages, updateProductInventory, updateProductPricing, updateVariantImages } from "../controllers/productController.js";
+import { addToProduct, deleteProduct, getAdminProductList, getAllProducts, getDeletedProducts, getProduct, getProductById, permanentlyDeleteProduct, restoreDeletedProduct, toggleProductStatus, updateBasicInformation, updateFeaturedImage, updateGalleryImages, updateProductInventory, updateProductPricing, updateVariantBasic, updateVariantImages } from "../controllers/productController.js";
 import authorizeRoles from "../middlewares/authorizeRoles.js";
 import upload from "../middlewares/multer.js";
 
@@ -12,6 +12,7 @@ productRouter.get("/:slug", getProduct);
 productRouter.get("/pid/:id", getProductById);
 productRouter.get("/", getAllProducts);
 productRouter.patch("/:id/basic", authMiddleware, authorizeRoles("admin"), updateBasicInformation);
+productRouter.patch("/:id/variant-basic", authMiddleware, authorizeRoles("admin"), updateVariantBasic);
 productRouter.patch("/:id/pricing", authMiddleware, authorizeRoles("admin"), updateProductPricing);
 productRouter.patch("/:id/inventory", authMiddleware, authorizeRoles("admin"), updateProductInventory);
 productRouter.patch("/:id/variant-images", authMiddleware, authorizeRoles("admin"), upload.any(), updateVariantImages);
