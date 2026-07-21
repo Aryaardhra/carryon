@@ -27,8 +27,15 @@ export const validateSKU = async (variants, session, productId = null) => {
   const skuSet = new Set();
 
   for (const variant of variants) {
+    // SKU should already be generated before this function runs
+    if (!variant.sku) {
+      logger.warn("SKU generation failed.");
+      throw new Error("SKU generation failed.");
+    }
+
     const sku = variant.sku.trim().toUpperCase();
 
+    // Duplicate SKU inside the current request
     if (skuSet.has(sku)) {
       logger.warn(`Duplicate SKU in request: ${sku}`);
       throw new Error(`Duplicate SKU '${sku}' found.`);
@@ -36,14 +43,13 @@ export const validateSKU = async (variants, session, productId = null) => {
 
     skuSet.add(sku);
 
-    const exists = await productModel
-      .findOne({
-        _id: { $ne: productId },
-        "variants.sku": sku,
-      })
-      .session(session);
+    // Duplicate SKU already existing in database
+    const existingProduct = await productModel.findOne({
+      _id: { $ne: productId },
+      "variants.sku": sku,
+    }).session(session);
 
-    if (exists) {
+    if (existingProduct) {
       logger.warn(`SKU already exists: ${sku}`);
       throw new Error(`SKU '${sku}' already exists.`);
     }

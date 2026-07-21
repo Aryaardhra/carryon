@@ -129,9 +129,6 @@ const variantSchema = new mongoose.Schema(
       default: true,
     },
   },
-  {
-    _id: false,
-  },
 );
 
 variantSchema.set("toJSON", {

@@ -67,7 +67,6 @@ export const uploadGalleryImages = async (
 
   return productImages;
 };
-
 export const uploadVariantImages = async (
   files,
   variants,
@@ -76,15 +75,21 @@ export const uploadVariantImages = async (
   const finalVariants = [];
 
   for (const variant of variants) {
+    // Existing variant -> use _id
+    // New variant -> use tempId
+    const fieldName = variant._id
+      ? `variant_${variant._id}`
+      : `variant_${variant.tempId}`;
+
     const variantFiles = (files || []).filter(
-      (file) => file.fieldname === `variant_${variant.sku}`,
+      (file) => file.fieldname === fieldName
     );
 
     if (!variantFiles.length) {
-      logger.warn(`No images uploaded for variant ${variant.sku}`);
+      logger.warn(`No images uploaded for variant ${fieldName}`);
 
       throw new Error(
-        `Please upload at least one image for variant ${variant.sku}`,
+        `Please upload at least one image for this variant.`
       );
     }
 
@@ -100,7 +105,7 @@ export const uploadVariantImages = async (
           originalName: file.originalname,
           mimeType: file.mimetype,
         };
-      }),
+      })
     );
 
     finalVariants.push({

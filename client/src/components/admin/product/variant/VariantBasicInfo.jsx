@@ -2,7 +2,7 @@ import { COLORS } from "../../../../constants/colors";
 import FormField from "../../FormField";
 
 const VariantBasicInfo = ({ variant, updateField, updateColor }) => {
-  
+
   const handleColorChange = (colorName) => {
     const selectedColor = COLORS.find((color) => color.name === colorName);
     if (!selectedColor) return;
@@ -15,13 +15,14 @@ const VariantBasicInfo = ({ variant, updateField, updateColor }) => {
       {/* SKU */}
 
       <div>
-        <label className="text-sm font-medium">SKU</label>
-        <input
-          value={variant.sku}
-          onChange={(e) => updateField("sku", e.target.value)}
-          className="mt-1 w-full border rounded-md p-2"
-        />
-      </div>
+  <label className="text-sm font-medium">SKU</label>
+
+  <input
+    value={variant.sku || "Will be generated automatically"}
+    readOnly
+    className="mt-1 w-full border rounded-md bg-gray-100 p-2 text-gray-500"
+  />
+</div>
 
       {/* Color */}
 
