@@ -3,9 +3,18 @@ import Product from "../models/productModel.js";
 import logger from "../utils/logger.js";
 import { clearProductCache } from "../redis/cache.js";
 import redis from "../configs/redis.js";
-import {replaceFeaturedImage, replaceGalleryImages, replaceVariantImages, uploadFeaturedImage, uploadGalleryImages, } from "../utils/productUploader.js";
+import {
+  replaceFeaturedImage,
+  replaceGalleryImages,
+  replaceVariantImages,
+  uploadFeaturedImage,
+  uploadGalleryImages,
+} from "../utils/productUploader.js";
 import { deleteFromCloudinary } from "../configs/cloudinary.js";
-import {parseProductRequest,parseUpdateProductRequest,} from "../utils/productParser.js";
+import {
+  parseProductRequest,
+  parseUpdateProductRequest,
+} from "../utils/productParser.js";
 import {
   generateUniqueSlug,
   validateBasicInformation,
@@ -153,6 +162,7 @@ export const getAllProduct = async (query) => {
   const filter = {
     status: "published",
     isDeleted: false,
+    isActive: true,
   };
 
   if (category) {
@@ -193,14 +203,14 @@ export const getAllProduct = async (query) => {
   }
 
   if (minPrice || maxPrice) {
-    filter["variants.price"] = {};
+    filter["variants.options.price"] = {};
 
     if (minPrice) {
-      filter["variants.price"].$gte = Number(minPrice);
+      filter["variants.options.price"].$gte = Number(minPrice);
     }
 
     if (maxPrice) {
-      filter["variants.price"].$lte = Number(maxPrice);
+      filter["variants.options.price"].$lte = Number(maxPrice);
     }
   }
 
@@ -217,13 +227,13 @@ export const getAllProduct = async (query) => {
 
     case "priceLow":
       sortOption = {
-        "variants.price": 1,
+        "variants.options.price": 1,
       };
       break;
 
     case "priceHigh":
       sortOption = {
-        "variants.price": -1,
+        "variants.options.price": -1,
       };
       break;
 
@@ -284,14 +294,110 @@ export const getAllProduct = async (query) => {
   return response;
 };
 
+export const getAdminProducts = async (query) => {
+  const {
+    page = 1,
+    limit = 10,
+    category,
+    brand,
+    search,
+    sort = "latest",
+  } = query;
+
+  const filter = {
+    isDeleted: false,
+  };
+
+  if (category) {
+    filter.category = category;
+  }
+
+  if (brand) {
+    filter.brand = brand;
+  }
+
+  if (search) {
+    filter.$or = [
+      {
+        name: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        brand: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        description: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        tags: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+    ];
+  }
+
+  let sortOption = {};
+
+  switch (sort) {
+    case "oldest":
+      sortOption = { createdAt: 1 };
+      break;
+
+    case "nameAsc":
+      sortOption = { name: 1 };
+      break;
+
+    case "nameDesc":
+      sortOption = { name: -1 };
+      break;
+
+    default:
+      sortOption = { createdAt: -1 };
+  }
+
+  const currentPage = Number(page);
+  const perPage = Number(limit);
+
+  const skip = (currentPage - 1) * perPage;
+
+  const [products, totalProducts] = await Promise.all([
+    Product.find(filter)
+      .populate("category", "name slug")
+      .sort(sortOption)
+      .skip(skip)
+      .limit(perPage),
+
+    Product.countDocuments(filter),
+  ]);
+
+  return {
+    products,
+    currentPage,
+    totalPages: Math.ceil(totalProducts / perPage),
+    totalProducts,
+    limit: perPage,
+    hasNextPage: currentPage * perPage < totalProducts,
+    hasPreviousPage: currentPage > 1,
+  };
+};
+
 export const updateBasicInformationService = async ({ id, body, session }) => {
   const product = await Product.findById(id).session(session);
 
   if (!product) {
-    logger.error("Product not found.");
+    throw new Error("Product not found.");
   }
 
-  const slug = await validateBasicInformation({
+  await validateBasicInformation({
     existingProduct: product,
     body,
     session,
@@ -302,11 +408,11 @@ export const updateBasicInformationService = async ({ id, body, session }) => {
   }
 
   if ("description" in body) {
-    product.description = body.description;
+    product.description = body.description.trim();
   }
 
   if ("brand" in body) {
-    product.brand = body.brand;
+    product.brand = body.brand.trim();
   }
 
   if ("category" in body) {
@@ -333,10 +439,28 @@ export const updateBasicInformationService = async ({ id, body, session }) => {
     product.suitableFor = body.suitableFor;
   }
 
-  await product.save({
-    session,
-  });
-  console.log("Returning product:", product);
+  // -----------------------
+  // Product Flags
+  // -----------------------
+
+  if ("featured" in body) {
+    product.featured = Boolean(body.featured);
+  }
+
+  if ("bestSeller" in body) {
+    product.bestSeller = Boolean(body.bestSeller);
+  }
+
+  if ("latest" in body) {
+    product.latest = Boolean(body.latest);
+  }
+
+  if ("status" in body) {
+    product.status = body.status;
+  }
+
+  await product.save({ session });
+
   return product;
 };
 
@@ -345,10 +469,14 @@ export const updateProductPricingService = async ({
   body,
   session,
 }) => {
-  const { sku, price, salePrice } = body;
+  const { sku, size, price, salePrice } = body;
 
   if (!sku) {
     throw new Error("SKU is required.");
+  }
+
+  if (!size) {
+    throw new Error("Size is required.");
   }
 
   const product = await Product.findById(productId).session(session);
@@ -365,22 +493,34 @@ export const updateProductPricingService = async ({
     throw new Error("Variant not found.");
   }
 
-  validatePricing({
-    price,
-    salePrice,
-  });
+  const option = variant.options.find((item) => item.size === size);
+
+  if (!option) {
+    throw new Error("Size option not found.");
+  }
+
+  validatePricing([
+    {
+      ...option.toObject(),
+      price: price !== undefined ? Number(price) : option.price,
+      salePrice:
+        salePrice !== undefined
+          ? salePrice === ""
+            ? null
+            : Number(salePrice)
+          : option.salePrice,
+    },
+  ]);
 
   if (price !== undefined) {
-    variant.price = Number(price);
+    option.price = Number(price);
   }
 
   if (salePrice !== undefined) {
-    variant.salePrice = salePrice === "" ? null : Number(salePrice);
+    option.salePrice = salePrice === "" ? null : Number(salePrice);
   }
 
-  await product.save({
-    session,
-  });
+  await product.save({ session });
 
   return product;
 };
@@ -390,10 +530,14 @@ export const updateProductInventoryService = async ({
   body,
   session,
 }) => {
-  const { sku, stock, isActive } = body;
+  const { sku, size, stock, isActive } = body;
 
   if (!sku) {
     throw new Error("SKU is required.");
+  }
+
+  if (!size) {
+    throw new Error("Size is required.");
   }
 
   const product = await Product.findById(productId).session(session);
@@ -410,21 +554,28 @@ export const updateProductInventoryService = async ({
     throw new Error("Variant not found.");
   }
 
-  validateInventory({
-    stock,
-  });
+  const option = variant.options.find((item) => item.size === size);
+
+  if (!option) {
+    throw new Error("Size option not found.");
+  }
+
+  validateInventory([
+    {
+      ...option.toObject(),
+      stock: stock !== undefined ? Number(stock) : option.stock,
+    },
+  ]);
 
   if (stock !== undefined) {
-    variant.stock = Number(stock);
+    option.stock = Number(stock);
   }
 
   if (isActive !== undefined) {
     variant.isActive = Boolean(isActive);
   }
 
-  await product.save({
-    session,
-  });
+  await product.save({ session });
 
   return product;
 };
@@ -507,6 +658,23 @@ export const updateVariantImagesService = async ({
   await product.save({
     session,
   });
+
+  return product;
+};
+
+export const toggleProductStatusService = async (productId, session) => {
+  const product = await Product.findOne({
+    _id: productId,
+    isDeleted: false,
+  }).session(session);
+
+  if (!product) {
+    throw new Error("Product not found.");
+  }
+
+  product.isActive = !product.isActive;
+
+  await product.save({ session });
 
   return product;
 };

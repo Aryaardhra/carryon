@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { Toaster } from "react-hot-toast";
 import CartDrawer from "./components/CartDrawer";
 
 const App = () => {
@@ -17,7 +16,7 @@ const App = () => {
 
       <CartDrawer />
       <div className="min-h-screen">
-        <Toaster position="top-right" />
+ 
         <Outlet context={{ setShowNavbar }} />
       </div>
       <Footer />

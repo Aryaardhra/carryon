@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     Accept: "application/json",
-    "Content-Type": "application/json",
   },
 });
 
@@ -51,12 +50,12 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-  //Access Token Expired
- 
+    //Access Token Expired
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-    //Already Refreshing
+      //Already Refreshing
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -72,20 +71,17 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await refreshToken(),
+        (await refreshToken(),
           {},
           {
             withCredentials: true,
           },
-        processQueue();
+          processQueue());
         return axiosInstance(originalRequest);
-
       } catch (refreshError) {
-
         processQueue(refreshError);
         await triggerLogout();
         return Promise.reject(refreshError);
-
       } finally {
         isRefreshing = false;
       }
