@@ -1529,3 +1529,16 @@
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 12:46:06"}
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 12:46:12"}
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 12:56:00"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-21 13:05:32"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-21 13:05:32"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-21 13:05:33"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: byteqzone@gmail.com","timestamp":"2026-07-21 13:05:33"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: byteqzone@gmail.com","timestamp":"2026-07-21 13:05:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 13:05:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-21 13:05:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: byteqzone@gmail.com","timestamp":"2026-07-21 13:05:49"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 13:05:49"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: byteqzone@gmail.com","timestamp":"2026-07-21 13:10:11"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 13:10:11"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 13:22:01"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-21 13:26:18"}
