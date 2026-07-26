@@ -11932,3 +11932,8 @@
 {"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-26 22:19:58"}
 {"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-07-26 22:19:58"}
 {"app":"carry_on-server","level":"info","message":"Login successful: kaizerbruno2@gmail.com","timestamp":"2026-07-26 22:20:28"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-26 22:42:24"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-26 22:42:24"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-26 22:42:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-26 22:42:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-26 22:42:25"}
