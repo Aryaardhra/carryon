@@ -8,9 +8,11 @@ import { AuthContextProvider } from './context/AuthContext.jsx'
 import { ProductContextProvider } from './context/ProductContext.jsx'
 import { CartContextProvider } from './context/CartContext.jsx'
 import { Toaster } from 'react-hot-toast'
+import { CategoryProvider } from './context/CategoryContext.jsx'
 
 createRoot(document.getElementById('root')).render(
    <AuthContextProvider>
+    <CategoryProvider>
     <ProductContextProvider>
       <CartContextProvider>
                <Toaster position="top-right"
@@ -21,6 +23,7 @@ createRoot(document.getElementById('root')).render(
         <RouterProvider router={router} />
       </CartContextProvider>
     </ProductContextProvider>
+    </CategoryProvider>
   </AuthContextProvider>
 )
 

@@ -1,17 +1,37 @@
 import { useState } from "react";
-import { FiPlus, FiMinus } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  FiChevronDown,
+  FiChevronUp,
+  FiFileText,
+  FiStar,
+  FiGrid,
+  FiDroplet,
+  FiMaximize,
+  FiInfo,
+  FiTruck,
+} from "react-icons/fi";
 
-const AccordionItem = ({ title, children, isOpen, onClick }) => {
+const AccordionItem = ({ icon, title, children, isOpen, onClick }) => {
   return (
-    <div className="border-b">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <button
         onClick={onClick}
-        className="w-full flex justify-between items-center py-4 text-left"
+        className="flex w-full items-center justify-between px-6 py-5 transition hover:bg-gray-50"
       >
-        <span className="font-medium">{title}</span>
+        <div className="flex items-center gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
+            {icon}
+          </div>
 
-        {isOpen ? <FiMinus /> : <FiPlus />}
+          <span className="text-lg font-semibold">{title}</span>
+        </div>
+
+        {isOpen ? (
+          <FiChevronUp className="text-xl" />
+        ) : (
+          <FiChevronDown className="text-xl" />
+        )}
       </button>
 
       <AnimatePresence>
@@ -20,10 +40,10 @@ const AccordionItem = ({ title, children, isOpen, onClick }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="pb-4 text-gray-600 text-sm">{children}</div>
+            <div className="border-t border-gray-100 px-6 py-6">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -32,60 +52,197 @@ const AccordionItem = ({ title, children, isOpen, onClick }) => {
 };
 
 const ProductAccordion = ({ product }) => {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndex, setOpenIndex] = useState(0);
 
   const toggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const sizes = [
+    ...new Set(
+      product?.variants?.flatMap((variant) =>
+        variant.options.map((option) => option.size),
+      ) || [],
+    ),
+  ];
+
+  const colors = [
+    ...new Map(
+      product?.variants?.map((variant) => [
+        variant.color.name,
+        variant.color,
+      ]) || [],
+    ).values(),
+  ];
+
   return (
-    <div className="mt-8">
+    <div className="space-y-5">
+      {/* Description */}
+
       <AccordionItem
+        icon={<FiFileText size={22} />}
         title="Product Description"
         isOpen={openIndex === 0}
         onClick={() => toggle(0)}
       >
-        <ul>
-          {Array.isArray(product.about) ? (
-            product.about.map((desc, index) => (
-              <li key={index}>
-                <span>*</span> {desc}
-              </li>
-            ))
-          ) : (
-            <li>
-              <span>*</span>
-              {product.about}
-            </li>
-          )}
-        </ul>
+        <p className="leading-8 text-gray-600">{product?.description}</p>
       </AccordionItem>
 
+      {/* Highlights */}
+
       <AccordionItem
-        title="Specifications"
+        icon={<FiStar size={22} />}
+        title="Why You'll Love It"
         isOpen={openIndex === 1}
         onClick={() => toggle(1)}
       >
-        Material: {product.material || "Premium Fabric"} <br />
-        Size: {product.size || "Medium"} <br />
-        Color: {product.color[0] || "Multiple"}
+        <div className="grid gap-4">
+          {product?.highlights?.length ? (
+            product.highlights.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-4 rounded-xl bg-gray-50 p-4"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-white">
+                  ✓
+                </div>
+
+                <p>{item}</p>
+              </div>
+            ))
+          ) : (
+            <p>No highlights available.</p>
+          )}
+        </div>
       </AccordionItem>
 
+      {/* Specifications */}
+
       <AccordionItem
-        title="Hassle-Free Returns & Exchange"
+        icon={<FiGrid size={22} />}
+        title="Specifications"
         isOpen={openIndex === 2}
         onClick={() => toggle(2)}
       >
-        7 Days easy return and exchange available.
+        <div className="overflow-hidden rounded-xl border">
+          {product?.specifications?.map((spec, index) => (
+            <div
+              key={index}
+              className={`grid grid-cols-2 px-5 py-4 ${
+                index !== product.specifications.length - 1 ? "border-b" : ""
+              }`}
+            >
+              <span className="text-gray-500">{spec.key}</span>
+
+              <span className="text-right font-semibold">{spec.value}</span>
+            </div>
+          ))}
+        </div>
       </AccordionItem>
 
+      {/* Colors */}
+
       <AccordionItem
-        title="More Information"
+        icon={<FiDroplet size={22} />}
+        title="Available Colors"
         isOpen={openIndex === 3}
         onClick={() => toggle(3)}
       >
-        Country of Origin:{product.country_of_origin} <br />
-        Manufacturer: {product.manufacturer}
+        <div className="flex flex-wrap gap-4">
+          {colors.map((color) => (
+            <div
+              key={color.name}
+              className="flex items-center gap-3 rounded-full border px-4 py-2"
+            >
+              <span
+                className="h-5 w-5 rounded-full border"
+                style={{
+                  backgroundColor: color.hex || "#ddd",
+                }}
+              />
+
+              {color.name}
+            </div>
+          ))}
+        </div>
+      </AccordionItem>
+
+      {/* Sizes */}
+
+      <AccordionItem
+        icon={<FiMaximize size={22} />}
+        title="Available Sizes"
+        isOpen={openIndex === 4}
+        onClick={() => toggle(4)}
+      >
+        <div className="flex flex-wrap gap-3">
+          {sizes.map((size) => (
+            <span
+              key={size}
+              className="rounded-xl border px-5 py-3 font-medium transition hover:bg-secondary hover:text-white"
+            >
+              {size}
+            </span>
+          ))}
+        </div>
+      </AccordionItem>
+
+      {/* Product Details */}
+
+      <AccordionItem
+        icon={<FiInfo size={22} />}
+        title="Product Details"
+        isOpen={openIndex === 5}
+        onClick={() => toggle(5)}
+      >
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="rounded-xl bg-gray-50 p-5">
+            <p className="text-sm text-gray-500">Brand</p>
+            <p className="mt-2 font-semibold">{product?.brand}</p>
+          </div>
+
+          <div className="rounded-xl bg-gray-50 p-5">
+            <p className="text-sm text-gray-500">Category</p>
+            <p className="mt-2 font-semibold">{product?.category?.name}</p>
+          </div>
+
+          <div className="rounded-xl bg-gray-50 p-5">
+            <p className="text-sm text-gray-500">Suitable For</p>
+            <p className="mt-2 font-semibold">
+              {product?.suitableFor?.join(", ")}
+            </p>
+          </div>
+
+          <div className="rounded-xl bg-gray-50 p-5">
+            <p className="text-sm text-gray-500">Total Stock</p>
+            <p className="mt-2 font-semibold">{product.totalStock}</p>
+          </div>
+        </div>
+      </AccordionItem>
+
+      {/* Shipping */}
+
+      <AccordionItem
+        icon={<FiTruck size={22} />}
+        title="Shipping & Returns"
+        isOpen={openIndex === 6}
+        onClick={() => toggle(6)}
+      >
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="rounded-xl border p-5">
+            <h4 className="font-semibold">🚚 Free Shipping</h4>
+
+            <p className="mt-2 text-gray-500">Free shipping on every order.</p>
+          </div>
+
+          <div className="rounded-xl border p-5">
+            <h4 className="font-semibold">🔄 Easy Returns</h4>
+
+            <p className="mt-2 text-gray-500">
+              7-day return & exchange with original packaging.
+            </p>
+          </div>
+        </div>
       </AccordionItem>
     </div>
   );

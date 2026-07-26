@@ -3,8 +3,13 @@ import axiosInstance from "../api/axiosInstance";
 export const addCategory = (formData) => {
   return axiosInstance.post("/v1/category/add", formData);
 };
+
 export const getCategories = () => {
   return axiosInstance.get("/v1/category/");
+};
+
+export const getCategoryById = (id) => {
+  return axiosInstance.get(`/v1/category/${id}`);
 };
 
 export const updateCategory = (id, formData) => {

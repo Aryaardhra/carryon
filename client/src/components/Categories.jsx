@@ -1,11 +1,14 @@
 import React from "react";
-import { categories } from "../assets/data/assets";
+//import { categories } from "../assets/data/assets";
 import Title from "./Title";
 import { useNavigate } from "react-router-dom";
+import { useCategory } from "../context/CategoryContext";
 
 const Categories = () => {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const { categories, loading } = useCategory();
+  
   return (
     <>
       <div className="mt-16">
@@ -16,16 +19,16 @@ const Categories = () => {
               key={index}
               className="group cursor-pointer py-5 px-2 gap-2 rounded-lg flex flex-col justify-center items-center"
               onClick={() => {
-                navigate(`/category/${category.path.toLowerCase()}`);
-                scrollTo(0, 0);
+                navigate(`/category/${category._id}`);
+                window.scrollTo(0, 0);
               }}
             >
               <img
-                src={category.image}
-                alt={category.text}
+                src={category.image.url}
+                alt={category.name}
                 className="group-hover:scale-108 transition max-w-28 size-20 rounded-full"
               />
-              <p className="text-sm font-medium">{category.text}</p>
+              <p className="text-sm font-medium">{category.name}</p>
             </div>
           ))}
         </div>

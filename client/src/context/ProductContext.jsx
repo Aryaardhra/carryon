@@ -1,12 +1,22 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { dummyProducts } from "../assets/data/assets";
-
+import { getProductById, getProducts } from "../services/productService";
+//import { dummyProducts } from "../assets/data/assets";
 export const ProductContext = createContext();
 
 export const ProductContextProvider = ({ children }) => {
-  const [products] = useState(dummyProducts);
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(dummyProducts);
+  const [page, setPage] = useState(1);
+  const limit = 8;
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalProducts: 0,
+  });
+
   const [filters, setFilters] = useState({
     category: [],
     color: [],
@@ -16,101 +26,58 @@ export const ProductContextProvider = ({ children }) => {
     sortBy: "",
   });
 
-  const priceRange = [
-    { label: "Below ₹500", min: 0, max: 500 },
-    { label: "₹500-₹2500", min: 500, max: 2500 },
-    { label: "₹2500-₹4500", min: 2500, max: 4500 },
-    { label: "Above ₹4500", min: 4500, max: Infinity },
-  ];
+  let minPrice = "";
+  let maxPrice = "";
 
-  const handleFilters = () => {
-    let tempProducts = [...products];
+  if (filters.price.includes("below500")) {
+    minPrice = 0;
+    maxPrice = 500;
+  }
 
-    // Search Filter
-    if (searchQuery.length > 0) {
-      tempProducts = tempProducts.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.material.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }
+  if (filters.price.includes("500-2500")) {
+    minPrice = 500;
+    maxPrice = 2500;
+  }
 
-    // Category
-    if (filters.category.length > 0) {
-      tempProducts = tempProducts.filter((product) =>
-        filters.category.includes(product.category),
-      );
-    }
+  if (filters.price.includes("2500-4500")) {
+    minPrice = 2500;
+    maxPrice = 4500;
+  }
 
-    // Color
-    if (filters.color.length > 0) {
-      tempProducts = tempProducts.filter((product) =>
-        product.color.some((clr) => filters.color.includes(clr)),
-      );
-    }
-
-    // Sizes
-    if (filters.sizes.length > 0) {
-      tempProducts = tempProducts.filter((product) =>
-        product.sizes.some((size) => filters.sizes.includes(size)),
-      );
-    }
-
-    // Materials
-    if (filters.material.length > 0) {
-      tempProducts = tempProducts.filter((product) =>
-        filters.material.includes(product.material),
-      );
-    }
-
-    const isPriceInSelectedRange = (price) => {
-      const numericPrice = Number(price);
-
-      return filters.price.some((selectedRange) => {
-        const range = priceRange.find((item) => item.label === selectedRange);
-
-        return range && numericPrice >= range.min && numericPrice <= range.max;
+  if (filters.price.includes("4500+")) {
+    minPrice = 4500;
+  }
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const { data } = await getProducts({
+        page,
+        limit,
+        category: filters.category.join(","),
+        color: filters.color.join(","),
+        material: filters.material.join(","),
+        search: searchQuery,
+        sort: filters.sortBy,
+        minPrice,
+        maxPrice,
       });
-    };
-
-    if (filters.price.length > 0) {
-      tempProducts = tempProducts.filter((product) =>
-        isPriceInSelectedRange(product.price),
-      );
+      setProducts(data.products);
+      setPagination({
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalProducts: data.totalProducts,
+        limit: data.limit,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-
-    // sorting
-
-    switch (filters.sortBy) {
-      case "low-high":
-        tempProducts.sort((a, b) => a.price - b.price);
-        break;
-
-      case "high-low":
-        tempProducts.sort((a, b) => b.price - a.price);
-        break;
-
-      case "bestSeller":
-        tempProducts.sort((a, b) => b.bestSeller - a.bestSeller);
-        break;
-
-      case "latestSeller":
-        tempProducts.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        );
-        break;
-
-      default:
-        break;
-    }
-
-    setFilteredProducts(tempProducts);
   };
 
   useEffect(() => {
-    handleFilters();
-  }, [filters, products, searchQuery]);
+    fetchProducts();
+  }, [page, filters, searchQuery]); // <-- NO products here
 
   const clearFilters = () => {
     setFilters({
@@ -121,6 +88,7 @@ export const ProductContextProvider = ({ children }) => {
       price: [],
       sortBy: "",
     });
+    setPage(1);
   };
 
   const handleFilterChange = (type, value) => {
@@ -133,6 +101,7 @@ export const ProductContextProvider = ({ children }) => {
           : [...prev[type], value],
       };
     });
+    setPage(1);
   };
 
   const handleSortChange = (value) => {
@@ -140,27 +109,30 @@ export const ProductContextProvider = ({ children }) => {
       ...prev,
       sortBy: value,
     }));
-  };
 
-  const value = {
-    filters,
-    setFilters,
-    filteredProducts,
-    setFilteredProducts,
-    products,
-    handleFilters,
-    handleFilterChange,
-    handleSortChange,
-    clearFilters,
-    searchQuery,
-    setSearchQuery,
+    setPage(1);
   };
 
   return (
-    <ProductContext.Provider value={value}>{children}</ProductContext.Provider>
+    <ProductContext.Provider
+      value={{
+        products,
+        loading,
+        filters,
+        setFilters,
+        page,
+        setPage,
+        pagination,
+        handleFilterChange,
+        handleSortChange,
+        clearFilters,
+        searchQuery,
+        setSearchQuery,
+      }}
+    >
+      {children}
+    </ProductContext.Provider>
   );
 };
 
-export const useProductContext = () => {
-  return useContext(ProductContext);
-};
+export const useProductContext = () => useContext(ProductContext);

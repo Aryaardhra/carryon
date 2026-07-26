@@ -67,10 +67,8 @@ export const createProduct = async (
     ],
     { session },
   );
-
   return product;
 };
-
 await clearProductCache();
 
 export const startTransaction = async () => {
@@ -131,7 +129,6 @@ export const getSingleProductById = async (id) => {
   if (!product) {
     throw new Error("Product not found.");
   }
-
   return product;
 };
 
@@ -141,6 +138,8 @@ export const getAllProduct = async (query) => {
     limit = 10,
     category,
     brand,
+    color,
+    material,
     search,
     minPrice,
     maxPrice,
@@ -159,21 +158,39 @@ export const getAllProduct = async (query) => {
   }
 
   // MongoDB Filters
-
   const filter = {
     status: "published",
     isDeleted: false,
     isActive: true,
   };
-
+  // Category
   if (category) {
-    filter.category = category;
+    filter.category = {
+      $in: category.split(","),
+    };
   }
-
+  // Brand
   if (brand) {
     filter.brand = brand;
   }
-
+  // Color
+  if (color) {
+    filter["variants.color.name"] = {
+      $in: color.split(","),
+    };
+  }
+  // Material
+  if (material) {
+    filter.specifications = {
+      $elemMatch: {
+        key: "Material",
+        value: {
+          $in: material.split(","),
+        },
+      },
+    };
+  }
+  // Search
   if (search) {
     filter.$or = [
       {
@@ -202,7 +219,7 @@ export const getAllProduct = async (query) => {
       },
     ];
   }
-
+  // Price
   if (minPrice || maxPrice) {
     filter["variants.options.price"] = {};
 
@@ -214,9 +231,7 @@ export const getAllProduct = async (query) => {
       filter["variants.options.price"].$lte = Number(maxPrice);
     }
   }
-
   // Sorting
-
   let sortOption = {};
 
   switch (sort) {
@@ -255,28 +270,22 @@ export const getAllProduct = async (query) => {
         createdAt: -1,
       };
   }
-
   // Pagination
-
   const currentPage = Number(page);
   const perPage = Number(limit);
-
   const skip = (currentPage - 1) * perPage;
 
   // Database Queries
-
   const [products, totalProducts] = await Promise.all([
     Product.find(filter)
       .populate("category", "name slug")
       .sort(sortOption)
       .skip(skip)
       .limit(perPage),
-
     Product.countDocuments(filter),
   ]);
 
   const totalPages = Math.ceil(totalProducts / perPage);
-
   const response = {
     products,
     currentPage,
@@ -289,9 +298,7 @@ export const getAllProduct = async (query) => {
   // Cache Result
 
   await redis.set(cacheKey, JSON.stringify(response), "EX", 600);
-
   logger.info("Products served from MongoDB and cached.");
-
   return response;
 };
 
@@ -440,10 +447,8 @@ export const updateBasicInformationService = async ({ id, body, session }) => {
     product.suitableFor = body.suitableFor;
   }
 
-  // -----------------------
   // Product Flags
-  // -----------------------
-
+ 
   if ("featured" in body) {
     product.featured = Boolean(body.featured);
   }
@@ -483,10 +488,7 @@ export const updateVariantBasicService = async ({
   }
 
   // Update product name
-  if (
-    productName &&
-    productName.trim() !== product.name
-  ) {
+  if (productName && productName.trim() !== product.name) {
     product.name = productName.trim();
   }
 
@@ -512,15 +514,13 @@ export const updateVariantBasicService = async ({
     existingVariant.sku = generateSku(
       product.name,
       incomingVariant.color.name,
-      existingVariant.options[0].size
+      existingVariant.options[0].size,
     );
   }
 
   // Check duplicate SKUs after regeneration
   await validateSKU(product.variants, session, product._id);
-
   await product.save({ session });
-
   return product;
 };
 
@@ -550,9 +550,7 @@ export const updateProductPricingService = async ({
       !Array.isArray(incomingVariant.options) ||
       incomingVariant.options.length === 0
     ) {
-      throw new Error(
-        "Each variant must contain at least one size option."
-      );
+      throw new Error("Each variant must contain at least one size option.");
     }
 
     const existingVariant = product.variants.id(incomingVariant._id);
@@ -567,12 +565,12 @@ export const updateProductPricingService = async ({
     // Update prices
     for (const incomingOption of incomingVariant.options) {
       const existingOption = existingVariant.options.find(
-        (option) => option.size === incomingOption.size
+        (option) => option.size === incomingOption.size,
       );
 
       if (!existingOption) {
         throw new Error(
-          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`
+          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`,
         );
       }
 
@@ -582,8 +580,7 @@ export const updateProductPricingService = async ({
 
       if (incomingOption.salePrice !== undefined) {
         existingOption.salePrice =
-          incomingOption.salePrice === "" ||
-          incomingOption.salePrice === null
+          incomingOption.salePrice === "" || incomingOption.salePrice === null
             ? null
             : Number(incomingOption.salePrice);
       }
@@ -591,7 +588,6 @@ export const updateProductPricingService = async ({
   }
 
   await product.save({ session });
-
   return product;
 };
 
@@ -621,9 +617,7 @@ export const updateProductInventoryService = async ({
       !Array.isArray(incomingVariant.options) ||
       incomingVariant.options.length === 0
     ) {
-      throw new Error(
-        "Each variant must contain at least one size option."
-      );
+      throw new Error("Each variant must contain at least one size option.");
     }
 
     const existingVariant = product.variants.id(incomingVariant._id);
@@ -643,12 +637,12 @@ export const updateProductInventoryService = async ({
     // Update Stock
     for (const incomingOption of incomingVariant.options) {
       const existingOption = existingVariant.options.find(
-        (option) => option.size === incomingOption.size
+        (option) => option.size === incomingOption.size,
       );
 
       if (!existingOption) {
         throw new Error(
-          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`
+          `Size ${incomingOption.size} not found in variant ${existingVariant.sku}.`,
         );
       }
 
@@ -659,9 +653,9 @@ export const updateProductInventoryService = async ({
   }
 
   await product.save({ session });
-
   return product;
 };
+
 export const updateFeaturedImageService = async ({
   productId,
   files,
@@ -669,17 +663,15 @@ export const updateFeaturedImageService = async ({
   uploadedPublicIds,
 }) => {
   const product = await Product.findById(productId).session(session);
-
   if (!product) {
     throw new Error("Product not found.");
   }
 
   await replaceFeaturedImage(product, files, uploadedPublicIds);
-
   await product.save({ session });
-
   return product;
 };
+
 export const updateGalleryImagesService = async ({
   productId,
   files,
@@ -693,9 +685,7 @@ export const updateGalleryImagesService = async ({
   }
 
   await replaceGalleryImages(product, files, uploadedPublicIds);
-
   await product.save({ session });
-
   return product;
 };
 
@@ -706,40 +696,27 @@ export const updateVariantImagesService = async ({
   session,
   uploadedPublicIds,
 }) => {
-  const { sku } = body;
+  const { variantId } = body;
 
-  if (!sku) {
-    throw new Error("SKU is required.");
+  if (!variantId) {
+    throw new Error("Variant ID is required.");
   }
 
-  const product = await Product.findById(productId).session(session);
-
-  if (!product) {
-    throw new Error("Product not found.");
-  }
-
-  const variant = product.variants.find(
-    (item) => item.sku === sku.trim().toUpperCase(),
-  );
+  const variant = product.variants.id(variantId);
 
   if (!variant) {
     throw new Error("Variant not found.");
   }
-
   const images = await replaceVariantImages(
     files,
-
     variant,
-
     uploadedPublicIds,
   );
 
   variant.images = images;
-
   await product.save({
     session,
   });
-
   return product;
 };
 
@@ -752,11 +729,8 @@ export const toggleProductStatusService = async (productId, session) => {
   if (!product) {
     throw new Error("Product not found.");
   }
-
   product.isActive = !product.isActive;
-
   await product.save({ session });
-
   return product;
 };
 
@@ -769,12 +743,9 @@ export const softDeleteProduct = async (productId, session) => {
   if (!product) {
     throw new Error("Product not found.");
   }
-
   product.isDeleted = true;
   product.deletedAt = new Date();
-
   await product.save({ session });
-
   return product;
 };
 
@@ -787,12 +758,9 @@ export const restoreProduct = async (productId, session) => {
   if (!product) {
     throw new Error("Product not found.");
   }
-
   product.isDeleted = false;
   product.deletedAt = null;
-
   await product.save({ session });
-
   return product;
 };
 
@@ -808,13 +776,11 @@ export const permanentlyDeleteProductService = async (productId, session) => {
   }
 
   //Delete Featured Image
-
   if (product.featuredImage?.public_id) {
     await deleteFromCloudinary(product.featuredImage.public_id);
   }
 
   // Delete Gallery Images
-
   if (product.productImages?.length) {
     await Promise.all(
       product.productImages.map((image) =>
@@ -826,7 +792,6 @@ export const permanentlyDeleteProductService = async (productId, session) => {
   // Delete Variant Images
 
   const variantImageDeletes = [];
-
   for (const variant of product.variants) {
     if (!variant.images?.length) continue;
 
@@ -834,12 +799,8 @@ export const permanentlyDeleteProductService = async (productId, session) => {
       variantImageDeletes.push(deleteFromCloudinary(image.public_id));
     }
   }
-
   await Promise.all(variantImageDeletes);
-
   // Delete Product Document
-
   await Product.deleteOne({ _id: productId }, { session });
-
   return product;
 };

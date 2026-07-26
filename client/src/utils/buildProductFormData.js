@@ -38,7 +38,7 @@ const buildProductFormData = (product) => {
 
   product.variants.forEach((variant, variantIndex) => {
     variant.images.forEach((image) => {
-      formData.append(`variant_${variant._id}`, image);
+      formData.append(`variant_${variant.tempId}`, image);
     });
   });
 

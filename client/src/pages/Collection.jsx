@@ -13,22 +13,20 @@ import { useProductContext } from "../context/ProductContext";
 
 const Collection = () => {
   const {
-    filters,
-    setFilters,
-    filteredProducts,
-    setFilteredProducts,
     products,
-    handleFilters,
+    filters,
     handleFilterChange,
     handleSortChange,
+    page,
+    setPage,
+    pagination,
+    loading,
   } = useProductContext();
+ 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const productsPerPage = 8;
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
 
     window.scrollTo({
       top: 0,
@@ -36,32 +34,13 @@ const Collection = () => {
     });
   };
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct,
-  );
-
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  console.log("Current Page:", currentPage);
-  console.log("Filtered:", filteredProducts.length);
-  console.log("Current Products:", currentProducts.length);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
-
   return (
     <div className="min-h-screen mt-2 pt-12">
       <CollectionHeader
-        totalProducts={currentProducts.length}
-        totalFilteredProducts={filteredProducts.length}
-        currentPage={currentPage}
-        productsPerPage={productsPerPage}
+        totalProducts={products.length}
+        totalFilteredProducts={pagination.totalProducts}
+        currentPage={pagination.currentPage}
+        productsPerPage={pagination.limit}
         onToggleFilters={() => setIsMobileFilterOpen(true)}
         filters={filters}
         handleSortChange={handleSortChange}
@@ -69,7 +48,7 @@ const Collection = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Desktop Sidebar */}
+          {/* Desktop Filter */}
           <div className="hidden lg:block lg:w-64">
             <FilterSidebar
               filters={filters}
@@ -77,16 +56,16 @@ const Collection = () => {
             />
           </div>
 
-          {/* Mobile Sidebar */}
+          {/* Mobile Filter */}
           <AnimatePresence>
             {isMobileFilterOpen && (
               <>
                 <motion.div
                   className="fixed inset-0 bg-black/50 z-50 lg:hidden"
-                  onClick={() => setIsMobileFilterOpen(false)}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  onClick={() => setIsMobileFilterOpen(false)}
                 />
 
                 <motion.div
@@ -96,11 +75,11 @@ const Collection = () => {
                   exit={{ x: "-100%" }}
                   transition={{ type: "spring", damping: 25 }}
                 >
-                  <div className="flex justify-between p-6 border-b">
-                    <h2>Filters</h2>
+                  <div className="flex justify-between items-center p-6 border-b">
+                    <h2 className="text-lg font-semibold">Filters</h2>
 
                     <button onClick={() => setIsMobileFilterOpen(false)}>
-                      <FiX />
+                      <FiX size={22} />
                     </button>
                   </div>
 
@@ -115,24 +94,38 @@ const Collection = () => {
             )}
           </AnimatePresence>
 
-          {/* Product Grid */}
-
+          {/* Products */}
           <div className="flex-1 mt-10 pt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {currentProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-            {/* Pagination */}
-            <div className="flex justify-center mt-12">
-              {totalPages > 1 && (
-                <WheelPagination
-                  totalPages={totalPages}
-                  visibleCount={5}
-                  onChange={handlePageChange}
-                />
-              )}
-            </div>
+            {loading ? (
+              <div className="text-center py-20">Loading products...</div>
+            ) : (
+              <>
+                {products.length === 0 ? (
+                  <div className="text-center py-20 text-gray-500">
+                    No products found.
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {products.map((product) => (
+                        <ProductCard key={product._id} product={product} />
+                      ))}
+                    </div>
+
+                    <div className="flex justify-center mt-12">
+                      {pagination.totalPages > 1 && (
+                        <WheelPagination
+                          totalPages={pagination.totalPages}
+                          visibleCount={5}
+                          currentPage={page}
+                          onChange={handlePageChange}
+                        />
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
