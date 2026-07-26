@@ -4,12 +4,13 @@ import { ProductCard } from "./ProductCard";
 import { useProductContext } from "../context/ProductContext";
 
 const LatestCollection = () => {
+  
   const { products } = useProductContext();
   const [stopScroll, setStopScroll] = useState(false);
   const [latestSeller, setLatestSeller] = useState([]);
 
   const latestProducts = () => {
-    const latestProduct = products.filter((item) => item.latestSeller);
+    const latestProduct = products.filter((item) => item.latest);
     setLatestSeller(latestProduct);
   };
 

@@ -4,33 +4,49 @@ import { motion, AnimatePresence, color } from "motion/react";
 import { itemVariants } from "./Variants";
 import { useProductContext } from "../context/ProductContext";
 import { categories } from "../assets/data/assets";
-
-const filterSections = [
-  {
-    title: "category",
-    options: categories.map((item) => item.path),
-  },
-  {
-    title: "color",
-    options: ["Black", "Grey", "Blue", "red", "green"],
-  },
-  {
-    title: "price",
-    options: ["Below ₹500", "₹500-₹2500", "₹2500-₹4500", "Above ₹4500"],
-  },
-  {
-    title: "material",
-    options: ["Leather", "Vegan Leather", "Canvas", "Suede", "Nylon"],
-  },
-  {
-    title: "sizes",
-    options: ["XS", "S", "M", "L", "XL"],
-  },
-];
+import { useCategory } from "../context/CategoryContext";
 
 export function FilterSidebar({ filters, onFilterChange }) {
+  const { categories } = useCategory();
   const { clearFilters } = useProductContext();
-
+  const filterSections = [
+    {
+      title: "category",
+      options: categories.map((item) => ({
+        label: item.name,
+        value: item._id,
+      })),
+    },
+    {
+      title: "color",
+      options: [
+        { label: "Black", value: "Black" },
+        { label: "Grey", value: "Grey" },
+        { label: "Blue", value: "Blue" },
+        { label: "Red", value: "Red" },
+        { label: "Green", value: "Green" },
+      ],
+    },
+    {
+      title: "material",
+      options: [
+        { label: "Leather", value: "Leather" },
+        { label: "Canvas", value: "Canvas" },
+        { label: "Nylon", value: "Nylon" },
+        { label: "Suede", value: "Suede" },
+        { label: "Vegan Leather", value: "Vegan Leather" },
+      ],
+    },
+    {
+      title: "price",
+      options: [
+        { label: "Below ₹500", value: "below500" },
+        { label: "₹500 - ₹2500", value: "500-2500" },
+        { label: "₹2500 - ₹4500", value: "2500-4500" },
+        { label: "Above ₹4500", value: "4500+" },
+      ],
+    },
+  ];
   const [openSections, setOpenSections] = useState([
     "category",
     "color",
@@ -88,19 +104,21 @@ export function FilterSidebar({ filters, onFilterChange }) {
                       <div className="px-4 pb-4 space-y-2.5">
                         {section.options.map((option) => (
                           <label
-                            key={option}
+                            key={option.value}
                             className="flex items-center space-x-2.5 cursor-pointer group"
                           >
                             <input
                               type="checkbox"
-                              checked={filters[section.title]?.includes(option)}
+                              checked={filters[section.title]?.includes(
+                                option.value,
+                              )}
                               onChange={() =>
-                                onFilterChange(section.title, option)
+                                onFilterChange(section.title, option.value)
                               }
                               className="rounded border-gray-300 text-black focus:ring-black w-4 h-4 cursor-pointer"
                             />
                             <span className="text-sm group-hover:text-gray-600">
-                              {option.replaceAll("_", " ")}
+                              {option.label}
                             </span>
                           </label>
                         ))}

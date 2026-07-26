@@ -44,11 +44,12 @@ export function CollectionHeader({
               onChange={(e) => handleSortChange(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded bg-white"
             >
-              <option value="">Featured</option>
-              <option value="bestSeller">Best Seller</option>
-              <option value="low-high">Price: Low to High</option>
-              <option value="high-low">Price: High to Low</option>
-              <option value="latestSeller">Latest Collection</option>
+              <option value="latest">Latest Collection</option>
+              <option value="oldest">Oldest</option>
+              <option value="priceLow">Price: Low to High</option>
+              <option value="priceHigh">Price: High to Low</option>
+              <option value="nameAsc">Name A-Z</option>
+              <option value="nameDesc">Name Z-A</option>
             </select>
           </div>
         </div>

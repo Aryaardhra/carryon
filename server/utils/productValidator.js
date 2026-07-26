@@ -19,7 +19,6 @@ export const validateParsedProductForUpdate = (data) => {
   if (data.variants) {
     validateSalePrice(data.variants);
   }
-
   return true;
 };
 
@@ -54,7 +53,6 @@ export const validateSKU = async (variants, session, productId = null) => {
       throw new Error(`SKU '${sku}' already exists.`);
     }
   }
-
   return true;
 };
 
@@ -72,7 +70,6 @@ export const validateCategory = async (category, session) => {
     logger.warn("Category not found.");
     throw new Error("Category not found.");
   }
-
   return true;
 };
 
@@ -82,7 +79,7 @@ export const validateSalePrice = (variants) => {
   for (const variant of variants) {
     if (!variant.options || variant.options.length === 0) {
       throw new Error(
-        `Variant '${variant.sku}' must contain at least one size option.`,
+        `Variant '${variant._id}' must contain at least one size option.`,
       );
     }
 
@@ -94,14 +91,12 @@ export const validateSalePrice = (variants) => {
         logger.warn(
           `Invalid sale price for SKU ${variant.sku} (${option.size})`,
         );
-
         throw new Error(
           `Sale price must be less than price for SKU ${variant.sku} (${option.size})`,
         );
       }
     }
   }
-
   return true;
 };
 
