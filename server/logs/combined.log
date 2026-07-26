@@ -11927,3 +11927,8 @@
 {"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-07-26 00:46:49"}
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-26 00:46:50"}
 {"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-26 00:46:50"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-26 22:19:58"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-26 22:19:58"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-26 22:19:58"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-07-26 22:19:58"}
+{"app":"carry_on-server","level":"info","message":"Login successful: kaizerbruno2@gmail.com","timestamp":"2026-07-26 22:20:28"}
