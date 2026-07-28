@@ -1,126 +1,168 @@
-import { createContext, useContext, useState } from "react";
-import { useProductContext } from "./ProductContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
+import {
+  getCart as getCartAPI,
+  addToCart as addToCartAPI,
+  updateCartQuantity as updateCartQuantityAPI,
+  removeCartItem as removeCartItemAPI,
+  clearCart as clearCartAPI,
+} from "../services/cartService";
 
-export const CartContext = createContext();
+const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
-  const { products } = useProductContext();
-  const [cartItems, setCartItems] = useState({});
+  const [cart, setCart] = useState({
+    items: [],
+    totalItems: 0,
+    totalQuantity: 0,
+    subtotal: 0,
+    totalSavings: 0,
+  });
+
+  const [loading, setLoading] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Fetch Cart
   
-  //addToCart
-
-  const addToCart = (productId, size, color) => {
-    const key = `${productId}-${size}-${color}`;
-
-    if (cartItems[key]) {
-      toast.success("Product already in cart");
-      return;
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      const { cart } = await getCartAPI();
+      setCart(cart);
+    } catch (error) {
+      
+      toast.error(error?.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    setCartItems((prev) => ({
-      ...prev,
-      [key]: {
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  // Add To Cart
+
+ const addToCart = async ({
+  productId,
+  color,
+  size,
+  quantity = 1,
+}) => {
+  
+    try {
+      const { cart } = await addToCartAPI({
         productId,
-        size,
         color,
-        quantity: 1,
-      },
-    }));
-
-    toast.success("Added to cart");
-  };
-  //increment
-
-  const incrementCartItem = (key) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        quantity: prev[key].quantity + 1,
-      },
-    }));
+        size,
+        quantity,
+      });
+      setCart(cart);
+      toast.success("Added to cart");
+      setIsCartOpen(true);
+    } catch (error) {
+      toast.error(error?.response?.data?.message ||error.message);
+    }
   };
 
-  ///remove single item from cart
+  // Increase Quantity
 
-  const decrementCartItem = (key) => {
-    setCartItems((prev) => {
-      if (prev[key].quantity <= 1) {
-        const copy = { ...prev };
+  const incrementCartItem = async (
+    cartItemId,
+    currentQuantity
+  ) => {
+    try {
+      const { cart } =
+        await updateCartQuantityAPI(
+          cartItemId,
+          currentQuantity + 1
+        );
 
-        delete copy[key];
+      setCart(cart);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
+  };
 
-        return copy;
+  // Decrease Quantity
+
+  const decrementCartItem = async (
+    cartItemId,
+    currentQuantity
+  ) => {
+    try {
+      if (currentQuantity === 1) {
+        await deleteCartItem(cartItemId);
+        return;
       }
 
-      return {
-        ...prev,
-        [key]: {
-          ...prev[key],
-          quantity: prev[key].quantity - 1,
-        },
-      };
-    });
+      const { cart } = await updateCartQuantityAPI( cartItemId, currentQuantity - 1 );
+      setCart(cart);
+    } catch (error) {
+      toast.error(error?.response?.data?.message ||error.message);
+    }
   };
 
-  //updatequantity
-
-  const updateCartItem = (productId, quantity) => {
-    if (quantity < 1) return;
-
-    setCartItems((prev) => ({
-      ...prev,
-      [productId]: {
-        quantity,
-      },
-    }));
-  };
-  //delete item
-
-  const deleteCartItem = (key) => {
-    setCartItems((prev) => {
-      const copy = { ...prev };
-
-      delete copy[key];
-
-      return copy;
-    });
-    toast.success("removed from cart");
+  // Update Quantity
+ 
+  const updateCartItem = async (
+    cartItemId,
+    quantity
+  ) => {
+    try {
+      const { cart } = await updateCartQuantityAPI( cartItemId, quantity );
+      setCart(cart);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+    }
   };
 
-  const clearCart = () => {
-    setCartItems({});
+  // Remove Item
+
+  const deleteCartItem = async (
+    cartItemId
+  ) => {
+    try {
+      const { cart } =
+        await removeCartItemAPI(cartItemId);
+        setCart(cart);
+      toast.success("Removed from cart");
+    } catch (error) {
+      toast.error(error?.response?.data?.message ||error.message
+      );
+    }
   };
 
-  const getCartCount = () => {
-    let count = 0;
+  // Clear Cart
 
-    Object.values(cartItems).forEach((item) => {
-      count += item.quantity;
-    });
-
-    return count;
+  const clearCart = async () => {
+    try {
+      const { cart } = await clearCartAPI();
+      setCart(cart);
+      toast.success("Cart cleared");
+    } catch (error) {
+      toast.error( error?.response?.data?.message || error.message);
+    }
   };
 
-  const getCartAmount = () => {
-    let total = 0;
+  // Helpers
 
-    Object.values(cartItems).forEach((item) => {
-      const product = products.find((p) => p._id === item.productId);
+  const getCartCount = () => cart.totalQuantity;
 
-      if (!product) return;
-
-      total += Number(product.offerPrice) * item.quantity;
-    });
-
-    return total;
-  };
+  const getCartAmount = () => cart.subtotal;
 
   const value = {
-    cartItems,
+    cart,
+    loading,
+    fetchCart,
     addToCart,
+    incrementCartItem,
+    decrementCartItem,
     updateCartItem,
     deleteCartItem,
     clearCart,
@@ -128,12 +170,14 @@ export const CartContextProvider = ({ children }) => {
     getCartAmount,
     isCartOpen,
     setIsCartOpen,
-    incrementCartItem,
-    decrementCartItem,
   };
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+    </CartContext.Provider>
+  );
 };
-export const useCartContext = () => {
-  return useContext(CartContext);
-};
+
+export const useCartContext = () =>
+  useContext(CartContext);

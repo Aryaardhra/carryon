@@ -24,7 +24,6 @@ export function ProductCard({ product }) {
         .filter((option) => option.salePrice)
         .map((option) => option.salePrice),
     );
-
     return salePrices?.length ? Math.min(...salePrices) : null;
   })();
 
@@ -76,7 +75,11 @@ export function ProductCard({ product }) {
                     e.stopPropagation();
                     const variant = product.variants?.[0];
                     const size = variant?.options?.[0]?.size;
-                    addToCart(product._id, size, variant?.color?.name);
+                    addToCart({
+                      productId: product._id,
+                      color: variant.color.name,
+                      size: size,
+                    });
                   }}
                   className="h-5 w-5 text-[#4c1c1c]"
                 />

@@ -11,7 +11,6 @@ import { getProductById } from "../services/productService";
 import { FaHeart } from "react-icons/fa";
 
 const ProductDetails = () => {
-  
   const navigate = useNavigate();
   const { productId } = useParams();
   const { products } = useProductContext();
@@ -40,8 +39,8 @@ const ProductDetails = () => {
   };
 
   const images = useMemo(() => {
-    if (!product) return [];
 
+    if (!product) return [];
     const imgs = [];
 
     if (product.featuredImage?.url) {
@@ -51,19 +50,16 @@ const ProductDetails = () => {
     if (product.productImages?.length) {
       imgs.push(...product.productImages);
     }
-
     return imgs;
   }, [product]);
 
   const colors = useMemo(() => {
     if (!product) return [];
-
     return product.variants.map((variant) => variant.color);
   }, [product]);
 
   const currentVariant = useMemo(() => {
     if (!product) return null;
-
     return (
       product.variants.find(
         (variant) => variant.color.name === selectedColor,
@@ -73,13 +69,11 @@ const ProductDetails = () => {
 
   const sizes = useMemo(() => {
     if (!currentVariant) return [];
-
     return currentVariant.options;
   }, [currentVariant]);
 
   const selectedOption = useMemo(() => {
     if (!currentVariant) return null;
-
     return (
       currentVariant.options.find((option) => option.size === selectedSize) ||
       currentVariant.options[0]
@@ -190,7 +184,11 @@ const ProductDetails = () => {
               <button
                 disabled={stock === 0}
                 onClick={() => {
-                  addToCart(product._id, selectedSize, selectedColor);
+                  addToCart({
+                    productId: product._id,
+                    color: selectedColor,
+                    size: selectedSize,
+                  });
 
                   setIsCartOpen(true);
                 }}
@@ -325,7 +323,7 @@ const ProductDetails = () => {
 
             <div className="mt-12 grid gap-4">
               <div className="rounded-2xl border border-gray-200 p-5">
-                <h4 className="font-semibold">🚚 Free Shipping</h4>
+                <h4 className="font-semibold">Free Shipping</h4>
 
                 <p className="mt-2 text-sm text-gray-500">
                   Complimentary shipping on all orders.
@@ -333,7 +331,7 @@ const ProductDetails = () => {
               </div>
 
               <div className="rounded-2xl border border-gray-200 p-5">
-                <h4 className="font-semibold">🔄 Easy Returns</h4>
+                <h4 className="font-semibold">Easy Returns</h4>
 
                 <p className="mt-2 text-sm text-gray-500">
                   Hassle-free 7 day return & exchange.
@@ -341,7 +339,7 @@ const ProductDetails = () => {
               </div>
 
               <div className="rounded-2xl border border-gray-200 p-5">
-                <h4 className="font-semibold">🔒 Secure Checkout</h4>
+                <h4 className="font-semibold"> Secure Checkout</h4>
 
                 <p className="mt-2 text-sm text-gray-500">
                   100% encrypted payment powered by Stripe.

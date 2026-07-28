@@ -1,15 +1,16 @@
 import Joi from "joi";
 
 export const validateAddToCart = (body) => {
+  const schema = Joi.object({
+    productId: Joi.string().required(),
+    color: Joi.string().required(),
+    size: Joi.string().valid("XS", "S", "M", "L", "XL", "XXL").required(),
+    quantity: Joi.number().integer().min(1).default(1),
+  });
 
-    const schema = Joi.object({
-        productId: Joi.string().required().messages({"any.required":"Product ID is required."}),
-        sku: Joi.string().trim().uppercase().required().messages({"any.required":"SKU is required."}),
-        quantity: Joi.number().integer().min(1).default(1).messages({"number.base":"Quantity must be a number.","number.min":"Quantity must be at least 1.",}),
-    });
-
-    return schema.validate(body);
+  return schema.validate(body);
 };
+
 export const validateUpdateCartQuantity = (body) => {
 
     const schema = Joi.object({
@@ -23,7 +24,6 @@ export const validateUpdateCartQuantity = (body) => {
 export const validateRemoveCartItem = (body) => {
 
     const schema = Joi.object({
-
         cartItemId: Joi.string().required().messages({"any.required": "Cart item id is required."}),
     });
 

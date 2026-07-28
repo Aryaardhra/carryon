@@ -1,41 +1,21 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useCartContext } from "../context/CartContext";
-import { useProductContext } from "../context/ProductContext";
 
 const CartDrawer = () => {
-  const { products } = useProductContext();
   const {
-    cartItems,
-    setCartItems,
-    addToCart,
+    cart,
     clearCart,
     getCartCount,
     getCartAmount,
+    incrementCartItem,
+    decrementCartItem,
     deleteCartItem,
     isCartOpen,
     setIsCartOpen,
-    incrementCartItem,
-    decrementCartItem,
   } = useCartContext();
 
-  const cartProducts = Object.entries(cartItems)
-    .map(([cartKey, cart]) => {
-      const product = products.find((p) => p._id === cart.productId);
-
-      if (!product) return null;
-
-      return {
-        ...product,
-        cartKey,
-        quantity: cart.quantity,
-        size: cart.size,
-        color: cart.color,
-      };
-    })
-    .filter(Boolean);
-
   const subtotal = getCartAmount();
-  const shippingFee = 50;
+  const shippingFee = subtotal > 0 ? 50 : 0;
   const tax = subtotal * 0.03;
   const total = subtotal + shippingFee + tax;
 
@@ -57,82 +37,98 @@ const CartDrawer = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 200 }}
-            className="
-            fixed right-0 top-0
-            h-full w-[350px]
-            bg-white z-50 shadow-xl p-6
-            overflow-y-auto
-            scrollbar-thin
-            scrollbar-thumb-gray-300
-            scrollbar-track-transparent"
+            transition={{
+              type: "spring",
+              stiffness: 220,
+            }}
+            className="fixed right-0 top-0 h-full w-[360px] bg-white z-50 shadow-xl p-6 overflow-y-auto"
           >
-            <h2 className="text-xl font-semibold mb-6">Your Cart</h2>
-
             <button
               onClick={() => setIsCartOpen(false)}
-              className="absolute top-4 right-4"
+              className="absolute top-4 right-5 text-xl"
             >
               ✕
             </button>
-            {cartProducts.length === 0 ? (
-              <p className="text-gray-500">Cart is empty</p>
+
+            <h2 className="text-xl font-semibold mb-8">Your Cart</h2>
+
+            {cart.items.length === 0 ? (
+              <div className="text-center mt-24 text-gray-500">
+                Cart is empty.
+              </div>
             ) : (
-              <div className="flex flex-col gap-4">
-                {cartProducts.map((item) => (
+              <div className="space-y-5">
+                {cart.items.map((item) => (
                   <div
-                    key={item._id}
-                    className="flex items-center gap-3 border-b pb-3"
+                    key={item.cartItemId}
+                    className="flex gap-4 border-b pb-5"
                   >
                     <img
-                      src={
-                        Array.isArray(item.image) ? item.image[0] : item.image
-                      }
-                      className="w-14 h-14 object-cover"
+                      src={item.product.featuredImage.url}
+                      alt={item.product.name}
+                      className="w-20 h-20 rounded-xl object-cover"
                     />
 
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-sm font-medium">{item.name}</p>
-                      </div>
-                      <div className="flex-1">
-                        <span className="px-2 py-0.5 text-[10px] bg-gray-100 rounded-full text-gray-600">
-                          {item.size}
+                      <h3 className="font-medium">{item.product.name}</h3>
+
+                      <div className="flex gap-2 mt-2">
+                        <span className="text-xs bg-gray-100 rounded-full px-2 py-1">
+                          {item.variant.color.name}
                         </span>
 
-                        <span className="px-2 py-0.5 text-[10px] bg-gray-100 rounded-full text-gray-600">
-                          {item.color}
+                        <span className="text-xs bg-gray-100 rounded-full px-2 py-1">
+                          {item.variant.size}
                         </span>
                       </div>
 
-                      <p className="font-medium text-sm mt-1">
-                        ₹{item.offerPrice}
-                      </p>
-                    </div>
+                      <div className="mt-3 flex items-center justify-between">
+                        <div>
+                          {item.variant.salePrice ? (
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold">
+                                ₹{item.variant.salePrice}
+                              </span>
 
-                    <div className="flex flex-row md:justify-start justify-end items-center mt-2">
-                      <button
-                        onClick={() => decrementCartItem(item.cartKey)}
-                        className="size-6 flex items-center justify-center px-1.5 rounded-full bg-gray-200 text-gray-700 hover:bg-primary hover:text-white ml-8"
-                      >
-                        -
-                      </button>
-                      <span className="px-2 text-center mx-1">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => incrementCartItem(item.cartKey)}
-                        className="size-6 flex items-center justify-center px-1.5 rounded-full bg-gray-200 text-gray-700 hover:bg-primary hover:text-white"
-                      >
-                        +
-                      </button>
-                      <div className="ml-5">
-                        <span
-                          onClick={(e) => deleteCartItem(item.cartKey)}
-                          className="text-gray-600 hover:text-gray-800 mr-4"
+                              <span className="line-through text-sm text-gray-400">
+                                ₹{item.variant.price}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="font-semibold">
+                              ₹{item.variant.price}
+                            </span>
+                          )}
+                        </div>
+
+                        <button
+                          onClick={() => deleteCartItem(item.cartItemId)}
+                          className="text-sm text-red-500"
                         >
                           Remove
-                        </span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center mt-4">
+                        <button
+                          onClick={() =>
+                            decrementCartItem(item.cartItemId, item.quantity)
+                          }
+                          className="w-7 h-7 rounded-full bg-gray-200"
+                        >
+                          -
+                        </button>
+
+                        <span className="px-4">{item.quantity}</span>
+
+                        <button
+                          onClick={() =>
+                            incrementCartItem(item.cartItemId, item.quantity)
+                          }
+                          className="w-7 h-7 rounded-full bg-gray-200"
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -140,39 +136,44 @@ const CartDrawer = () => {
               </div>
             )}
 
-            <div className="mt-6 border-t pt-14">
+            {/* Summary */}
+            <div className="mt-8 border-t pt-6 space-y-3">
               <div className="flex justify-between">
-                <span>Total Items:</span>
+                <span>Total Items</span>
                 <span>{getCartCount()}</span>
               </div>
-              <div className="flex justify-between mt-2">
-                <span>Subtotal:</span>
-                <span>₹ {subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span>Shipping Fee:</span>
-                <span>₹ {shippingFee}</span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span>Tax (3%):</span>
-                <span>₹ {tax.toFixed(2)}</span>
+
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
 
-              <div className="flex justify-between mt-2 font-semibold text-lg">
-                <span>Total Amount:</span>
-                <span>₹ {total.toFixed(2)}</span>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>₹{shippingFee.toFixed(2)}</span>
               </div>
+
+              <div className="flex justify-between">
+                <span>Tax</span>
+                <span>₹{tax.toFixed(2)}</span>
+              </div>
+
+              <div className="flex justify-between text-lg font-semibold pt-3 border-t">
+                <span>Total</span>
+                <span>₹{total.toFixed(2)}</span>
+              </div>
+
               <button
                 onClick={clearCart}
-                className="w-full mt-4 border border-gray-500 text-gray-500 py-2 rounded"
+                className="w-full mt-5 border py-3 rounded-lg"
               >
                 Clear Cart
               </button>
-            </div>
 
-            <button className="w-full mt-8 bg-black text-white py-3 rounded">
-              Checkout
-            </button>
+              <button className="w-full bg-black text-white py-3 rounded-lg mt-3">
+                Checkout
+              </button>
+            </div>
           </motion.div>
         </>
       )}
