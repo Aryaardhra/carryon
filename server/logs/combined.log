@@ -12082,3 +12082,6 @@
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-28 12:40:27"}
 {"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-28 12:40:27"}
 {"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-28 12:40:27"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-07-28 12:45:22"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-28 12:45:22"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-28 12:45:23"}
