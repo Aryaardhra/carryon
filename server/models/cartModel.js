@@ -15,6 +15,12 @@ const cartItemSchema = new mongoose.Schema(
       trim: true,
     },
 
+    size: {
+      type: String,
+      required: true,
+      enum: ["XS", "S", "M", "L", "XL", "XXL"],
+    },
+
     quantity: {
       type: Number,
       required: true,
@@ -37,8 +43,8 @@ const cartItemSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // createdAt & updatedAt for each cart item
-  }
+    timestamps: true,
+  },
 );
 
 const cartSchema = new mongoose.Schema(
@@ -58,7 +64,7 @@ const cartSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 //Prevent duplicate product + SKU combinations inside the same cart.
