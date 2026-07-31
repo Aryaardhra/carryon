@@ -109,6 +109,7 @@ export const uploadVariantImages = async (
     );
 
     finalVariants.push({
+
       sku: variant.sku.trim().toUpperCase(),
 
       color: variant.color,
@@ -213,7 +214,7 @@ export const replaceVariantImages = async (
   uploadedPublicIds,
 ) => {
   if (!files.length) {
-    throw new Error("Please upload images.");
+     return variant.images;
   }
 
   //Delete old images

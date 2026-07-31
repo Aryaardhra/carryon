@@ -91,7 +91,8 @@ const findExistingCartItem = (cart, productId, sku, size) => {
 };
 
 export const addToCartService = async ({ userId, body, session }) => {
-  const { productId, color, size, quantity = 1 } = body;
+  const { productId, color, size, selectedImage, quantity = 1 } = body;
+  
 
   // Validation
  
@@ -106,6 +107,10 @@ export const addToCartService = async ({ userId, body, session }) => {
   if (!size) {
     throw new Error("Size is required.");
   }
+
+  if (!selectedImage) {
+  throw new Error("Selected image is required.");
+}
 
   const qty = Number(quantity);
 
@@ -152,21 +157,15 @@ export const addToCartService = async ({ userId, body, session }) => {
 
     existingItem.quantity = newQuantity;
   } else {
-    cart.items.push({
-      product: product._id,
-
-      // SKU is derived from the variant, not sent by frontend
-      sku: variant.sku,
-
-      // Selected size
-      size: option.size,
-
-      quantity: qty,
-
-      // Snapshot prices at time of adding to cart
-      addedPrice: option.price,
-      addedSalePrice: option.salePrice ?? null,
-    });
+   cart.items.push({
+    product: product._id,
+    sku: variant.sku,
+    size: option.size,
+    selectedImage,
+    quantity: qty,
+    addedPrice: option.price,
+    addedSalePrice: option.salePrice ?? null,
+});
   }
 
   await cart.save({ session });
@@ -260,7 +259,6 @@ export const updateCartQuantityService = async ({ userId, body, session }) => {
 
   // Update Quantity
   cartItem.quantity = Number(quantity);
-
   await cart.save({ session });
 
   logger.info(
@@ -298,11 +296,8 @@ export const removeCartItemService = async ({ userId, body, session }) => {
 
   // Remove Item
   item.deleteOne();
-
   await cart.save({ session });
-
   logger.info(`Removed cart item ${cartItemId}`);
-
   return await formatCart(cart);
 };
 

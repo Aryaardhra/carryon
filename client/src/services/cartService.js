@@ -7,11 +7,12 @@ export const getCart = async () => {
 
 // Add To Cart
 
-export const addToCart = async ({ productId, color, size, quantity = 1 }) => {
+export const addToCart = async ({ productId, color, size, selectedImage, quantity = 1 }) => {
   const { data } = await axiosInstance.post("/v1/cart/add", {
     productId,
     color,
     size,
+    selectedImage,
     quantity,
   });
   return data;

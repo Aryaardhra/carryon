@@ -9,6 +9,7 @@ import { useProductContext } from "../context/ProductContext";
 import { useCartContext } from "../context/CartContext";
 import { getProductById } from "../services/productService";
 import { FaHeart } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [thumbnail, setThumbnail] = useState(null);
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
     fetchProduct();
@@ -38,75 +39,122 @@ const ProductDetails = () => {
     }
   };
 
-  const images = useMemo(() => {
+  useEffect(() => {
+    if (!product) return;
 
-    if (!product) return [];
-    const imgs = [];
+    setSelectedColor(null);
+    setSelectedSize(null);
 
     if (product.featuredImage?.url) {
-      imgs.push(product.featuredImage);
+      setSelectedImage(product.featuredImage);
+    } else if (product.productImages?.length) {
+      setSelectedImage(product.productImages[0]);
     }
-
-    if (product.productImages?.length) {
-      imgs.push(...product.productImages);
-    }
-    return imgs;
   }, [product]);
 
-  const colors = useMemo(() => {
-    if (!product) return [];
-    return product.variants.map((variant) => variant.color);
-  }, [product]);
+  const selectedVariant = useMemo(() => {
+    if (!product || !selectedColor) return null;
 
-  const currentVariant = useMemo(() => {
-    if (!product) return null;
     return (
       product.variants.find(
         (variant) => variant.color.name === selectedColor,
-      ) || product.variants[0]
+      ) || null
     );
   }, [product, selectedColor]);
 
+  const displayImages = useMemo(() => {
+    if (!product) return [];
+
+    const images = [];
+
+    // Featured image
+    if (product.featuredImage?.url) {
+      images.push(product.featuredImage);
+    }
+
+    // Gallery images
+    if (product.productImages?.length) {
+      images.push(...product.productImages);
+    }
+
+    // Selected color images
+    if (selectedVariant?.images?.length) {
+      images.push(...selectedVariant.images);
+    }
+
+    // Remove duplicate URLs
+    return images.filter(
+      (image, index, self) =>
+        index === self.findIndex((img) => img.url === image.url),
+    );
+  }, [product, selectedVariant]);
+
+  useEffect(() => {
+    if (!product) return;
+
+    // If a color is selected, always show its first image
+    if (selectedVariant?.images?.length) {
+      setSelectedImage(selectedVariant.images[0]);
+      return;
+    }
+
+    // Otherwise show featured/gallery
+    if (product.featuredImage?.url) {
+      setSelectedImage(product.featuredImage);
+    } else if (product.productImages?.length) {
+      setSelectedImage(product.productImages[0]);
+    }
+  }, [selectedVariant, product]);
+
   const sizes = useMemo(() => {
-    if (!currentVariant) return [];
-    return currentVariant.options;
-  }, [currentVariant]);
+    if (!selectedVariant) return [];
+
+    return selectedVariant.options;
+  }, [selectedVariant]);
 
   const selectedOption = useMemo(() => {
-    if (!currentVariant) return null;
+    if (!selectedVariant) return null;
+
     return (
-      currentVariant.options.find((option) => option.size === selectedSize) ||
-      currentVariant.options[0]
+      selectedVariant.options.find((option) => option.size === selectedSize) ??
+      selectedVariant.options.find((option) => option.stock > 0) ??
+      selectedVariant.options[0] ??
+      null
     );
-  }, [currentVariant, selectedSize]);
+  }, [selectedVariant, selectedSize]);
 
-  const price = selectedOption?.price || 0;
-  const salePrice = selectedOption?.salePrice;
-  const stock = selectedOption?.stock || 0;
+  const price = selectedOption?.price ?? product?.minPrice ?? 0;
 
-  useEffect(() => {
-    if (!product) return;
-    const firstVariant = product.variants[0];
-    setSelectedColor(firstVariant.color.name);
-    setSelectedSize(firstVariant.options[0].size);
+  const salePrice = selectedOption?.salePrice ?? null;
 
-    if (images.length) {
-      setThumbnail(images[0].url);
+  const stock = selectedOption?.stock ?? product?.totalStock ?? 0;
+
+  const handleBuyNow = () => {
+    if (!selectedColor) {
+      toast.error("Please select a color.");
+      return;
     }
-  }, [product, images]);
 
-  useEffect(() => {
-    if (!product) return;
+    if (!selectedSize) {
+      toast.error("Please select a size.");
+      return;
+    }
 
-    const related = products.filter(
-      (item) =>
-        item.category?._id === product.category?._id &&
-        item._id !== product._id,
-    );
+    if (stock <= 0) {
+      toast.error("Product is out of stock.");
+      return;
+    }
 
-    setRelatedProducts(related.slice(0, 5));
-  }, [product, products]);
+    addToCart({
+      productId: product._id,
+      color: selectedColor,
+      size: selectedSize,
+      selectedImage: selectedImage.url,
+      quantity: 1,
+    });
 
+    navigate("/checkout");
+  };
   if (loading) {
     return <div className="mt-40 text-center">Loading Product...</div>;
   }
@@ -133,16 +181,15 @@ const ProductDetails = () => {
             <div className="flex gap-5">
               {/* Thumbnails */}
               <div className="flex flex-col gap-3">
-                {images.map((image, index) => (
+                {displayImages.map((image) => (
                   <button
-                    key={index}
-                    onClick={() => setThumbnail(image.url)}
-                    className={`relative w-20 h-20 rounded-2xl overflow-hidden transition-all duration-300
-          ${
-            thumbnail === image.url
-              ? "ring-2 ring-secondary shadow-lg"
-              : "border border-gray-200 hover:border-secondary"
-          }`}
+                    key={image.url}
+                    onClick={() => setSelectedImage(image)}
+                    className={`relative w-20 h-20 rounded-2xl overflow-hidden transition-all duration-300 ${
+                      selectedImage?.url === image.url
+                        ? "ring-2 ring-secondary shadow-lg"
+                        : "border border-gray-200 hover:border-secondary"
+                    }`}
                   >
                     <img
                       src={image.url}
@@ -170,7 +217,7 @@ const ProductDetails = () => {
 
                   <div className="flex h-full items-center justify-center overflow-hidden">
                     <img
-                      src={thumbnail}
+                      src={selectedImage?.url}
                       alt={product.name}
                       className="max-h-[90%] max-w-[90%] object-contain transition duration-500 hover:scale-105"
                     />
@@ -188,6 +235,8 @@ const ProductDetails = () => {
                     productId: product._id,
                     color: selectedColor,
                     size: selectedSize,
+                    selectedImage: selectedImage.url,
+                    quantity: 1,
                   });
 
                   setIsCartOpen(true);
@@ -199,6 +248,7 @@ const ProductDetails = () => {
 
               <button
                 disabled={stock === 0}
+                onClick={handleBuyNow}
                 className="rounded-2xl bg-secondary py-4 text-lg font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Buy Now
@@ -267,22 +317,25 @@ const ProductDetails = () => {
               <h3 className="mb-4 text-lg font-semibold">Select Color</h3>
 
               <div className="flex flex-wrap gap-3">
-                {colors.map((color) => (
+                {product.variants.map((variant) => (
                   <button
-                    key={color.name}
+                    key={variant._id}
                     onClick={() => {
-                      setSelectedColor(color.name);
-                      setSelectedSize("");
-                    }}
-                    className={`rounded-xl border px-6 py-3 transition-all duration-300
+                      setSelectedColor(variant.color.name);
 
-          ${
-            selectedColor === color.name
-              ? "border-secondary bg-secondary text-white shadow-lg"
-              : "border-gray-300 hover:border-secondary"
-          }`}
+                      const firstAvailable =
+                        variant.options.find((o) => o.stock > 0) ??
+                        variant.options[0];
+
+                      setSelectedSize(firstAvailable?.size ?? null);
+                    }}
+                    className={`rounded-xl border px-6 py-3 transition-all duration-300 ${
+                      selectedColor === variant.color.name
+                        ? "border-secondary bg-secondary text-white shadow-lg"
+                        : "border-gray-300 hover:border-secondary"
+                    }`}
                   >
-                    {color.name}
+                    {variant.color.name}
                   </button>
                 ))}
               </div>
@@ -301,18 +354,18 @@ const ProductDetails = () => {
                     onClick={() => setSelectedSize(size.size)}
                     className={`h-14 w-14 rounded-xl border transition
 
-          ${
-            selectedSize === size.size
-              ? "bg-secondary text-white border-secondary shadow-lg"
-              : "border-gray-300"
-          }
+                   ${
+                     selectedSize === size.size
+                     ? "bg-secondary text-white border-secondary shadow-lg"
+                     : "border-gray-300"
+                    }
 
-          ${
-            size.stock === 0
-              ? "opacity-40 cursor-not-allowed"
-              : "hover:border-secondary"
-          }`}
-                  >
+                  ${
+                   size.stock === 0
+                   ? "opacity-40 cursor-not-allowed"
+                   : "hover:border-secondary"
+                   }`}
+                   >
                     {size.size}
                   </button>
                 ))}

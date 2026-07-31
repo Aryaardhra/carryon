@@ -31,11 +31,15 @@ const initialProduct = {
 
   variants: [
     {
+      tempId: crypto.randomUUID(),
+
       sku: "",
+
       color: {
         name: "",
         hex: "",
       },
+
       options: [
         {
           size: "",
@@ -44,6 +48,7 @@ const initialProduct = {
           salePrice: "",
         },
       ],
+
       images: [],
       isActive: true,
     },
@@ -51,7 +56,6 @@ const initialProduct = {
 };
 
 const useProductForm = () => {
-
   const [product, setProduct] = useState(initialProduct);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +69,9 @@ const useProductForm = () => {
       const { data } = await getCategories();
       setCategories(data?.categories || []);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Unable to fetch categories.");
+      toast.error(
+        error.response?.data?.message || "Unable to fetch categories.",
+      );
     }
   };
 
@@ -74,6 +80,7 @@ const useProductForm = () => {
   };
 
   const submitProduct = async (e) => {
+  
     e.preventDefault();
 
     try {

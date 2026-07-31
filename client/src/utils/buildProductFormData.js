@@ -23,7 +23,6 @@ const buildProductFormData = (product) => {
   formData.append("specifications", JSON.stringify(product.specifications));
   formData.append("seo", JSON.stringify(product.seo));
   formData.append("variants", JSON.stringify(variantsWithoutImages));
-
   // Featured Image
   if (product.featuredImage && product.featuredImage.length > 0) {
     formData.append("featuredImages", product.featuredImage[0]);
@@ -36,7 +35,7 @@ const buildProductFormData = (product) => {
     });
   }
 
-  product.variants.forEach((variant, variantIndex) => {
+  product.variants.forEach((variant) => {
     variant.images.forEach((image) => {
       formData.append(`variant_${variant.tempId}`, image);
     });

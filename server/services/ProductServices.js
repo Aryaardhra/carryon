@@ -37,6 +37,9 @@ export const createProduct = async (
     category,
     brand,
     suitableFor,
+    bestSeller,
+    latest,
+    status,
     highlights,
     tags,
     specifications,
@@ -55,6 +58,9 @@ export const createProduct = async (
         description: description?.trim() || "",
         category,
         brand: brand?.trim() || "",
+        bestSeller,
+        latest,
+        status,
         suitableFor,
         highlights,
         tags,
@@ -69,7 +75,7 @@ export const createProduct = async (
   );
   return product;
 };
-await clearProductCache();
+
 
 export const startTransaction = async () => {
   const session = await mongoose.startSession();
@@ -492,35 +498,83 @@ export const updateVariantBasicService = async ({
     product.name = productName.trim();
   }
 
-  for (const incomingVariant of variants) {
-    if (!incomingVariant._id) {
-      throw new Error("Variant ID is required.");
-    }
+  // Store incoming ids
+  const incomingIds = variants
+    .filter((variant) => variant._id)
+    .map((variant) => variant._id.toString());
 
+  // Remove deleted variants
+  product.variants = product.variants.filter((variant) =>
+    incomingIds.includes(variant._id.toString())
+  );
+
+  for (const incomingVariant of variants) {
     if (!incomingVariant.color?.name) {
       throw new Error("Variant color is required.");
     }
 
-    const existingVariant = product.variants.id(incomingVariant._id);
+    // ----------------------------
+    // EXISTING VARIANT
+    // ----------------------------
 
-    if (!existingVariant) {
-      throw new Error("Variant not found.");
+    if (incomingVariant._id) {
+      const existingVariant = product.variants.id(incomingVariant._id);
+
+      if (!existingVariant) {
+        throw new Error("Variant not found.");
+      }
+
+      existingVariant.color = incomingVariant.color;
+      existingVariant.isActive =
+        incomingVariant.isActive ?? existingVariant.isActive;
+
+      existingVariant.sku = generateSku(
+        product.name,
+        incomingVariant.color.name,
+        existingVariant.options[0]?.size || "M"
+      );
     }
 
-    // Update color
-    existingVariant.color = incomingVariant.color;
+    // ----------------------------
+    // NEW VARIANT
+    // ----------------------------
 
-    // Regenerate SKU using updated product name & color
-    existingVariant.sku = generateSku(
-      product.name,
-      incomingVariant.color.name,
-      existingVariant.options[0].size,
-    );
+    else {
+      const firstSize =
+        incomingVariant.options?.[0]?.size || "M";
+
+      product.variants.push({
+        sku: generateSku(
+          product.name,
+          incomingVariant.color.name,
+          firstSize
+        ),
+
+        color: incomingVariant.color,
+
+        options:
+          incomingVariant.options?.map((option) => ({
+            size: option.size,
+            stock: Number(option.stock),
+            price: Number(option.price),
+            salePrice:
+              option.salePrice === "" ||
+              option.salePrice == null
+                ? null
+                : Number(option.salePrice),
+          })) || [],
+
+        images: [],
+
+        isActive: incomingVariant.isActive ?? true,
+      });
+    }
   }
 
-  // Check duplicate SKUs after regeneration
   await validateSKU(product.variants, session, product._id);
+
   await product.save({ session });
+
   return product;
 };
 
@@ -542,9 +596,11 @@ export const updateProductPricingService = async ({
   }
 
   for (const incomingVariant of variants) {
-    if (!incomingVariant._id) {
-      throw new Error("Variant ID is required.");
-    }
+   if (!incomingVariant._id) {
+  // Newly created variant.
+  // Pricing was already inserted when the variant was created.
+  continue;
+}
 
     if (
       !Array.isArray(incomingVariant.options) ||
@@ -553,11 +609,11 @@ export const updateProductPricingService = async ({
       throw new Error("Each variant must contain at least one size option.");
     }
 
-    const existingVariant = product.variants.id(incomingVariant._id);
+   const existingVariant = product.variants.id(incomingVariant._id);
 
-    if (!existingVariant) {
-      throw new Error("Variant not found.");
-    }
+if (!existingVariant) {
+  continue;
+}
 
     // Validate prices
     validatePricing(incomingVariant.options);
@@ -609,9 +665,11 @@ export const updateProductInventoryService = async ({
   }
 
   for (const incomingVariant of variants) {
-    if (!incomingVariant._id) {
-      throw new Error("Variant ID is required.");
-    }
+   if (!incomingVariant._id) {
+  // Newly added variant.
+  // Inventory was already stored when the variant was created.
+  continue;
+}
 
     if (
       !Array.isArray(incomingVariant.options) ||
@@ -620,11 +678,11 @@ export const updateProductInventoryService = async ({
       throw new Error("Each variant must contain at least one size option.");
     }
 
-    const existingVariant = product.variants.id(incomingVariant._id);
+   const existingVariant = product.variants.id(incomingVariant._id);
 
-    if (!existingVariant) {
-      throw new Error("Variant not found.");
-    }
+if (!existingVariant) {
+  continue;
+}
 
     // Validate inventory
     validateInventory(incomingVariant.options);
@@ -702,21 +760,28 @@ export const updateVariantImagesService = async ({
     throw new Error("Variant ID is required.");
   }
 
+  const product = await Product.findById(productId).session(session);
+
+  if (!product) {
+    throw new Error("Product not found.");
+  }
+
   const variant = product.variants.id(variantId);
 
   if (!variant) {
     throw new Error("Variant not found.");
   }
+
   const images = await replaceVariantImages(
     files,
     variant,
-    uploadedPublicIds,
+    uploadedPublicIds
   );
 
   variant.images = images;
-  await product.save({
-    session,
-  });
+
+  await product.save({ session });
+
   return product;
 };
 

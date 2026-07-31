@@ -1,28 +1,36 @@
 import VariantCard from "./VariantCard";
 import AdminButton from "../AdminButton";
 
-const emptyOption = {
-  size: "",
-  stock: 0,
-  price: "",
-  salePrice: "",
-};
+const emptyVariant = () => ({
+  
+  tempId: crypto.randomUUID(),
 
-const emptyVariant = {
   sku: "",
+
   color: {
     name: "",
     hex: "#000000",
   },
+
   images: [],
-  options: [structuredClone(emptyOption)],
-};
+
+  options: [
+    {
+      size: "",
+      stock: 0,
+      price: "",
+      salePrice: "",
+    },
+  ],
+
+  isActive: true,
+});
 
 const ProductVariants = ({ product, setProduct }) => {
   const addVariant = () => {
     setProduct((prev) => ({
       ...prev,
-      variants: [...prev.variants, structuredClone(emptyVariant)],
+      variants: [...prev.variants, emptyVariant()],
     }));
   };
 
@@ -36,12 +44,10 @@ const ProductVariants = ({ product, setProduct }) => {
   };
 
   const removeVariant = (index) => {
-    const updated = [...product.variants];
-    updated.splice(index, 1);
-    setProduct({
-      ...product,
-      variants: updated,
-    });
+    setProduct((prev) => ({
+      ...prev,
+      variants: prev.variants.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -57,7 +63,7 @@ const ProductVariants = ({ product, setProduct }) => {
       <div className="space-y-8">
         {product.variants.map((variant, index) => (
           <VariantCard
-            key={index}
+            key={variant._id || variant.tempId}
             index={index}
             variant={variant}
             updateVariant={updateVariant}
