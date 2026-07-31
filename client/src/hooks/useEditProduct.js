@@ -52,16 +52,16 @@ const useEditProduct = () => {
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
-  const updateFeaturedIfNeeded = async () => {
-    const file = product.featuredImage?.[0];
+  const updateFeatured = async (currentProduct) => {
+    const file = currentProduct.featuredImage?.[0];
     if (!(file instanceof File)) return;
     const formData = new FormData();
     formData.append("featuredImage", file);
     await updateFeaturedImage(id, formData);
   };
 
-  const updateGalleryIfNeeded = async () => {
-    const newImages = product.productImages.filter(
+  const updateGallery = async (currentProduct) => {
+    const newImages = currentProduct.productImages.filter(
       (image) => image instanceof File,
     );
 
@@ -72,40 +72,35 @@ const useEditProduct = () => {
     newImages.forEach((image) => {
       formData.append("galleryImages", image);
     });
-
     await updateGalleryImages(id, formData);
   };
 
-  const updateVariantImagesIfNeeded = async () => {
-    for (const variant of product.variants) {
+  const updateVariantImages = async (currentProduct) => {
+    for (const variant of currentProduct.variants) {
       const newImages = variant.images.filter((image) => image instanceof File);
 
       if (!newImages.length) continue;
-
+      
       const formData = new FormData();
-
       formData.append("variantId", variant._id);
-
-      newImages.forEach((image) => {
-        formData.append("images", image);
-      });
-
+      newImages.forEach((image) => { formData.append("images", image) });
       await updateVariantImages(id, formData);
     }
   };
-  const updatePricingIfNeeded = async () => {
+  const updatePricing = async (currentProduct) => {
     await updateProductPricing(id, {
-      variants: product.variants,
+      variants: currentProduct.variants,
     });
   };
 
-  const updateInventoryIfNeeded = async () => {
+  const updateInventory = async (currentProduct) => {
     await updateProductInventory(id, {
-      variants: product.variants,
+      variants: currentProduct.variants,
     });
   };
 
   useEffect(() => {
+    console.log(product.variants);
     loadPage();
   }, [id]);
 
@@ -181,24 +176,28 @@ const useEditProduct = () => {
         status: product.status,
       });
 
-      await updateVariantBasic(id, {
+      const { data: variantResponse } = await updateVariantBasic(id, {
         productName: product.name,
+
         variants: product.variants.map((variant) => ({
-           _id: variant._id,
+          _id: variant._id,
           color: variant.color,
+          options: variant.options,
+          isActive: variant.isActive,
         })),
       });
 
-      // Pricing
-      await updatePricingIfNeeded();
+      const updatedProduct = {
+        ...product,
+        variants: variantResponse.product.variants,
+      };
 
-      // Inventory
-      await updateInventoryIfNeeded();
-
-      // Images
-      await updateFeaturedIfNeeded();
-      await updateGalleryIfNeeded();
-      await updateVariantImagesIfNeeded();
+      setProduct(updatedProduct);
+      await updatePricing(updatedProduct);
+      await updateInventory(updatedProduct);
+      await updateFeatured(updatedProduct);
+      await updateGallery(updatedProduct);
+      await updateVariantImages(updatedProduct);
 
       toast.success("Product updated successfully.");
 
@@ -213,12 +212,9 @@ const useEditProduct = () => {
   return {
     product,
     setProduct,
-
     categories,
-
     loading,
     pageLoading,
-
     submitProduct,
   };
 };

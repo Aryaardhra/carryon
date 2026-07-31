@@ -8,15 +8,15 @@ import { useCartContext } from "../context/CartContext";
 export function ProductCard({ product }) {
   const { addToCart } = useCartContext();
 
+  const variant = product.variants?.[0];
+  const size = variant?.options?.[0]?.size;
   // Featured image
-  const image =
-    product?.featuredImage?.url ||
-    product?.productImages?.[0]?.url ||
-    "/placeholder.png";
-
+  const image = product.featuredImage?.url ||
+    product.productImages?.[0]?.url ||
+    product.variants?.[0]?.images?.[0]?.url ||
+    "";
   // Lowest original price
   const price = product?.minPrice || 0;
-
   // Lowest sale price
   const salePrice = (() => {
     const salePrices = product?.variants?.flatMap((variant) =>
@@ -78,7 +78,11 @@ export function ProductCard({ product }) {
                     addToCart({
                       productId: product._id,
                       color: variant.color.name,
-                      size: size,
+                      size,
+                      selectedImage: {
+                      url: image,
+                      },
+                      quantity: 1,
                     });
                   }}
                   className="h-5 w-5 text-[#4c1c1c]"

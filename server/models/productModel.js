@@ -302,10 +302,6 @@ productSchema.index({
 });
 
 productSchema.index({
-  featured: 1,
-});
-
-productSchema.index({
   bestSeller: 1,
 });
 

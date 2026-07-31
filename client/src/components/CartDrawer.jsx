@@ -64,7 +64,7 @@ const CartDrawer = () => {
                     className="flex gap-4 border-b pb-5"
                   >
                     <img
-                      src={item.product.featuredImage.url}
+                      src={item.variant.selectedImage}
                       alt={item.product.name}
                       className="w-20 h-20 rounded-xl object-cover"
                     />

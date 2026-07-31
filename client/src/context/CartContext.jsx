@@ -52,14 +52,23 @@ export const CartContextProvider = ({ children }) => {
   productId,
   color,
   size,
+  selectedImage,
   quantity = 1,
 }) => {
-  
+   console.log({
+    productId,
+    color,
+    colorType: typeof color,
+    size,
+    selectedImage,
+    quantity,
+  });
     try {
       const { cart } = await addToCartAPI({
         productId,
         color,
         size,
+        selectedImage,
         quantity,
       });
       setCart(cart);

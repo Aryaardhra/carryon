@@ -78,10 +78,10 @@ export const formatCart = async (cart) => {
         sku: variant.sku,
         color: variant.color,
         size: option.size,
-        stock: option.stock,
         price: option.price,
         salePrice: option.salePrice,
-        images: variant.images[0] || product.featuredImage,
+        stock: option.stock,
+        selectedImage: item.selectedImage,
       },
     });
   }

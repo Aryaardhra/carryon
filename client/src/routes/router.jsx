@@ -24,6 +24,7 @@ import Profile from "../pages/Profile";
 import AddCategory from "../admin/pages/AddCategory";
 import CategoryList from "../admin/pages/CategoryList";
 import EditProduct from "../admin/pages/EditProduct";
+import CheckOut from "../pages/CheckOut";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
         children: [
           
           { path: "cart", element: "Cart" },
-          { path: "checkout", element: "checkout" },
+          { path: "checkout", element: <CheckOut /> },
           { path: "my-orders", element: "orders" },
           { path: "my-profile", element: <Profile /> },
           { path: "wishlist", element: "wishlist" },

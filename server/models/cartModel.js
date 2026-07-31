@@ -21,6 +21,12 @@ const cartItemSchema = new mongoose.Schema(
       enum: ["XS", "S", "M", "L", "XL", "XXL"],
     },
 
+     selectedImage: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     quantity: {
       type: Number,
       required: true,
