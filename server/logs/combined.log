@@ -12540,3 +12540,18 @@
 {"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-07-31 00:17:01"}
 {"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-31 00:17:01"}
 {"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-31 00:17:01"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: byteqzone@gmail.com","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: byteqzone@gmail.com","timestamp":"2026-07-31 16:20:25"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"info","message":"Removed cart item 6a6b97b48c8857b2bd82019e","timestamp":"2026-07-31 16:22:49"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Tan Bag (Red/L) to cart.","timestamp":"2026-07-31 16:22:59"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Tan Bag (Blue/M) to cart.","timestamp":"2026-07-31 16:23:08"}
