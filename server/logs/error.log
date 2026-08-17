@@ -984,3 +984,43 @@
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:20:25"}
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:21:02"}
 {"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-07-31 16:21:02"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-11 16:13:27"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:45:58"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 17:02:35"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 17:02:35"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"error","message":"Error: \"color\" must be a string\n    at addToCart (file:///D:/M_E_R_N/carry_on/server/controllers/cartController.js:30:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-16 23:04:06"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 00:49:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 00:49:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:04:29"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:32:16)\n    at createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:26)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 01:04:29"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:20:22"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:37:53"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: createCartCheckoutOrderService is not defined\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 01:56:16"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: createCartCheckoutOrderService is not defined\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:01:01"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:32:16)\n    at createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:26)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:27:31"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createCartCheckoutOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:260:16)\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:13)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:28:07"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: Order is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:143:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:20)","timestamp":"2026-08-17 02:30:13"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: cartModel is not defined\n    at createCartCheckoutOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:280:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)","timestamp":"2026-08-17 02:34:15"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: Order is not defined\n    at getOrderByStripeSessionService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:538:17)\n    at getOrderByStripeSession (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:81:25)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 03:08:44"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:22:47"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 13:34:38"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 13:49:42"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 14:04:43"}
