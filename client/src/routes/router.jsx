@@ -25,6 +25,8 @@ import AddCategory from "../admin/pages/AddCategory";
 import CategoryList from "../admin/pages/CategoryList";
 import EditProduct from "../admin/pages/EditProduct";
 import CheckOut from "../pages/CheckOut";
+import PaymentSuccess from "../pages/PaymentSuccess";
+import PaymentCancelled from "../pages/PaymentCancelled";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,8 @@ const router = createBrowserRouter([
           
           { path: "cart", element: "Cart" },
           { path: "checkout", element: <CheckOut /> },
+          { path: "payment-success", element: <PaymentSuccess /> },
+          { path: "payment-cancelled", element: <PaymentCancelled /> },
           { path: "my-orders", element: "orders" },
           { path: "my-profile", element: <Profile /> },
           { path: "wishlist", element: "wishlist" },

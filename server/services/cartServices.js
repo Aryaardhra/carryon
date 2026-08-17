@@ -92,10 +92,9 @@ const findExistingCartItem = (cart, productId, sku, size) => {
 
 export const addToCartService = async ({ userId, body, session }) => {
   const { productId, color, size, selectedImage, quantity = 1 } = body;
-  
 
   // Validation
- 
+
   if (!productId) {
     throw new Error("Product ID is required.");
   }
@@ -109,8 +108,8 @@ export const addToCartService = async ({ userId, body, session }) => {
   }
 
   if (!selectedImage) {
-  throw new Error("Selected image is required.");
-}
+    throw new Error("Selected image is required.");
+  }
 
   const qty = Number(quantity);
 
@@ -138,15 +137,15 @@ export const addToCartService = async ({ userId, body, session }) => {
   validateStock(option, qty);
 
   // Find or create user cart
-  
+
   const cart = await findUserCart(userId, session);
 
   // Find existing cart item
-  
+
   const existingItem = findExistingCartItem(
     cart,
     productId,
-    variant.color.name,
+    variant.sku,
     option.size,
   );
 
@@ -157,15 +156,15 @@ export const addToCartService = async ({ userId, body, session }) => {
 
     existingItem.quantity = newQuantity;
   } else {
-   cart.items.push({
-    product: product._id,
-    sku: variant.sku,
-    size: option.size,
-    selectedImage,
-    quantity: qty,
-    addedPrice: option.price,
-    addedSalePrice: option.salePrice ?? null,
-});
+    cart.items.push({
+      product: product._id,
+      sku: variant.sku,
+      size: option.size,
+      selectedImage,
+      quantity: qty,
+      addedPrice: option.price,
+      addedSalePrice: option.salePrice ?? null,
+    });
   }
 
   await cart.save({ session });

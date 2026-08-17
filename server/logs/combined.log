@@ -12555,3 +12555,197 @@
 {"app":"carry_on-server","level":"info","message":"Removed cart item 6a6b97b48c8857b2bd82019e","timestamp":"2026-07-31 16:22:49"}
 {"app":"carry_on-server","level":"info","message":"Added Travel Tan Bag (Red/L) to cart.","timestamp":"2026-07-31 16:22:59"}
 {"app":"carry_on-server","level":"info","message":"Added Travel Tan Bag (Blue/M) to cart.","timestamp":"2026-07-31 16:23:08"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-11 16:13:27"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-11 16:13:27"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-11 16:13:27"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-11 16:13:27"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-13 15:36:55"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-13 15:45:47"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 15:45:58"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 17:02:35"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-13 17:02:35"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-13 17:02:35"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-13 17:02:37"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-13 17:02:37"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-16 22:59:12"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-16 22:59:13"}
+{"app":"carry_on-server","level":"warn","message":"Login failed: kaizerburno2@gmail.com","timestamp":"2026-08-16 23:01:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-16 23:02:01"}
+{"app":"carry_on-server","level":"warn","message":"Login failed: kaizerburno2@gmail.com","timestamp":"2026-08-16 23:02:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"warn","message":"Refresh token missing!","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-16 23:03:32"}
+{"app":"carry_on-server","level":"info","message":"Login successful: kaizerbruno2@gmail.com","timestamp":"2026-08-16 23:03:48"}
+{"app":"carry_on-server","level":"warn","message":"\"color\" must be a string","timestamp":"2026-08-16 23:04:06"}
+{"app":"carry_on-server","level":"error","message":"Error: \"color\" must be a string\n    at addToCart (file:///D:/M_E_R_N/carry_on/server/controllers/cartController.js:30:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-16 23:04:06"}
+{"app":"carry_on-server","level":"info","message":"Added Hand Bag Carryon (Brown/S) to cart.","timestamp":"2026-08-16 23:04:23"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-16 23:10:33"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-16 23:10:33"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-16 23:10:33"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-16 23:10:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-16 23:10:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-16 23:10:55"}
+{"app":"carry_on-server","level":"info","message":"Removed cart item 6a81f49fa327aa9f65d59b39","timestamp":"2026-08-16 23:11:29"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 00:49:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 00:49:24"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 00:49:25"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 00:49:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 00:49:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 00:49:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 00:56:01"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 00:56:01"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 00:56:01"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 00:56:43"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 00:56:43"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 00:56:43"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 01:00:04"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:00:04"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 01:00:05"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 01:01:40"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 01:01:40"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:01:40"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 01:01:46"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 01:01:46"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:01:46"}
+{"app":"carry_on-server","level":"info","message":"Address added for user: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:04:03"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:04:29"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:04:29"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:32:16)\n    at createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:26)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 01:04:29"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:20:22"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:20:22"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:37:53"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:37:53"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 01:55:45"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: createCartCheckoutOrderService is not defined\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 01:56:16"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 01:56:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 01:56:55"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 01:56:55"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:00:38"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:00:38"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:00:38"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: createCartCheckoutOrderService is not defined\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:01:01"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:02:16"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:02:16"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:02:16"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:27:09"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:32:16)\n    at createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:26)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:27:31"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: User is not defined\n    at createCartCheckoutOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:260:16)\n    at createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:13)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 02:28:07"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: Order is not defined\n    at createBuyNowOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:143:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createBuyNowOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:15:20)","timestamp":"2026-08-17 02:30:13"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:33:12"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:33:12"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:33:12"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:34:02"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:34:02"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:34:02"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: cartModel is not defined\n    at createCartCheckoutOrderService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:280:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createCartCheckoutOrder (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:47:7)","timestamp":"2026-08-17 02:34:15"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:35:26"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:35:26"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:35:26"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:37:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:37:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 02:37:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:37:58"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:37:58"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:37:58"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:47:08"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 02:47:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:47:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:47:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:47:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:47:34"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 02:47:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 02:59:20"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 02:59:20"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 02:59:20"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:07:44"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 03:08:44"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 03:08:44"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:08:44"}
+{"app":"carry_on-server","level":"error","message":"ReferenceError: Order is not defined\n    at getOrderByStripeSessionService (file:///D:/M_E_R_N/carry_on/server/services/OrderServices.js:538:17)\n    at getOrderByStripeSession (file:///D:/M_E_R_N/carry_on/server/controllers/orderController.js:81:25)\n    at Layer.handleRequest (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\M_E_R_N\\carry_on\\server\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/M_E_R_N/carry_on/server/middlewares/authMiddleware.js:31:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-08-17 03:08:44"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 03:09:25"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 03:09:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:09:25"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 03:20:11"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:20:11"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 03:20:11"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 03:22:47"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 03:22:47"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 12:21:54"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 12:21:55"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 13:34:38"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:34:39"}
+{"app":"carry_on-server","level":"info","message":"Removed cart item 6a6c7e943f52ed46c492164e","timestamp":"2026-08-17 13:34:39"}
+{"app":"carry_on-server","level":"info","message":"Removed cart item 6a6c7e8b3f52ed46c4921644","timestamp":"2026-08-17 13:34:45"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 13:36:34"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:36:34"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 13:36:34"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 13:38:04"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 13:38:04"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:38:04"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 13:47:24"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:47:24"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 13:47:24"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 13:49:42"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:49:42"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 13:59:30"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 13:59:30"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 13:59:30"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 14:00:52"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:00:52"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:00:52"}
+{"app":"carry_on-server","level":"error","message":"Invalid token ","timestamp":"2026-08-17 14:04:43"}
+{"app":"carry_on-server","level":"info","message":"refresh token rotated: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:04:43"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 14:09:08"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:09:08"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:09:08"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:10:35"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:10:35"}
+{"app":"carry_on-server","level":"info","message":"Products served from MongoDB and cached.","timestamp":"2026-08-17 14:10:35"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 14:11:20"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:11:21"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:11:21"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 14:11:30"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:11:30"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:11:30"}
+{"app":"carry_on-server","level":"info","message":"Added Travel Tan Bag (Red/L) to cart.","timestamp":"2026-08-17 14:12:02"}
+{"app":"carry_on-server","level":"info","message":"Added Classy Sling Bag (Olive/M) to cart.","timestamp":"2026-08-17 14:12:19"}
+{"app":"carry_on-server","level":"info","message":"Products served from Redis.","timestamp":"2026-08-17 14:13:13"}
+{"app":"carry_on-server","level":"info","message":"Fetched all categories","timestamp":"2026-08-17 14:13:13"}
+{"app":"carry_on-server","level":"info","message":"Fetched user profile: kaizerbruno2@gmail.com","timestamp":"2026-08-17 14:13:13"}
