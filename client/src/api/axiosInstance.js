@@ -1,42 +1,29 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { triggerLogout } from "../services/authServices.";
-import { refreshToken } from "./authApi";
+import { refreshToken } from "./refreshTokenApi";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-  timeout: 10000,
   headers: {
     Accept: "application/json",
   },
 });
 
 let isRefreshing = false;
-
 let failedQueue = [];
 
-const processQueue = (error) => {
-  failedQueue.forEach((promise) => {
+const processQueue = (error = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
     if (error) {
-      promise.reject(error);
+      reject(error);
     } else {
-      promise.resolve();
+      resolve();
     }
   });
 
   failedQueue = [];
 };
-
-//Request
-
-axiosInstance.interceptors.request.use(
-  (config) => config,
-
-  (error) => Promise.reject(error),
-);
-
-//Response
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -44,50 +31,88 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Network error
+
     if (!error.response) {
       toast.error("Network Error");
+      return Promise.reject(error);
+    }
+    const status = error.response.status;
 
+    // Don't refresh authentication APIs
+
+    const requestUrl = originalRequest?.url || "";
+
+    const isAuthRequest =
+      requestUrl.includes("/v1/user/login") ||
+      requestUrl.includes("/v1/user/register") ||
+      requestUrl.includes("/v1/user/logout") ||
+      requestUrl.includes("/v1/user/refresh-token") ||
+      requestUrl.includes("/v1/user/verify-email") ||
+      requestUrl.includes("/v1/user/forgot-password") ||
+      requestUrl.includes("/v1/user/reset-password");
+
+    if (isAuthRequest) {
       return Promise.reject(error);
     }
 
-    //Access Token Expired
+    // Only handle 401
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      //Already Refreshing
-
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve,
-            reject,
-          });
-        }).then(() => {
-          return axiosInstance(originalRequest);
-        });
-      }
-
-      isRefreshing = true;
-
-      try {
-        (await refreshToken(),
-          {},
-          {
-            withCredentials: true,
-          },
-          processQueue());
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError);
-        await triggerLogout();
-        return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
-      }
+    if (status !== 401) {
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  },
+
+    // Prevent infinite retry
+
+    if (originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    // If another refresh is happening
+
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({
+          resolve,
+          reject,
+        });
+      }).then(() => {
+        return axiosInstance(originalRequest);
+      });
+    }
+
+    // Start refreshing
+
+    isRefreshing = true;
+
+    try {
+      await refreshToken();
+
+      // Resolve queued requests
+      processQueue();
+
+      // Retry original request
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      console.error(
+        "❌ Access token refresh failed:",
+        refreshError
+      );
+
+      // Reject queued requests
+      processQueue(refreshError);
+
+      toast.error(
+        "Session expired. Please login again."
+      );
+
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
+  }
 );
 
 export default axiosInstance;

@@ -129,9 +129,7 @@ const ProductDetails = () => {
     }
   }, [selectedVariant, product]);
 
-  // =========================================================
   // AVAILABLE SIZES
-  // =========================================================
 
   const sizes = useMemo(() => {
     if (!selectedVariant) return [];
@@ -431,11 +429,7 @@ const ProductDetails = () => {
             <div className="mt-10">
               <p className="leading-8 text-gray-600">{product.description}</p>
             </div>
-
-            {/* =================================================
-                COLOR
-            ================================================= */}
-
+               // COLOR
             <div className="mt-10">
               <h3 className="mb-4 text-lg font-semibold">Select Color</h3>
 

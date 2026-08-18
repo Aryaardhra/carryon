@@ -32,3 +32,28 @@ export const getOrderByStripeSession = async (sessionId) => {
     `/v1/orders/stripe-session/${sessionId}`
   );
 };
+
+export const getMyOrders = async () => {
+  return await axiosInstance.get(
+    "v1/orders/my-orders",
+  );
+};
+
+export const getOrderDetails = async (orderId) => {
+  return await axiosInstance.get(
+    `v1/orders/${orderId}`,
+  );
+};
+
+
+export const retryOrderPayment = async (orderId) => {
+  return await axiosInstance.post(
+    `/v1/orders/${orderId}/retry-payment`,
+  );
+};
+
+export const cancelOrder = async (orderId) => {
+  return await axiosInstance.patch(
+    `/v1/orders/${orderId}/cancel`,
+  );
+};

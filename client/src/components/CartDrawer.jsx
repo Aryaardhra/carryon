@@ -48,7 +48,7 @@ const CartDrawer = () => {
     <AnimatePresence>
       {isCartOpen && (
         <>
-          // BACKDROP
+          { /* BACKDROP*/}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.4 }}
@@ -57,7 +57,7 @@ const CartDrawer = () => {
             onClick={() => setIsCartOpen(false)}
             className="fixed inset-0 z-40 bg-black"
           />
-          // DRAWER
+           { /* DRAWER*/}
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -80,7 +80,7 @@ const CartDrawer = () => {
               shadow-2xl
             "
           >
-            // HEADER
+             { /* HEADER*/}
             <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-5">
               <div>
                 <h2 className="text-xl font-semibold">Your Cart</h2>
@@ -112,7 +112,7 @@ const CartDrawer = () => {
                 ✕
               </button>
             </div>
-            //EMPTY CART
+             { /*EMPTY CART*/}
             {cart.items.length === 0 ? (
               <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl">
@@ -148,7 +148,7 @@ const CartDrawer = () => {
               </div>
             ) : (
               <>
-                // CART ITEMS
+                 { /*CART ITEMS*/}
                 <div className="px-6 py-6">
                   <div className="space-y-6">
                     {cart.items.map((item) => {
@@ -308,7 +308,7 @@ const CartDrawer = () => {
                       );
                     })}
                   </div>
-                  // SUMMARY
+                   { /* SUMMARY*/}
                   <div className="mt-8 border-t pt-6">
                     <h3 className="text-lg font-semibold">Order Summary</h3>
 
@@ -364,7 +364,7 @@ const CartDrawer = () => {
                       </div>
                     </div>
                   </div>
-                  // CLEAR CART
+                   { /*CLEAR CART*/}
                   <button
                     type="button"
                     onClick={clearCart}
@@ -384,7 +384,7 @@ const CartDrawer = () => {
                   >
                     Clear Cart
                   </button>
-                  // CHECKOUT
+                   { /* CHECKOUT*/}
                   <button
                     type="button"
                     onClick={handleCheckout}

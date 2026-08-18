@@ -150,14 +150,14 @@ const Navbar = ({ visible = false }) => {
 
                 {user?.role === "admin" && (
                   <li
-                    onClick={() => navigate("/admin")}
+                    onClick={() => navigate("/admin/category-list")}
                     className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
                   >
                     Dashboard
                   </li>
                 )}
                 <li
-                  onClick={() => navigate("/my-orders")}
+                  onClick={() => navigate("/orders")}
                   className="px-4 py-2 hover:bg-primary/10 cursor-pointer"
                 >
                   My Orders
@@ -232,13 +232,13 @@ const Navbar = ({ visible = false }) => {
 
               {user?.role === "admin" && (
                 <li>
-                  <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/admin/category-list" onClick={() => setIsMenuOpen(false)}>
                     Dashboard
                   </Link>
                 </li>
               )}
               <li>
-                <Link to="/my-orders" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/orders" onClick={() => setIsMenuOpen(false)}>
                   My Orders
                 </Link>
               </li>

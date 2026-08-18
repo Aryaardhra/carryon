@@ -1,3 +1,4 @@
+
 import axiosInstance from "./axiosInstance";
 
 export const registerUser = (data) => {
@@ -19,10 +20,6 @@ export const getCurrentUser = () => {
 export const verifyEmail = async (token) => {
    const res = await axiosInstance.get(`/v1/user/verify-email/${token}`);
    return res.data;
-};
-
-export const refreshToken = () =>{
-   return axiosInstance.post("/v1/user/refresh-token");
 };
 
 export const forgotPassword = (email) => {

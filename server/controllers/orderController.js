@@ -1,4 +1,12 @@
-import {createBuyNowOrderService, createCartCheckoutOrderService, getOrderByStripeSessionService } from "../services/OrderServices.js";
+import {
+  cancelOrderService,
+  createBuyNowOrderService,
+  createCartCheckoutOrderService,
+  getMyOrdersService,
+  getOrderByStripeSessionService,
+  getOrderDetailsService,
+  retryOrderPaymentService,
+} from "../services/OrderServices.js";
 
 export const createBuyNowOrder = async (req, res, next) => {
   try {
@@ -94,6 +102,65 @@ export const retryOrderPayment = async (req, res, next) => {
       message: "Payment retry session created successfully.",
       checkoutUrl: result.checkoutUrl,
       sessionId: result.sessionId,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMyOrders = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const orders = await getMyOrdersService({
+      userId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getOrderDetails = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+
+    const userId = req.user._id;
+
+    const order = await getOrderDetailsService({
+      userId,
+      orderId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const cancelOrder = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+
+    const userId = req.user._id;
+
+    const result = await cancelOrderService({
+      orderId,
+      userId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+      order: result.order,
+      refundId: result.refundId || null,
     });
   } catch (error) {
     next(error);

@@ -11,7 +11,8 @@ export function ProductCard({ product }) {
   const variant = product.variants?.[0];
   const size = variant?.options?.[0]?.size;
   // Featured image
-  const image = product.featuredImage?.url ||
+  const image =
+    product.featuredImage?.url ||
     product.productImages?.[0]?.url ||
     product.variants?.[0]?.images?.[0]?.url ||
     "";
@@ -73,15 +74,31 @@ export function ProductCard({ product }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+
                     const variant = product.variants?.[0];
-                    const size = variant?.options?.[0]?.size;
+
+                    if (!variant) {
+                      toast.error("Product variant unavailable.");
+                      return;
+                    }
+
+                    const size = variant.options?.[0]?.size;
+
+                    if (!size) {
+                      toast.error("Product size unavailable.");
+                      return;
+                    }
+
+                    if (!image) {
+                      toast.error("Product image unavailable.");
+                      return;
+                    }
+
                     addToCart({
                       productId: product._id,
-                      color: variant.color.name,
+                      color: variant.color?.name,
                       size,
-                      selectedImage: {
-                      url: image,
-                      },
+                      selectedImage: image,
                       quantity: 1,
                     });
                   }}

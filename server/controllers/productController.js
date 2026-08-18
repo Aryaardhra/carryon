@@ -84,7 +84,14 @@ export const addToProduct = async (req, res, next) => {
 
     await commitTransaction(session);
 
-    await clearProductCache(data.category);
+     try {
+      await clearProductCache(data.category);
+    } catch (cacheError) {
+      logger.error(
+        "Product cache clearing failed:",
+        cacheError
+      );
+    }
 
     return res.status(201).json({
       success: true,

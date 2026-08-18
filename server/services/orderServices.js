@@ -1,12 +1,11 @@
 import stripe from "../configs/stripe.js";
 import Cart from "../models/cartModel.js";
 import orderModel from "../models/orderModel.js";
-//import productModel from "../models/productModel.js";
 import Product from "../models/productModel.js";
 import userModel from "../models/userModel.js";
 
- // Create a Stripe Checkout Session for Buy Now
- 
+// Create a Stripe Checkout Session for Buy Now
+
 export const createBuyNowOrderService = async ({
   userId,
   productId,
@@ -15,7 +14,6 @@ export const createBuyNowOrderService = async ({
   quantity = 1,
   addressId,
 }) => {
-
   // Validate quantity
 
   const parsedQuantity = Number(quantity);
@@ -25,7 +23,6 @@ export const createBuyNowOrderService = async ({
   }
 
   // Find user
- 
 
   const user = await userModel.findById(userId);
 
@@ -34,7 +31,7 @@ export const createBuyNowOrderService = async ({
   }
 
   // Find shipping address
-  
+
   if (!addressId) {
     throw new Error("Shipping address is required.");
   }
@@ -70,14 +67,12 @@ export const createBuyNowOrderService = async ({
     throw new Error("This variant is currently unavailable.");
   }
   //  Find selected size
-  
+
   if (!size) {
     throw new Error("Size is required.");
   }
 
-  const option = variant.options.find(
-    (item) => item.size === size,
-  );
+  const option = variant.options.find((item) => item.size === size);
 
   if (!option) {
     throw new Error("Selected size is not available.");
@@ -87,9 +82,7 @@ export const createBuyNowOrderService = async ({
 
   if (option.stock < parsedQuantity) {
     throw new Error(
-      `Only ${option.stock} item${
-        option.stock === 1 ? "" : "s"
-      } available.`,
+      `Only ${option.stock} item${option.stock === 1 ? "" : "s"} available.`,
     );
   }
 
@@ -119,7 +112,7 @@ export const createBuyNowOrderService = async ({
   const totalAmount = subtotal + shippingFee;
 
   // 10. Create order
- 
+
   const order = await orderModel.create({
     user: user._id,
 
@@ -162,45 +155,44 @@ export const createBuyNowOrderService = async ({
 
   // 11. Create Stripe Checkout Session
 
- const session = await stripe.checkout.sessions.create({
-  mode: "payment",
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
 
-  line_items: [
-    {
-      price_data: {
-        currency: "inr",
+    line_items: [
+      {
+        price_data: {
+          currency: "inr",
 
-        product_data: {
-          name: `${product.name} - ${variant.color.name} - ${size}`,
+          product_data: {
+            name: `${product.name} - ${variant.color.name} - ${size}`,
+          },
+
+          unit_amount: Math.round(finalPrice * 100),
         },
 
-        unit_amount: Math.round(finalPrice * 100),
+        quantity: parsedQuantity,
       },
+    ],
 
-      quantity: parsedQuantity,
-    },
-  ],
-
-  metadata: {
-    orderId: order._id.toString(),
-    userId: user._id.toString(),
-  },
-
-  payment_intent_data: {
     metadata: {
       orderId: order._id.toString(),
       userId: user._id.toString(),
     },
-  },
 
-  success_url:
-    `${process.env.CLIENT_URL}` +
-    `/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+    payment_intent_data: {
+      metadata: {
+        orderId: order._id.toString(),
+        userId: user._id.toString(),
+      },
+    },
 
-  cancel_url:
-    `${process.env.CLIENT_URL}` +
-    `/payment-cancelled?order_id=${order._id}`,
-});
+    success_url:
+      `${process.env.CLIENT_URL}` +
+      `/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+
+    cancel_url:
+      `${process.env.CLIENT_URL}` + `/payment-cancelled?order_id=${order._id}`,
+  });
 
   //  Save Stripe session ID
 
@@ -214,11 +206,7 @@ export const createBuyNowOrderService = async ({
   };
 };
 
-export const createCartCheckoutOrderService = async ({
-  userId,
-  addressId,
-}) => {
-
+export const createCartCheckoutOrderService = async ({ userId, addressId }) => {
   if (!addressId) {
     throw new Error("Shipping address is required.");
   }
@@ -246,7 +234,6 @@ export const createCartCheckoutOrderService = async ({
 
   let subtotal = 0;
   for (const cartItem of cart.items) {
-  
     const product = await Product.findOne({
       _id: cartItem.product,
       isDeleted: false,
@@ -255,15 +242,11 @@ export const createCartCheckoutOrderService = async ({
     });
 
     if (!product) {
-      throw new Error(
-        `Product "${cartItem.product}" is no longer available.`,
-      );
+      throw new Error(`Product "${cartItem.product}" is no longer available.`);
     }
 
     const variant = product.variants.find(
-      (item) =>
-        item.sku === cartItem.sku &&
-        item.isActive,
+      (item) => item.sku === cartItem.sku && item.isActive,
     );
 
     if (!variant) {
@@ -272,9 +255,7 @@ export const createCartCheckoutOrderService = async ({
       );
     }
 
-    const option = variant.options.find(
-      (item) => item.size === cartItem.size,
-    );
+    const option = variant.options.find((item) => item.size === cartItem.size);
 
     if (!option) {
       throw new Error(
@@ -298,17 +279,11 @@ export const createCartCheckoutOrderService = async ({
 
     const finalPrice = salePrice ?? price;
 
-    if (
-      !Number.isFinite(finalPrice) ||
-      finalPrice <= 0
-    ) {
-      throw new Error(
-        `Invalid price for ${product.name}.`,
-      );
+    if (!Number.isFinite(finalPrice) || finalPrice <= 0) {
+      throw new Error(`Invalid price for ${product.name}.`);
     }
 
-    const itemSubtotal =
-      finalPrice * cartItem.quantity;
+    const itemSubtotal = finalPrice * cartItem.quantity;
 
     subtotal += itemSubtotal;
 
@@ -325,20 +300,15 @@ export const createCartCheckoutOrderService = async ({
       price,
       salePrice,
       image: {
-        public_id:
-          variant.images?.[0]?.public_id || "",
+        public_id: variant.images?.[0]?.public_id || "",
 
-        url:
-          variant.images?.[0]?.url ||
-          cartItem.selectedImage ||
-          "",
+        url: variant.images?.[0]?.url || cartItem.selectedImage || "",
       },
     });
   }
 
   const shippingFee = 0;
-  const totalAmount =
-    subtotal + shippingFee;
+  const totalAmount = subtotal + shippingFee;
 
   const order = await orderModel.create({
     user: user._id,
@@ -361,52 +331,43 @@ export const createCartCheckoutOrderService = async ({
     orderStatus: "pending",
   });
 
-  const lineItems = orderItems.map(
-    (item) => ({
-      price_data: {
-        currency: "inr",
+  const lineItems = orderItems.map((item) => ({
+    price_data: {
+      currency: "inr",
 
-        product_data: {
-          name: `${item.productName} - ${item.color.name} - ${item.size}`,
-        },
-
-        unit_amount:
-          Math.round(
-            (item.salePrice ?? item.price) *
-              100,
-          ),
+      product_data: {
+        name: `${item.productName} - ${item.color.name} - ${item.size}`,
       },
 
-      quantity: item.quantity,
-    }),
-  );
+      unit_amount: Math.round((item.salePrice ?? item.price) * 100),
+    },
 
-  const session =
-    await stripe.checkout.sessions.create({
-      mode: "payment",
+    quantity: item.quantity,
+  }));
 
-      line_items: lineItems,
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
 
+    line_items: lineItems,
+
+    metadata: {
+      orderId: order._id.toString(),
+      userId: user._id.toString(),
+    },
+
+    payment_intent_data: {
       metadata: {
         orderId: order._id.toString(),
         userId: user._id.toString(),
       },
+    },
 
-      payment_intent_data: {
-       metadata: {
-    orderId: order._id.toString(),
-    userId: user._id.toString(),
-  },
-},
+    success_url:
+      `${process.env.CLIENT_URL}` +
+      `/payment-success?session_id={CHECKOUT_SESSION_ID}`,
 
-      success_url:
-        `${process.env.CLIENT_URL}` +
-        `/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-
-      cancel_url:
-        `${process.env.CLIENT_URL}/payment-cancelled`,
-    });
-
+    cancel_url: `${process.env.CLIENT_URL}/payment-cancelled`,
+  });
 
   order.stripeSessionId = session.id;
 
@@ -419,11 +380,7 @@ export const createCartCheckoutOrderService = async ({
   };
 };
 
-
-export const getOrderByStripeSessionService = async ({
-  userId,
-  sessionId,
-}) => {
+export const getOrderByStripeSessionService = async ({ userId, sessionId }) => {
   if (!sessionId) {
     throw new Error("Stripe session ID is required.");
   }
@@ -440,11 +397,7 @@ export const getOrderByStripeSessionService = async ({
   return order;
 };
 
-export const retryOrderPaymentService = async ({
-  orderId,
-  userId,
-}) => {
-
+export const retryOrderPaymentService = async ({ orderId, userId }) => {
   const order = await orderModel.findOne({
     _id: orderId,
     user: userId,
@@ -454,36 +407,21 @@ export const retryOrderPaymentService = async ({
     throw new Error("Order not found.");
   }
 
-
   if (order.paymentStatus === "paid") {
-    throw new Error(
-      "This order has already been paid.",
-    );
+    throw new Error("This order has already been paid.");
   }
 
-  if (
-    order.paymentStatus !== "failed" &&
-    order.paymentStatus !== "pending"
-  ) {
-    throw new Error(
-      "This order cannot be paid at this time.",
-    );
+  if (order.paymentStatus !== "failed" && order.paymentStatus !== "pending") {
+    throw new Error("This order cannot be paid at this time.");
   }
 
-  if (
-    !order.items ||
-    order.items.length === 0
-  ) {
-    throw new Error(
-      "This order does not contain any items.",
-    );
+  if (!order.items || order.items.length === 0) {
+    throw new Error("This order does not contain any items.");
   }
-
 
   const lineItems = [];
 
   for (const item of order.items) {
-
     const product = await Product.findOne({
       _id: item.product,
       isDeleted: false,
@@ -492,45 +430,30 @@ export const retryOrderPaymentService = async ({
     });
 
     if (!product) {
-      throw new Error(
-        `${item.productName} is no longer available.`,
-      );
+      throw new Error(`${item.productName} is no longer available.`);
     }
-
 
     // Find the original variant
 
-    const variant =
-      product.variants.id(item.variantId);
+    const variant = product.variants.id(item.variantId);
 
     if (!variant) {
-      throw new Error(
-        `${item.productName} variant is no longer available.`,
-      );
+      throw new Error(`${item.productName} variant is no longer available.`);
     }
-
 
     if (!variant.isActive) {
-      throw new Error(
-        `${item.productName} variant is currently unavailable.`,
-      );
+      throw new Error(`${item.productName} variant is currently unavailable.`);
     }
-
 
     // Find original size
 
-    const option =
-      variant.options.find(
-        (option) =>
-          option.size === item.size,
-      );
+    const option = variant.options.find((option) => option.size === item.size);
 
     if (!option) {
       throw new Error(
         `${item.productName} - ${item.size} is no longer available.`,
       );
     }
-
 
     if (option.stock < item.quantity) {
       throw new Error(
@@ -547,18 +470,11 @@ export const retryOrderPaymentService = async ({
         ? Number(option.salePrice)
         : null;
 
-  const finalPrice =
-  item.salePrice ?? item.price;
+    const finalPrice = item.salePrice ?? item.price;
 
-if (
-  !Number.isFinite(finalPrice) ||
-  finalPrice <= 0
-) {
-  throw new Error(
-    `Invalid price for ${item.productName}.`,
-  );
-}
-
+    if (!Number.isFinite(finalPrice) || finalPrice <= 0) {
+      throw new Error(`Invalid price for ${item.productName}.`);
+    }
 
     lineItems.push({
       price_data: {
@@ -571,16 +487,14 @@ if (
             `${item.size}`,
         },
 
-        unit_amount:
-          Math.round(finalPrice * 100),
+        unit_amount: Math.round(finalPrice * 100),
       },
 
       quantity: item.quantity,
     });
   }
 
-  const session =
-  await stripe.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     mode: "payment",
 
     line_items: lineItems,
@@ -602,10 +516,8 @@ if (
       `/payment-success?session_id={CHECKOUT_SESSION_ID}`,
 
     cancel_url:
-      `${process.env.CLIENT_URL}` +
-      `/payment-cancelled?order_id=${order._id}`,
+      `${process.env.CLIENT_URL}` + `/payment-cancelled?order_id=${order._id}`,
   });
-
 
   order.stripeSessionId = session.id;
   order.paymentStatus = "pending";
@@ -616,4 +528,142 @@ if (
     checkoutUrl: session.url,
     sessionId: session.id,
   };
+};
+
+export const getMyOrdersService = async ({ userId }) => {
+  if (!userId) {
+    throw new Error("User ID is required.");
+  }
+
+  const orders = await orderModel
+    .find({
+      user: userId,
+    })
+    .sort({
+      createdAt: -1,
+    });
+
+  return orders;
+};
+
+export const getOrderDetailsService = async ({ userId, orderId }) => {
+  if (!userId) {
+    throw new Error("User ID is required.");
+  }
+
+  if (!orderId) {
+    throw new Error("Order ID is required.");
+  }
+
+  const order = await orderModel.findOne({
+    _id: orderId,
+    user: userId,
+  });
+
+  if (!order) {
+    throw new Error("Order not found.");
+  }
+
+  return order;
+};
+
+export const cancelOrderService = async ({ orderId, userId }) => {
+ 
+  const order = await orderModel.findOne({
+    _id: orderId,
+    user: userId,
+  });
+
+  if (!order) {
+    throw new Error("Order not found.");
+  }
+
+  // CHECK CURRENT ORDER STATUS
+
+  const cancellableStatuses = ["pending", "confirmed"];
+
+  if (!cancellableStatuses.includes(order.orderStatus)) {
+    throw new Error("This order cannot be cancelled at this stage.");
+  }
+  // PREVENT DUPLICATE CANCELLATION
+
+  if (order.orderStatus === "cancelled") {
+    throw new Error("This order has already been cancelled.");
+  }
+
+  // UNPAID ORDER
+
+  if (order.paymentStatus === "pending" || order.paymentStatus === "failed") {
+    order.orderStatus = "cancelled";
+
+    await order.save();
+
+    return {
+      message: "Order cancelled successfully.",
+      order,
+      refundId: null,
+    };
+  }
+
+  // PAID ORDER
+
+  if (order.paymentStatus === "paid") {
+    if (!order.stripePaymentIntentId) {
+      throw new Error("Stripe payment information is missing.");
+    }
+    //CREATE STRIPE REFUND
+
+
+    const refund = await stripe.refunds.create({
+      payment_intent: order.stripePaymentIntentId,
+    });
+
+    // UPDATE ORDER
+
+    order.paymentStatus = "refunded";
+    order.orderStatus = "cancelled";
+    order.refundId = refund.id;
+    order.refundedAt = new Date();
+    await order.save();
+
+    // RESTORE STOCK
+
+    for (const item of order.items) {
+      const product = await Product.findById(item.product);
+
+      if (!product) {
+        console.error(
+          `Product not found while restoring stock: ${item.product}`,
+        );
+        continue;
+      }
+
+      const variant = product.variants.id(item.variantId);
+      if (!variant) {
+        console.error(
+          `Variant not found while restoring stock: ${item.variantId}`,
+        );
+        continue;
+      }
+
+      const option = variant.options.find(
+        (option) => option.size === item.size,
+      );
+      if (!option) {
+        console.error(
+          `Size option not found while restoring stock: ${item.size}`,
+        );
+        continue;
+      }
+
+      option.stock += item.quantity;
+      await product.save();
+    }
+    return {
+      message: "Order cancelled and payment refunded successfully.",
+      order,
+      refundId: refund.id,
+    };
+  }
+  throw new Error("This order cannot be cancelled.");
 };
