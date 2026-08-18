@@ -9,7 +9,7 @@ import ProductDetails from "../pages/ProductDetails";
 import AdminLayout from "../admin/pages/AdminLayout";
 import AddProduct from "../admin/pages/AddProduct";
 import ProductList from "../admin/pages/ProductList";
-import Orders from "../admin/pages/Orders";
+//import Orders from "../admin/pages/Orders";
 import AdminRoute from "./AdminRoute";
 import { AuthContextProvider } from "../context/AuthContext";
 import { ProductContextProvider } from "../context/ProductContext";
@@ -27,6 +27,10 @@ import EditProduct from "../admin/pages/EditProduct";
 import CheckOut from "../pages/CheckOut";
 import PaymentSuccess from "../pages/PaymentSuccess";
 import PaymentCancelled from "../pages/PaymentCancelled";
+import MyOrders from "../pages/MyOrders";
+import OrderDetails from "../pages/OrderDetails";
+import AdminOrders from "../admin/pages/AdminOrders";
+import AdminOrderDetails from "../admin/pages/AdminOrderDetails";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +52,8 @@ const router = createBrowserRouter([
           { path: "checkout", element: <CheckOut /> },
           { path: "payment-success", element: <PaymentSuccess /> },
           { path: "payment-cancelled", element: <PaymentCancelled /> },
-          { path: "my-orders", element: "orders" },
+          { path: "orders", element: <MyOrders /> },
+          { path: "orders/:orderId", element: <OrderDetails /> },
           { path: "my-profile", element: <Profile /> },
           { path: "wishlist", element: "wishlist" },
         ],
@@ -73,7 +78,8 @@ const router = createBrowserRouter([
           { path: "add-product", element: <AddProduct /> },
           { path: "edit/:id", element: <EditProduct />},
           { path: "product-list", element: <ProductList /> },
-          { path: "orders", element: <Orders /> },
+          { path: "/admin/orders", element: <AdminOrders /> },
+          { path: "/admin/orders/:orderId", element: <AdminOrderDetails /> },
         ],
       },
     ],

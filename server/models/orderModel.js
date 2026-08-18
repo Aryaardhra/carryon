@@ -172,6 +172,15 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    refundId: {
+      type: String,
+      default: null,
+    },
+
+    refundedAt: {
+      type: Date,
+      default: null,
+    },
 
     paidAt: {
       type: Date,

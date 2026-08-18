@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { loginUser, registerUser, logoutUser, getCurrentUser } from "../api/authApi";
 import toast from "react-hot-toast";
-import { registerLogoutHandler } from "../services/authServices.";
+import { registerLogoutHandler, triggerLogout } from "../services/authServices.";
 
 const AuthContext = createContext();
 
@@ -56,17 +56,19 @@ export const AuthContextProvider = ({ children }) => {
 
    // Logout
 
-  const logout = async (callApi = true) => {
+const logout = async (callApi = true) => {
   try {
     if (callApi) {
-      await logoutUser();
+      await triggerLogout();
     }
   } catch (err) {
-    console.error(err);
+    console.error("Logout API failed:", err);
   } finally {
     setUser(null);
     setIsAuthenticated(false);
     setIsAdmin(false);
+
+    navigate("/login", { replace: true });
   }
 };
 

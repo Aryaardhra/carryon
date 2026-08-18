@@ -12,6 +12,7 @@ import testStripeConnection from "./configs/stripe.js";
 import orderRouter from "./routes/orderRoute.js";
 import stripeRouter from "./routes/stripeRoute.js";
 import addressRouter from "./routes/addressRoutes.js";
+import adminOrderRouter from "./routes/adminOrderRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/v1/product", productRouter);
 app.use("/v1/cart/", cartRouter);
 app.use("/v1/orders", orderRouter);
 app.use("/v1/addresses", addressRouter);
+app.use("/v1/admin/orders", adminOrderRouter);
 
 app.use(errorHandler);
 

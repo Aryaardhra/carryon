@@ -3,7 +3,7 @@ import userModel from "../models/userModel.js";
 import logger from "../utils/logger.js";
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.accessToken;
+  const token = req.cookies?.accessToken;
 
   try {
     if (!token) {
