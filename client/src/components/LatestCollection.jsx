@@ -10,13 +10,13 @@ const LatestCollection = () => {
   const [latestSeller, setLatestSeller] = useState([]);
 
   const latestProducts = () => {
-    const latestProduct = products.filter((item) => item.latest);
+    const latestProduct = products.filter((item) => item?.latest);
     setLatestSeller(latestProduct);
   };
 
   useEffect(() => {
     latestProducts();
-  }, []);
+  }, [products]);
 
   return (
     <>
@@ -42,7 +42,7 @@ const LatestCollection = () => {
               animationDuration: latestSeller.length * 2500 + "ms",
             }}
           >
-            {latestSeller.map((product) => (
+            {latestSeller?.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
 

@@ -436,20 +436,24 @@ export const changePassword = async (req, res, next) => {
 
 export const refreshAccessToken = async (req, res, next) => {
   try {
-    const oldRefreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies?.refreshToken;
 
-    if (!oldRefreshToken) {
+    if (!refreshToken) {
       logger.warn("Refresh token missing!");
+
       return res.status(401).json({
         success: false,
-        message: "Unauthorized",
+        message: "Refresh token missing",
       });
     }
 
-    const userId = await redis.get(`refresh:${oldRefreshToken}`);
+    const userId = await redis.get(
+      `refresh:${refreshToken}`,
+    );
 
     if (!userId) {
-      logger.warn("Invalid refresh token");
+      logger.warn("Invalid or expired refresh token");
+
       return res.status(401).json({
         success: false,
         message: "Invalid or expired refresh token",
@@ -460,20 +464,19 @@ export const refreshAccessToken = async (req, res, next) => {
 
     if (!user) {
       logger.warn(`User not found: ${userId}`);
-      return res.status(404).json({
+
+      return res.status(401).json({
         success: false,
         message: "User not found",
       });
     }
 
-    // Remove old refresh token
-    await redis.del(`refresh:${oldRefreshToken}`);
-    await redis.del(`user-refresh:${user._id}`);
-
+    // Only generate a new access token.
+    // The refresh token remains unchanged.
     const accessToken = generateAccessToken(user);
-    const newRefreshToken = await generateRefreshToken(user._id);
 
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction =
+      process.env.NODE_ENV === "production";
 
     const cookieOptions = {
       httpOnly: true,
@@ -486,12 +489,9 @@ export const refreshAccessToken = async (req, res, next) => {
       maxAge: 15 * 60 * 1000,
     });
 
-    res.cookie("refreshToken", newRefreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    logger.info(`refresh token rotated: ${user.email}`);
+    logger.info(
+      `Access token refreshed: ${user.email}`,
+    );
 
     return res.status(200).json({
       success: true,
@@ -505,7 +505,10 @@ export const refreshAccessToken = async (req, res, next) => {
       },
     });
   } catch (error) {
-    logger.error(`Refresh Token Error: ${error.message}`);
+    logger.error(
+      `Refresh Token Error: ${error.message}`,
+    );
+
     next(error);
   }
 };
