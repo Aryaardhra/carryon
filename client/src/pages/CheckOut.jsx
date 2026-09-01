@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getAddresses, addAddress } from "../services/addressService";
 import { getCart as getCartAPI } from "../services/cartService";
-import { createBuyNowOrder, createCartCheckout} from "../services/OrderServices";
+import { createBuyNowOrder, createCartCheckout} from "../services/orderServices";
 import { getProductById } from "../services/productService";
 
 const CheckOut = () => {
