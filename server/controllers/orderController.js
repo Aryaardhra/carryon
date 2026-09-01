@@ -6,7 +6,7 @@ import {
   getOrderByStripeSessionService,
   getOrderDetailsService,
   retryOrderPaymentService,
-} from "../services/OrderServices.js";
+} from "../services/orderServices.js"
 
 export const createBuyNowOrder = async (req, res, next) => {
   try {
