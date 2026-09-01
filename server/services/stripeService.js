@@ -143,7 +143,7 @@ export const handleCheckoutExpired = async (
   }
 
 
-  const order = await Order.findById(orderId);
+  const order = await orderModel.findById(orderId);
 
   if (!order) {
     console.error(
