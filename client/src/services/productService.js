@@ -11,7 +11,7 @@ export const getAdminProducts = (params = {}) => {
 };
 
 export const getProducts = (params = {}) => {
-  return axiosInstance.get("/v1/product/", {
+  return axiosInstance.get("/v1/product", {
     params,
   });
 };
