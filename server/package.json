@@ -27,6 +27,7 @@
     "nodemailer": "^9.0.1",
     "redis": "^6.0.0",
     "slugify": "^1.6.9",
+    "stripe": "^22.6.0",
     "winston": "^3.19.0"
   },
   "devDependencies": {
