@@ -439,7 +439,7 @@ export const refreshAccessToken = async (req, res, next) => {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
-      logger.warn("Refresh token missing!");
+      {/*logger.warn("Refresh token missing!");*/}
 
       return res.status(401).json({
         success: false,
