@@ -597,7 +597,7 @@ const CheckOut = () => {
               )}
             </section>
 
-            //payment
+            {/*payment*/}
             <section className="rounded-3xl border border-gray-200 p-6 sm:p-8">
               <h2 className="text-xl font-semibold">Payment</h2>
 
