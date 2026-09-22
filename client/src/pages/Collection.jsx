@@ -10,6 +10,7 @@ import { FiX } from "react-icons/fi";
 import { ProductCard } from "../components/ProductCard";
 import WheelPagination from "../components/WheelPagination";
 import { useProductContext } from "../context/ProductContext";
+import SEO from "../components/SEO";
 
 const Collection = () => {
   const {
@@ -35,6 +36,12 @@ const Collection = () => {
   };
 
   return (
+    <>
+      <SEO
+        title="Shop All Bags"
+        description="Explore the complete CarryOn collection of premium bags and accessories. Find the perfect bag for every occasion."
+        url="https://carryon.saturns.in/collection"
+      />
     <div className="min-h-screen mt-2 pt-12">
       <CollectionHeader
         totalProducts={products.length}
@@ -130,6 +137,7 @@ const Collection = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

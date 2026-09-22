@@ -10,6 +10,7 @@ import { useCartContext } from "../context/CartContext";
 import { getProductById } from "../services/productService";
 import { FaHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
+import SEO from "../components/SEO";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -276,6 +277,18 @@ const ProductDetails = () => {
 
   return (
     <>
+    <SEO
+  title={product?.name || "Product"}
+  description={
+    product?.description ||
+    `Shop ${product?.name || "this product"} at CarryOn.`
+  }
+  image={
+    product?.featuredImage ||
+    "https://carryon.saturns.in/og-image.jpg"
+  }
+  url={`https://carryon.saturns.in/product/pid/${product?._id}`}
+/>
       <div className="mx-auto max-w-7xl px-6 py-24">
   
         <p className="mb-8 text-sm text-gray-500">
