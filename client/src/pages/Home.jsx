@@ -13,12 +13,18 @@ import Banner from '../components/Banner';
 import ServicesBanner from '../components/ServicesBanner';
 import NewsLetter from '../components/NewsLetter';
 import OurBlog from '../components/OurBlog';
+import SEO from '../components/SEO';
 const Home = () => {
 
    const { setShowNavbar } = useOutletContext();
 
   return (
     <>
+      <SEO
+        title="CarryOn Bags"
+        description="Discover stylish and premium bags at CarryOn. Shop handbags, backpacks, shoulder bags and more."
+        url="https://carryon.saturns.in"
+      />
       <Hero setShowNavbar={setShowNavbar} />
       <Categories />
       <LatestCollection />

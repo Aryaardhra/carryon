@@ -5,6 +5,7 @@ import { ProductCard } from "../components/ProductCard";
 import { categories } from "../assets/data/assets";
 import { getProducts } from "../services/productService";
 import { getCategoryById } from "../services/categoryService";
+import SEO from "../components/SEO";
 
 const ProductCategory = () => {
   const { id } = useParams();
@@ -46,6 +47,16 @@ const ProductCategory = () => {
   }
 
   return (
+    <>
+      <SEO
+        title={category?.name || "Shop Bags"}
+        description={
+          category?.description ||
+          `Explore ${category?.name || "premium bags"} at CarryOn.`
+        }
+        url={`https://carryon.saturns.in/category/${category?._id}`}
+      />
+
     <div className="mt-24 ml-8">
       {category && (
         <div className="flex flex-col items-start w-max mb-6">
@@ -69,6 +80,7 @@ const ProductCategory = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

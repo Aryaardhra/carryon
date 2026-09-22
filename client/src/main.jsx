@@ -9,8 +9,10 @@ import { ProductContextProvider } from './context/ProductContext.jsx'
 import { CartContextProvider } from './context/CartContext.jsx'
 import { Toaster } from 'react-hot-toast'
 import { CategoryProvider } from './context/CategoryContext.jsx'
+import { HelmetProvider } from "react-helmet-async";
 
 createRoot(document.getElementById('root')).render(
+  <HelmetProvider>
    <AuthContextProvider>
     <CategoryProvider>
     <ProductContextProvider>
@@ -25,5 +27,6 @@ createRoot(document.getElementById('root')).render(
     </ProductContextProvider>
     </CategoryProvider>
   </AuthContextProvider>
+  </HelmetProvider>
 )
 
